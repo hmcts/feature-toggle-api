@@ -1,9 +1,5 @@
 provider "azurerm" {}
 
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
-}
-
 # Make sure the resource group exists
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
@@ -12,9 +8,6 @@ resource "azurerm_resource_group" "rg" {
 
 locals {
   ase_name               = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
-
-  local_env              = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "aat" : "saat" : var.env}"
-  local_ase              = "${(var.env == "preview" || var.env == "spreview") ? (var.env == "preview" ) ? "core-compute-aat" : "core-compute-saat" : local.ase_name}"
 }
 
 module "feature-toggle-api" {
