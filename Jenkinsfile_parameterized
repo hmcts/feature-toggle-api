@@ -1,6 +1,8 @@
 #!groovy
 @Library("Infrastructure") _
 
+def channel = '#rpe-build-notices'
+
 properties([
   parameters([
     string(name: 'PRODUCT_NAME', defaultValue: 'rpe', description: ''),
@@ -14,5 +16,5 @@ properties([
 ])
 
 withParameterizedPipeline(params.TYPE, params.PRODUCT_NAME, params.APP, params.ENVIRONMENT, params.SUBSCRIPTION) {
-  // loadVaultSecrets(secrets)
+  enableSlackNotifications(channel)
 }
