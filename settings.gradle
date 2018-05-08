@@ -1,0 +1,3 @@
+rootProject.name = 'feature-toggle-api'
+
+include 'feature-toggle-core'

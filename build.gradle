@@ -171,6 +171,8 @@ dependencyManagement {
 }
 
 dependencies {
+  compileOnly project(':feature-toggle-core')
+
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
