@@ -1,6 +1,11 @@
 server:
   port: 8580
 
+management:
+  endpoints:
+    web:
+      base-path: /
+
 spring:
   application:
     name: Feature Toggle API
