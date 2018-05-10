@@ -113,7 +113,9 @@ pmd {
 jacocoTestReport {
   dependsOn = [allprojects*.test, allprojects*.integration]
 
-  executionData fileTree(rootDir.absolutePath).include("**/build/jacoco/*.exec")
+  executionData allprojects.collectMany {
+    ["$it.buildDir/jacoco/test.exec", "$it.buildDir/jacoco/integration.exec"]
+  }
 
   reports {
     xml.enabled = true
