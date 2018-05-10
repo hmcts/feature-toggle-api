@@ -33,6 +33,8 @@ allprojects {
       println("setting up $project.name:$set.name")
 
       set.java {
+        compileClasspath += project.sourceSets.main.output
+        runtimeClasspath += project.sourceSets.main.output
         srcDirs += file("$project.name/$set.name/java")
       }
       set.resources {
