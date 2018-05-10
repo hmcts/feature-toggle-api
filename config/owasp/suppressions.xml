@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
-  <!-- nothing to suppress. yay -->
+  <!-- not used by server -->
+
+  <suppress>
+    <notes><![CDATA[main/java/org/apache/directory/groovyldap/LDAP.java in the Groovy LDAP API allows attackers to conduct LDAP entry poisoning attacks by leveraging setting returnObjFlag to true for all search methods]]></notes>
+    <gav regex="true">^org\.codehaus\.groovy:groovy-(json|xml):2.4.15$</gav>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
 </suppressions>
