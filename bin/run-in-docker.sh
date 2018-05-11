@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 print_help() {
-  echo "Script to run docker containers for Spring Boot Template API service
+  echo "Script to run docker containers for Feature Toggle API as service
 
   Usage:
 
@@ -10,25 +10,22 @@ print_help() {
   Options:
     --clean, -c                   Clean and install current state of source code
     --install, -i                 Install current state of source code
+    --with-flyway, -f             Run docker compose with flyway enabled
     --param PARAM=, -p PARAM=     Parse script parameter
     --help, -h                    Print this help block
 
   Available parameters:
-
+    DB_PASSWORD                   Defaults to 'password'
   "
 }
 
 # script execution flags
 GRADLE_CLEAN=false
 GRADLE_INSTALL=false
+FLYWAY_ENABLED=false
 
-# TODO custom environment variables application requires.
-# TODO also consider enlisting them in help string above ^
-# TODO sample: DB_PASSWORD   Defaults to 'dev'
 # environment variables
-#DB_PASSWORD=dev
-#S2S_URL=localhost
-#S2S_SECRET=secret
+DB_PASSWORD="password"
 
 execute_script() {
   cd $(dirname "$0")/..
@@ -45,15 +42,18 @@ execute_script() {
     ./gradlew assemble
   fi
 
-#  echo "Assigning environment variables.."
-#
-#  export DB_PASSWORD=${DB_PASSWORD}
-#  export S2S_URL=${S2S_URL}
-#  export S2S_SECRET=${S2S_SECRET}
+  echo "Assigning environment variables.."
+
+  export FEATURES_DB_PASSWORD=${DB_PASSWORD}
 
   echo "Bringing up docker containers.."
 
-  docker-compose up
+  if [ ${FLYWAY_ENABLED} = true ]
+  then
+    docker-compose -f docker-compose-flyway.yml up
+  else
+    docker-compose up
+  fi
 }
 
 while true ; do
@@ -61,11 +61,10 @@ while true ; do
     -h|--help) print_help ; shift ; break ;;
     -c|--clean) GRADLE_CLEAN=true ; GRADLE_INSTALL=true ; shift ;;
     -i|--install) GRADLE_INSTALL=true ; shift ;;
+    -f|--with-flyway) FLYWAY_ENABLED=true ; shift ;;
     -p|--param)
       case "$2" in
-#        DB_PASSWORD=*) DB_PASSWORD="${2#*=}" ; shift 2 ;;
-#        S2S_URL=*) S2S_URL="${2#*=}" ; shift 2 ;;
-#        S2S_SECRET=*) S2S_SECRET="${2#*=}" ; shift 2 ;;
+        DB_PASSWORD=*) DB_PASSWORD="${2#*=}" ; shift 2 ;;
         *) shift 2 ;;
       esac ;;
     *) execute_script ; break ;;

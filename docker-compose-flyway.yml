@@ -1,0 +1,33 @@
+version: '2.1'
+
+services:
+  feature-toggle-api:
+    extends:
+      file: docker-compose-core.yml
+      service: service
+    environment:
+      - FLYWAY_ENABLED=true
+    depends_on:
+      - feature-toggle-flyway
+  feature-toggle-database:
+    extends:
+      file: docker-compose-core.yml
+      service: database
+    volumes:
+      - feature-toggle-database-data:/var/lib/postgresql/data
+  feature-toggle-flyway:
+    build:
+      context: feature-toggle-db/flyway
+    image: docker.artifactory.reform.hmcts.net/reform/flyway
+    container_name: feature-toggle-flyway
+    environment:
+      - FEATURES_DB_PASSWORD
+    volumes:
+      - ./feature-toggle-db/src/main/resources/db/migration:/flyway/sql
+    depends_on:
+      feature-toggle-database:
+        condition: service_healthy
+    command: feature-toggle-database 5432 featuretoggler $FEATURES_DB_PASSWORD features public
+
+volumes:
+  feature-toggle-database-data:
