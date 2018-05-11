@@ -1,9 +1,18 @@
+buildscript {
+  repositories {
+    jcenter()
+  }
+
+  dependencies {
+    classpath 'org.owasp:dependency-check-gradle:3.1.2'
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
+  }
+}
+
 plugins {
   id 'application'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
-  id 'org.springframework.boot' version '2.0.1.RELEASE'
-  id 'org.owasp.dependencycheck' version '3.1.2'
-  id 'com.github.ben-manes.versions' version '0.17.0'
+  id 'org.springframework.boot' version '2.0.2.RELEASE'
 }
 
 group = 'uk.gov.hmcts.reform'
@@ -24,6 +33,8 @@ allprojects {
   apply plugin: 'checkstyle'
   apply plugin: 'pmd'
   apply plugin: 'jacoco'
+  apply plugin: 'org.owasp.dependencycheck'
+  apply plugin: 'com.github.ben-manes.versions'
 
   sourceCompatibility = 1.8
   targetCompatibility = 1.8
@@ -81,6 +92,47 @@ allprojects {
       url "https://repo.spring.io/libs-milestone"
     }
   }
+
+  dependencyUpdates.resolutionStrategy = {
+    componentSelection { rules ->
+      rules.all { ComponentSelection selection ->
+        boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+          selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+        }
+        if (rejected) {
+          selection.reject('Release candidate')
+        }
+      }
+    }
+  }
+
+// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
+  dependencyCheck {
+    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+    // range of 0-10 fails the build, anything greater and it doesn't fail the build
+    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+    suppressionFile = 'config/owasp/suppressions.xml'
+  }
+
+  dependencyManagement {
+    dependencies {
+      dependencySet(group: 'com.google.guava', version: '20.0') {
+        entry 'guava'
+      }
+      // spring boot dependency management plugin downgrades
+      // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
+      // bump to 2.9.5 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
+      dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.5') {
+        entry 'jackson-annotations'
+        entry 'jackson-core'
+        entry 'jackson-databind'
+      }
+    }
+    imports {
+      mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
+      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+    }
+  }
 }
 
 subprojects {
@@ -127,47 +179,6 @@ jacocoTestReport {
     executionData = files(executionData.findAll {
       it.exists()
     })
-  }
-}
-
-dependencyUpdates.resolutionStrategy = {
-  componentSelection { rules ->
-    rules.all { ComponentSelection selection ->
-      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-      }
-      if (rejected) {
-        selection.reject('Release candidate')
-      }
-    }
-  }
-}
-
-// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
-dependencyCheck {
-  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-  // range of 0-10 fails the build, anything greater and it doesn't fail the build
-  failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-  suppressionFile = 'config/owasp/suppressions.xml'
-}
-
-dependencyManagement {
-  dependencies {
-    dependencySet(group: 'com.google.guava', version: '20.0') {
-      entry 'guava'
-    }
-    // spring boot dependency management plugin downgrades
-    // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
-    // bump to 2.9.5 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
-    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.5') {
-      entry 'jackson-annotations'
-      entry 'jackson-core'
-      entry 'jackson-databind'
-    }
-  }
-  imports {
-    mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
-    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
   }
 }
 
