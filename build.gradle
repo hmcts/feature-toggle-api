@@ -45,7 +45,7 @@ allprojects {
 
   sourceSets.all { set ->
     if (!tasks.findByName(set.name) && set.name.indexOf('Test') > 0) {
-      println("setting up $project.name:$set.name")
+      logger.info("setting up $project.name:$set.name")
 
       set.java {
         compileClasspath += project.sourceSets.main.output
@@ -63,7 +63,7 @@ allprojects {
         classpath = set.runtimeClasspath
       }
     } else {
-      println("$project.name:$set.name already exists as a task")
+      logger.info("$project.name:$set.name already exists as a task")
     }
   }
 
