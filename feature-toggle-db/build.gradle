@@ -1,0 +1,25 @@
+apply plugin: 'org.flywaydb.flyway'
+
+flyway {
+  url = System.getenv('FLYWAY_URL')
+  user = System.getenv('FLYWAY_USER')
+  password = System.getenv('FLYWAY_PASSWORD')
+  baselineOnMigrate = true
+  baselineVersion = '000'
+}
+
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
+task migratePostgresDatabase(type: FlywayMigrateTask) {
+  baselineOnMigrate = true
+  if (project.hasProperty("dburl")) {
+    url = "jdbc:postgresql://${dburl}"
+  }
+}
+
+dependencies {
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: springBootVersion
+  compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.0'
+}
