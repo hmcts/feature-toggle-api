@@ -8,6 +8,7 @@ addons:
   apt:
     packages:
       - libecpg-dev
+    update: true
 
 services:
   - docker
