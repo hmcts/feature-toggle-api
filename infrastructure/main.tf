@@ -25,7 +25,7 @@ locals {
   db_connection_options  = "?ssl=true"
 }
 
-module "db" {
+module "feature-toggle-db" {
   source              = "git@github.com:hmcts/moj-module-postgres?ref=cnp-449-tactical"
   product             = "${var.product}-${var.component}-db"
   location            = "${var.location_db}"
@@ -46,15 +46,15 @@ module "feature-toggle-api" {
   subscription        = "${var.subscription}"
 
   app_settings = {
-    FEATURES_DB_HOST            = "${module.db.host_name}"
-    FEATURES_DB_PORT            = "${module.db.postgresql_listen_port}"
-    FEATURES_DB_USER_NAME       = "${module.db.user_name}"
-    FEATURES_DB_PASSWORD        = "${module.db.postgresql_password}"
-    FEATURES_DB_NAME            = "${module.db.postgresql_database}"
+    FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
+    FEATURES_DB_PORT            = "${module.feature-toggle-db.postgresql_listen_port}"
+    FEATURES_DB_USER_NAME       = "${module.feature-toggle-db.user_name}"
+    FEATURES_DB_PASSWORD        = "${module.feature-toggle-db.postgresql_password}"
+    FEATURES_DB_NAME            = "${module.feature-toggle-db.postgresql_database}"
     FEATURES_DB_CONN_OPTIONS    = "${local.db_connection_options}"
-    FLYWAY_URL                  = "jdbc:postgresql://${module.db.host_name}:${module.db.postgresql_listen_port}/${module.db.postgresql_database}${local.db_connection_options}"
-    FLYWAY_USER                 = "${module.db.user_name}"
-    FLYWAY_PASSWORD             = "${module.db.postgresql_password}"
+    FLYWAY_URL                  = "jdbc:postgresql://${module.feature-toggle-db.host_name}:${module.feature-toggle-db.postgresql_listen_port}/${module.feature-toggle-db.postgresql_database}${local.db_connection_options}"
+    FLYWAY_USER                 = "${module.feature-toggle-db.user_name}"
+    FLYWAY_PASSWORD             = "${module.feature-toggle-db.postgresql_password}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
@@ -76,31 +76,31 @@ module "feature-toggle-key-vault" {
 
 resource "azurerm_key_vault_secret" "POSTGRES-USER" {
   name      = "${var.component}-POSTGRES-USER"
-  value     = "${module.db.user_name}"
+  value     = "${module.feature-toggle-db.user_name}"
   vault_uri = "${module.feature-toggle-key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES-PASS" {
   name      = "${var.component}-POSTGRES-PASS"
-  value     = "${module.db.postgresql_password}"
+  value     = "${module.feature-toggle-db.postgresql_password}"
   vault_uri = "${module.feature-toggle-key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_HOST" {
   name      = "${var.component}-POSTGRES-HOST"
-  value     = "${module.db.host_name}"
+  value     = "${module.feature-toggle-db.host_name}"
   vault_uri = "${module.feature-toggle-key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_PORT" {
   name      = "${var.component}-POSTGRES-PORT"
-  value     = "${module.db.postgresql_listen_port}"
+  value     = "${module.feature-toggle-db.postgresql_listen_port}"
   vault_uri = "${module.feature-toggle-key-vault.key_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "POSTGRES_DATABASE" {
   name      = "${var.component}-POSTGRES-DATABASE"
-  value     = "${module.db.postgresql_database}"
+  value     = "${module.feature-toggle-db.postgresql_database}"
   vault_uri = "${module.feature-toggle-key-vault.key_vault_uri}"
 }
 # endregion
