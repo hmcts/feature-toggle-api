@@ -9,3 +9,28 @@ management:
 spring:
   application:
     name: Feature Toggle API
+  datasource:
+    url: jdbc:postgresql://${FEATURES_DB_HOST:feature-toggle-database}:${FEATURES_DB_PORT:5432}/${FEATURES_DB_NAME:features}${FEATURES_DB_CONN_OPTIONS:}
+    username: ${FEATURES_DB_USER_NAME:featuretoggler}
+    password: ${FEATURES_DB_PASSWORD:}
+    properties:
+      charSet: UTF-8
+    hikari:
+      minimumIdle: 2
+      maximumPoolSize: 10
+      idleTimeout: 10000
+      poolName: FeatureToggleHikariCP
+      maxLifetime: 7200000
+      connectionTimeout: 30000
+  jpa:
+    hibernate:
+      connection:
+        # Without below HikariCP uses deprecated com.zaxxer.hikari.hibernate.HikariConnectionProvider
+        # Surprisingly enough below ConnectionProvider is in hibernate-hikaricp dependency and not hibernate-core
+        provider_class: org.hibernate.hikaricp.internal.HikariCPConnectionProvider
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            # silence the 'wall-of-text' - unnecessary exception throw about blob types
+            non_contextual_creation: true

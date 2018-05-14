@@ -12,6 +12,11 @@ services:
     container_name: feature-toggle-api
     environment:
       - FLYWAY_ENABLED=false
+      - FEATURES_DB_HOST
+      - FEATURES_DB_PORT
+      - FEATURES_DB_NAME
+      - FEATURES_DB_CONN_OPTIONS
+      - FEATURES_DB_USER_NAME
       - FEATURES_DB_PASSWORD
       # these environment variables are used by java-logging library
       - ROOT_APPENDER

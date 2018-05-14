@@ -154,6 +154,7 @@ dependencies {
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
+  compile group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.2.17.Final'
   compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.0'
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
