@@ -17,7 +17,7 @@ services:
       - feature-toggle-database-data:/var/lib/postgresql/data
   feature-toggle-flyway:
     build:
-      context: feature-toggle-db/flyway
+      context: docker/flyway
     image: docker.artifactory.reform.hmcts.net/reform/flyway
     container_name: feature-toggle-flyway
     environment:

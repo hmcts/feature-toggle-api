@@ -1,23 +1,13 @@
-buildscript {
-  repositories {
-    jcenter()
-  }
-
-  dependencies {
-    classpath 'org.owasp:dependency-check-gradle:3.1.2'
-    classpath 'com.github.ben-manes:gradle-versions-plugin:0.17.0'
-  }
-}
-
 plugins {
   id 'application'
+  id 'checkstyle'
+  id 'pmd'
+  id 'jacoco'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.0.7'
   id 'org.springframework.boot' version '2.0.2.RELEASE'
-}
-
-ext {
-  springBootVersion = springBoot.class.package.implementationVersion
+  id 'org.owasp.dependencycheck' version '3.1.2'
+  id 'com.github.ben-manes.versions' version '0.17.0'
 }
 
 group = 'uk.gov.hmcts.reform'
@@ -27,132 +17,36 @@ version = '0.0.1'
 // enforces it's own (older) version which is not recommended.
 def versions = [
   reformLogging: '3.0.1',
+  springBoot: springBoot.class.package.implementationVersion,
   springCloud: 'Finchley.M9',
   springHystrix: '1.4.4.RELEASE',
   springfoxSwagger: '2.9.0'
 ]
 
-allprojects {
-  apply plugin: 'java'
-  apply plugin: 'checkstyle'
-  apply plugin: 'pmd'
-  apply plugin: 'jacoco'
-  apply plugin: 'org.owasp.dependencycheck'
-  apply plugin: 'com.github.ben-manes.versions'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
-  sourceCompatibility = 1.8
-  targetCompatibility = 1.8
+sourceSets.all { set ->
+  if (!tasks.findByName(set.name) && set.name.indexOf('Test') > 0) {
+    logger.info("setting up $set.name")
 
-  sourceSets.all { set ->
-    if (!tasks.findByName(set.name) && set.name.indexOf('Test') > 0) {
-      logger.info("setting up $project.name:$set.name")
-
-      set.java {
-        compileClasspath += project.sourceSets.main.output
-        runtimeClasspath += project.sourceSets.main.output
-        srcDirs += file("$project.name/$set.name/java")
-      }
-      set.resources {
-        srcDirs += file("$project.name/$set.name/resources")
-      }
-
-      def taskName = set.name.substring(0, set.name.indexOf('Test'))
-
-      task([type: Test, description: "Runs the $taskName tests.", group: 'Verification'], taskName) << {
-        testClassesDirs = set.output.classesDirs
-        classpath = set.runtimeClasspath
-      }
-    } else {
-      logger.info("$project.name:$set.name already exists as a task")
+    set.java {
+      compileClasspath += project.sourceSets.main.output
+      runtimeClasspath += project.sourceSets.main.output
+      srcDirs += file("src/$set.name/java")
     }
-  }
-
-  tasks.withType(JavaCompile) {
-    options.compilerArgs << "-Xlint:unchecked" << "-Werror"
-  }
-
-  checkstyle {
-    maxWarnings = 0
-    toolVersion = '8.9'
-    // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
-    configDir = new File(rootDir, 'config/checkstyle')
-  }
-
-  pmd {
-    toolVersion = "6.3.0"
-    ignoreFailures = true
-    reportsDir = file("$project.buildDir/reports/pmd")
-    ruleSetFiles = files("$rootDir/config/pmd/ruleset.xml")
-  }
-
-  repositories {
-    jcenter()
-    // until new projects get to jcenter
-    maven {
-      url  "https://dl.bintray.com/hmcts/hmcts-maven"
+    set.resources {
+      srcDirs += file("src/$set.name/resources")
     }
-    // remove once spring sorts out their cloud artifact to proper version
-    maven {
-      url "https://repo.spring.io/libs-milestone"
+
+    def taskName = set.name.substring(0, set.name.indexOf('Test'))
+
+    task([type: Test, description: "Runs the $taskName tests.", group: 'Verification'], taskName) << {
+      testClassesDirs = set.output.classesDirs
+      classpath = set.runtimeClasspath
     }
-  }
-
-  dependencyUpdates.resolutionStrategy = {
-    componentSelection { rules ->
-      rules.all { ComponentSelection selection ->
-        boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
-          selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
-        }
-        if (rejected) {
-          selection.reject('Release candidate')
-        }
-      }
-    }
-  }
-
-// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
-  dependencyCheck {
-    // Specifies if the build should be failed if a CVSS score above a specified level is identified.
-    // range of 0-10 fails the build, anything greater and it doesn't fail the build
-    failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
-    suppressionFile = 'config/owasp/suppressions.xml'
-  }
-
-  dependencyManagement {
-    dependencies {
-      dependencySet(group: 'com.google.guava', version: '20.0') {
-        entry 'guava'
-      }
-      // spring boot dependency management plugin downgrades
-      // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
-      // bump to 2.9.5 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
-      dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.5') {
-        entry 'jackson-annotations'
-        entry 'jackson-core'
-        entry 'jackson-databind'
-      }
-    }
-    imports {
-      mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
-      mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
-    }
-  }
-}
-
-subprojects {
-  sourceSets {
-    integrationTest
-  }
-
-  pmd {
-    sourceSets = [sourceSets.main, sourceSets.test, sourceSets.integrationTest]
-  }
-
-  dependencies {
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
-
-    integrationTestCompile sourceSets.main.runtimeClasspath
-    integrationTestCompile sourceSets.test.runtimeClasspath
+  } else {
+    logger.info("$set.name already exists as a task")
   }
 }
 
@@ -162,36 +56,92 @@ sourceSets {
   smokeTest
 }
 
-pmd {
+tasks.withType(JavaCompile) {
+  options.compilerArgs << "-Xlint:unchecked" << "-Werror"
+}
+
+checkstyle {
+  maxWarnings = 0
+  toolVersion = '8.9'
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
+  // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
+  configDir = new File(rootDir, 'config/checkstyle')
+}
+
+pmd {
+  toolVersion = "6.3.0"
+  ignoreFailures = true
+  reportsDir = file("$project.buildDir/reports/pmd")
+  ruleSetFiles = files("$rootDir/config/pmd/ruleset.xml")
 }
 
 jacocoTestReport {
-  dependsOn = [allprojects*.test, allprojects*.integration]
-
-  executionData allprojects.collectMany {
-    ["$it.buildDir/jacoco/test.exec", "$it.buildDir/jacoco/integration.exec"]
-  }
+  executionData(test, integration)
 
   reports {
     xml.enabled = true
     csv.enabled = false
     xml.destination = file("${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
   }
+}
 
-  doFirst {
-    executionData = files(executionData.findAll {
-      it.exists()
-    })
+repositories {
+  jcenter()
+  // until new projects get to jcenter
+  maven {
+    url  "https://dl.bintray.com/hmcts/hmcts-maven"
+  }
+  // remove once spring sorts out their cloud artifact to proper version
+  maven {
+    url "https://repo.spring.io/libs-milestone"
+  }
+}
+
+dependencyUpdates.resolutionStrategy = {
+  componentSelection { rules ->
+    rules.all { ComponentSelection selection ->
+      boolean rejected = ['alpha', 'beta', 'rc', 'cr', 'm'].any { qualifier ->
+        selection.candidate.version ==~ /(?i).*[.-]${qualifier}[.\d-]*/
+      }
+      if (rejected) {
+        selection.reject('Release candidate')
+      }
+    }
+  }
+}
+
+// https://jeremylong.github.io/DependencyCheck/dependency-check-gradle/configuration.html
+dependencyCheck {
+  // Specifies if the build should be failed if a CVSS score above a specified level is identified.
+  // range of 0-10 fails the build, anything greater and it doesn't fail the build
+  failBuildOnCVSS = System.getProperty('dependencyCheck.failBuild') == 'true' ? 0 : 11
+  suppressionFile = 'config/owasp/suppressions.xml'
+}
+
+dependencyManagement {
+  dependencies {
+    dependencySet(group: 'com.google.guava', version: '20.0') {
+      entry 'guava'
+    }
+    // spring boot dependency management plugin downgrades
+    // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
+    // bump to 2.9.5 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
+    dependencySet(group: 'com.fasterxml.jackson.core', version: '2.9.5') {
+      entry 'jackson-annotations'
+      entry 'jackson-core'
+      entry 'jackson-databind'
+    }
+  }
+  imports {
+    mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
+    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
   }
 }
 
 dependencies {
-  compileOnly project(':feature-toggle-core')
-
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -201,7 +151,12 @@ dependencies {
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: versions.springHystrix
 
-  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+  compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
+  compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
+  compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.0'
+
+  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
@@ -210,7 +165,7 @@ dependencies {
 
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
-  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
+  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   // move to `compile`
   smokeTestCompileOnly group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
 }
@@ -225,8 +180,19 @@ bootJar {
   }
 }
 
+flyway {
+  url = System.getenv('FLYWAY_URL')
+  user = System.getenv('FLYWAY_USER')
+  password = System.getenv('FLYWAY_PASSWORD')
+  baselineOnMigrate = true
+  baselineVersion = '000'
+}
+
 import org.flywaydb.gradle.task.FlywayMigrateTask
 
 task migratePostgresDatabase(type: FlywayMigrateTask, dependsOn: ':feature-toggle-db:migratePostgresDatabase') {
-  logger.trace('Migration complete')
+  baselineOnMigrate = true
+  if (project.hasProperty("dburl")) {
+    url = "jdbc:postgresql://${dburl}"
+  }
 }
