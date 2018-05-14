@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.demo.data.migration;
+package uk.gov.hmcts.reform.feature.data.migration;
 
 import org.flywaydb.core.Flyway;
 import org.flywaydb.core.api.MigrationInfo;
@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.boot.autoconfigure.flyway.FlywayMigrationStrategy;
-import uk.gov.hmcts.reform.feature.data.migration.FlywayNoOpStrategy;
 import uk.gov.hmcts.reform.feature.exception.PendingMigrationScriptException;
 
 import static org.assertj.core.api.Assertions.assertThat;
