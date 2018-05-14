@@ -4,6 +4,12 @@ branches:
   only:
     - master
 
+#addons:
+#  apt:
+#    packages:
+#      - libecpg-dev
+#    update: true
+
 services:
   - docker
 
@@ -17,9 +23,11 @@ cache:
   - $HOME/.gradle/wrapper/
 
 before_install:
+#  - sudo pip install pgsanity
   - curl https://raw.githubusercontent.com/hmcts/reform-api-docs/master/bin/publish-swagger-docs.sh > publish-swagger-docs.sh
 
 script:
+#  - pgsanity feature-toggle-db/src/main/resources/db/migration/*.sql
   - ./gradlew test
   - ./gradlew integration
 

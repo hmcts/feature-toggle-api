@@ -1,3 +1,3 @@
 rootProject.name = 'feature-toggle-api'
 
-include 'feature-toggle-core'
+include 'feature-toggle-core', 'feature-toggle-db'

@@ -12,7 +12,12 @@ buildscript {
 plugins {
   id 'application'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
+  id 'org.flywaydb.flyway' version '5.0.7'
   id 'org.springframework.boot' version '2.0.2.RELEASE'
+}
+
+ext {
+  springBootVersion = springBoot.class.package.implementationVersion
 }
 
 group = 'uk.gov.hmcts.reform'
@@ -22,7 +27,6 @@ version = '0.0.1'
 // enforces it's own (older) version which is not recommended.
 def versions = [
   reformLogging: '3.0.1',
-  springBoot: springBoot.class.package.implementationVersion,
   springCloud: 'Finchley.M9',
   springHystrix: '1.4.4.RELEASE',
   springfoxSwagger: '2.9.0'
@@ -41,7 +45,7 @@ allprojects {
 
   sourceSets.all { set ->
     if (!tasks.findByName(set.name) && set.name.indexOf('Test') > 0) {
-      println("setting up $project.name:$set.name")
+      logger.info("setting up $project.name:$set.name")
 
       set.java {
         compileClasspath += project.sourceSets.main.output
@@ -59,7 +63,7 @@ allprojects {
         classpath = set.runtimeClasspath
       }
     } else {
-      println("$project.name:$set.name already exists as a task")
+      logger.info("$project.name:$set.name already exists as a task")
     }
   }
 
@@ -129,7 +133,7 @@ allprojects {
       }
     }
     imports {
-      mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
+      mavenBom "org.springframework.boot:spring-boot-dependencies:$springBootVersion"
       mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
     }
   }
@@ -145,7 +149,7 @@ subprojects {
   }
 
   dependencies {
-    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 
     integrationTestCompile sourceSets.main.runtimeClasspath
     integrationTestCompile sourceSets.test.runtimeClasspath
@@ -185,9 +189,9 @@ jacocoTestReport {
 dependencies {
   compileOnly project(':feature-toggle-core')
 
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: springBootVersion
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: springBootVersion
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: springBootVersion
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -197,7 +201,7 @@ dependencies {
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: versions.springHystrix
 
-  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
@@ -206,7 +210,7 @@ dependencies {
 
   smokeTestCompile sourceSets.main.runtimeClasspath
   smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
-  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: springBootVersion
   // move to `compile`
   smokeTestCompileOnly group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
 }
@@ -219,4 +223,10 @@ bootJar {
   manifest {
     attributes('Implementation-Version': project.version.toString())
   }
+}
+
+import org.flywaydb.gradle.task.FlywayMigrateTask
+
+task migratePostgresDatabase(type: FlywayMigrateTask, dependsOn: ':feature-toggle-db:migratePostgresDatabase') {
+  logger.trace('Migration complete')
 }
