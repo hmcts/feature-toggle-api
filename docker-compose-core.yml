@@ -29,7 +29,7 @@ services:
       - $SERVER_PORT:$SERVER_PORT
   database:
     build:
-      context: feature-toggle-db
+      context: docker/database
     image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-database
     container_name: feature-toggle-database
     environment:
