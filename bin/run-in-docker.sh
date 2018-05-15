@@ -16,6 +16,7 @@ print_help() {
 
   Available parameters:
     DB_PASSWORD                   Defaults to 'password'
+    S2S_URL                       Defaults to 'false' - disables health check
   "
 }
 
@@ -26,6 +27,7 @@ FLYWAY_ENABLED=false
 
 # environment variables
 DB_PASSWORD="password"
+S2S_URL=false
 
 execute_script() {
   cd $(dirname "$0")/..
@@ -45,6 +47,7 @@ execute_script() {
   echo "Assigning environment variables.."
 
   export FEATURES_DB_PASSWORD=${DB_PASSWORD}
+  export S2S_URL=${S2S_URL}
 
   echo "Bringing up docker containers.."
 
@@ -65,6 +68,7 @@ while true ; do
     -p|--param)
       case "$2" in
         DB_PASSWORD=*) DB_PASSWORD="${2#*=}" ; shift 2 ;;
+        S2S_URL=*) S2S_URL="${2#*=}" ; shift 2 ;;
         *) shift 2 ;;
       esac ;;
     *) execute_script ; break ;;

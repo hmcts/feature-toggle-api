@@ -18,6 +18,7 @@ services:
       - FEATURES_DB_CONN_OPTIONS
       - FEATURES_DB_USER_NAME
       - FEATURES_DB_PASSWORD
+      - S2S_URL=false
       # these environment variables are used by java-logging library
       - ROOT_APPENDER
       - JSON_CONSOLE_PRETTY_PRINT
