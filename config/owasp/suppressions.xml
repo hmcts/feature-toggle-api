@@ -11,6 +11,12 @@
   <!-- not used by server -->
 
   <suppress>
+    <notes><![CDATA[Used only for testing not used in prod]]></notes>
+    <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
+    <cpe>cpe:/a:postgresql:postgresql</cpe>
+  </suppress>
+
+  <suppress>
     <notes><![CDATA[main/java/org/apache/directory/groovyldap/LDAP.java in the Groovy LDAP API allows attackers to conduct LDAP entry poisoning attacks by leveraging setting returnObjFlag to true for all search methods]]></notes>
     <gav regex="true">^org\.codehaus\.groovy:groovy-(json|xml):2.4.15$</gav>
     <cve>CVE-2016-6497</cve>
