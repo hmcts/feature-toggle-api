@@ -27,38 +27,54 @@ def versions = [
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
-sourceSets.all { set ->
-  if (!tasks.findByName(set.name) && set.name.indexOf('Test') > 0) {
-    logger.info("setting up $set.name")
-
-    set.java {
-      compileClasspath += project.sourceSets.main.output
-      runtimeClasspath += project.sourceSets.main.output
-      srcDirs += file("src/$set.name/java")
-    }
-    set.resources {
-      srcDirs += file("src/$set.name/resources")
-    }
-
-    def taskName = set.name.substring(0, set.name.indexOf('Test'))
-
-    task([type: Test, description: "Runs the $taskName tests.", group: 'Verification'], taskName) << {
-      testClassesDirs = set.output.classesDirs
-      classpath = set.runtimeClasspath
-    }
-  } else {
-    logger.info("$set.name already exists as a task")
-  }
-}
-
 sourceSets {
-  functionalTest
-  integrationTest
-  smokeTest
+  functionalTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/functionalTest/java')
+    }
+    resources.srcDirs += file('src/functionalTest/resources')
+  }
+
+  integrationTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/integrationTest/java')
+    }
+    resources.srcDirs += file('src/integrationTest/resources')
+  }
+
+  smokeTest {
+    java {
+      compileClasspath += main.output
+      runtimeClasspath += main.output
+      srcDir file('src/smokeTest/java')
+    }
+    resources.srcDirs += file('src/smokeTest/resources')
+  }
 }
 
 tasks.withType(JavaCompile) {
   options.compilerArgs << "-Xlint:unchecked" << "-Werror"
+}
+
+task functional(type: Test, description: 'Runs functional tests', group: 'Verification') {
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
+}
+
+task integration(type: Test, description: 'Runs integration tests', group: 'Verification') {
+  testClassesDirs = sourceSets.integrationTest.output.classesDirs
+  classpath = sourceSets.integrationTest.runtimeClasspath
+
+  environment("APPINSIGHTS_INSTRUMENTATIONKEY", "integration-test-key")
+}
+
+task smoke(type: Test, description: 'Runs smoke tests') {
+  testClassesDirs = sourceSets.smokeTest.output.classesDirs
+  classpath = sourceSets.smokeTest.runtimeClasspath
 }
 
 checkstyle {
@@ -148,6 +164,7 @@ dependencies {
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
 
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix', version: versions.springHystrix
   compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-netflix-hystrix-dashboard', version: versions.springHystrix
@@ -155,8 +172,8 @@ dependencies {
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
-  compile group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.2.17.Final'
-  compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.0'
+  compile group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.3.0.Final'
+  compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.1'
 
   compile group: 'org.ff4j', name: 'ff4j-core', version: versions.ff4j
 
@@ -164,6 +181,7 @@ dependencies {
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
+  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.2'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
 
@@ -194,7 +212,7 @@ flyway {
 
 import org.flywaydb.gradle.task.FlywayMigrateTask
 
-task migratePostgresDatabase(type: FlywayMigrateTask, dependsOn: ':feature-toggle-db:migratePostgresDatabase') {
+task migratePostgresDatabase(type: FlywayMigrateTask) {
   baselineOnMigrate = true
   if (project.hasProperty("dburl")) {
     url = "jdbc:postgresql://${dburl}"
