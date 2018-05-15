@@ -16,6 +16,7 @@ version = '0.0.1'
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 // enforces it's own (older) version which is not recommended.
 def versions = [
+  ff4j: '1.7.1',
   reformLogging: '3.0.1',
   springBoot: springBoot.class.package.implementationVersion,
   springCloud: 'Finchley.M9',
@@ -154,7 +155,10 @@ dependencies {
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
+  compile group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.2.17.Final'
   compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.0'
+
+  compile group: 'org.ff4j', name: 'ff4j-core', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
