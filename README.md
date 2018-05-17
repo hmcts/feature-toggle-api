@@ -6,6 +6,8 @@
 
 ![LLD](/doc/arch/diagram.png)
 
+![sequence](/doc/arch/sequence.png)
+
 ## Building and deploying the application
 
 ### Building the application
