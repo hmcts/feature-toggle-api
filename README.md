@@ -4,6 +4,10 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ace85050970d4ea99e8034a4dc768b63)](https://www.codacy.com/app/HMCTS/feature-toggle-api)
 [![codecov](https://codecov.io/gh/hmcts/feature-toggle-api/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/feature-toggle-api)
 
+![LLD](/doc/arch/diagram.png)
+
+![sequence](/doc/arch/sequence.png)
+
 ## Building and deploying the application
 
 ### Building the application
