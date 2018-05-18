@@ -16,7 +16,7 @@ version = '0.0.1'
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 // enforces it's own (older) version which is not recommended.
 def versions = [
-  ff4j: '1.7.1',
+  ff4j: '1.6.5',
   reformLogging: '2.2.1',
   springBoot: springBoot.class.package.implementationVersion,
   springHystrix: '1.4.4.RELEASE',
@@ -147,6 +147,16 @@ dependencyManagement {
       entry 'tomcat-embed-core'
       entry 'tomcat-embed-websocket'
     }
+    // does not properly cache method references when used with OGNL before 3.0.12,
+    // which allows remote attackers to cause a denial of service (block access to a web site) via unspecified vectors.
+    dependencySet(group: 'ognl', version: '3.0.12') {
+      entry 'ognl'
+    }
+    // before 1.3.2: allows remote attackers to cause a denial of service (CPU consumption) via a long boundary string
+    // before 1.3.3: DiskFileItem File Manipulation Remote Code Execution
+    dependencySet(group: 'commons-fileupload', version: '1.3.3') {
+      entry 'commons-fileupload'
+    }
   }
 }
 
@@ -167,7 +177,10 @@ dependencies {
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
 
-  compile group: 'org.ff4j', name: 'ff4j-core', version: versions.ff4j
+  compile("org.ff4j:ff4j-web:${versions.ff4j}") {
+    exclude group: 'javax.servlet', module: 'jstl'
+  }
+  compile group: 'org.ff4j', name: 'ff4j-spring-boot-web-api', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
