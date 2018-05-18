@@ -5,7 +5,7 @@ plugins {
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.0.7'
-  id 'org.springframework.boot' version '2.0.2.RELEASE'
+  id 'org.springframework.boot' version '1.5.10.RELEASE'
   id 'org.owasp.dependencycheck' version '3.1.2'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
@@ -17,9 +17,8 @@ version = '0.0.1'
 // enforces it's own (older) version which is not recommended.
 def versions = [
   ff4j: '1.7.1',
-  reformLogging: '3.0.1',
+  reformLogging: '2.2.1',
   springBoot: springBoot.class.package.implementationVersion,
-  springCloud: 'Finchley.M9',
   springHystrix: '1.4.4.RELEASE',
   springfoxSwagger: '2.9.0'
 ]
@@ -108,10 +107,6 @@ repositories {
   maven {
     url  "https://dl.bintray.com/hmcts/hmcts-maven"
   }
-  // remove once spring sorts out their cloud artifact to proper version
-  maven {
-    url "https://repo.spring.io/libs-milestone"
-  }
 }
 
 dependencyUpdates.resolutionStrategy = {
@@ -137,9 +132,6 @@ dependencyCheck {
 
 dependencyManagement {
   dependencies {
-    dependencySet(group: 'com.google.guava', version: '20.0') {
-      entry 'guava'
-    }
     // spring boot dependency management plugin downgrades
     // hystrix related libraries use 2.4.3 and not clear if plan to upgrade
     // bump to 2.9.5 because of https://nvd.nist.gov/vuln/detail/CVE-2018-7489
@@ -148,10 +140,13 @@ dependencyManagement {
       entry 'jackson-core'
       entry 'jackson-databind'
     }
-  }
-  imports {
-    mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
-    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
+    // the url pattern of "" is not correctly handled in tomcat
+    // it is possible for unauthorised users to gain access to web application resources that should have been protected
+    // not bumping tomcat-annotations-api as it introduces way more vulnerabilities than 8.5.27
+    dependencySet(group: 'org.apache.tomcat.embed', version: '8.5.29') {
+      entry 'tomcat-embed-core'
+      entry 'tomcat-embed-websocket'
+    }
   }
 }
 
@@ -171,17 +166,15 @@ dependencies {
 
   compile group: 'org.flywaydb', name: 'flyway-core', version: '5.0.7'
   compile group: 'org.postgresql', name: 'postgresql', version: '42.2.2'
-  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
-  compile group: 'org.hibernate', name: 'hibernate-hikaricp', version: '5.3.0.Final'
-  compile group: 'com.vladmihalcea', name: 'hibernate-types-5', version: '2.2.1'
 
   compile group: 'org.ff4j', name: 'ff4j-core', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
-  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.2'
+  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
 
@@ -194,7 +187,7 @@ dependencies {
 
 mainClassName = 'uk.gov.hmcts.reform.feature.Application'
 
-bootJar {
+jar {
   archiveName = 'feature-toggle-api.jar'
 
   manifest {
