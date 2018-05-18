@@ -173,7 +173,7 @@ dependencies {
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
-  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.2'
+  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
 
