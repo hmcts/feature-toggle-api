@@ -5,7 +5,7 @@ plugins {
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.0.7'
-  id 'org.springframework.boot' version '2.0.2.RELEASE'
+  id 'org.springframework.boot' version '1.5.10.RELEASE'
   id 'org.owasp.dependencycheck' version '3.1.2'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
@@ -17,9 +17,8 @@ version = '0.0.1'
 // enforces it's own (older) version which is not recommended.
 def versions = [
   ff4j: '1.7.1',
-  reformLogging: '3.0.1',
+  reformLogging: '2.2.1',
   springBoot: springBoot.class.package.implementationVersion,
-  springCloud: 'Finchley.M9',
   springHystrix: '1.4.4.RELEASE',
   springfoxSwagger: '2.9.0'
 ]
@@ -108,10 +107,6 @@ repositories {
   maven {
     url  "https://dl.bintray.com/hmcts/hmcts-maven"
   }
-  // remove once spring sorts out their cloud artifact to proper version
-  maven {
-    url "https://repo.spring.io/libs-milestone"
-  }
 }
 
 dependencyUpdates.resolutionStrategy = {
@@ -149,10 +144,6 @@ dependencyManagement {
 //      entry 'jackson-databind'
 //    }
   }
-  imports {
-    mavenBom "org.springframework.boot:spring-boot-dependencies:${versions.springBoot}"
-    mavenBom "org.springframework.cloud:spring-cloud-dependencies:${versions.springCloud}"
-  }
 }
 
 dependencies {
@@ -178,6 +169,7 @@ dependencies {
   compile group: 'org.ff4j', name: 'ff4j-core', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
+  testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
@@ -194,7 +186,7 @@ dependencies {
 
 mainClassName = 'uk.gov.hmcts.reform.feature.Application'
 
-bootJar {
+jar {
   archiveName = 'feature-toggle-api.jar'
 
   manifest {
