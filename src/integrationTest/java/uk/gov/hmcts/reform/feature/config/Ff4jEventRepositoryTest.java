@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class Ff4jEventRepositoryTest {
+
     private EventRepository eventRepository;
 
     private static final LocalDateTime localDateTime = LocalDateTime.of(2018, 5, 21, 18, 41, 16);
@@ -26,15 +27,11 @@ public class Ff4jEventRepositoryTest {
     @Autowired
     private DataSource dataSource;
 
-    @Before
-    public void initStore() {
-        eventRepository = new JdbcEventRepository(dataSource);
-        eventRepository.saveEvent(createEvent());
-    }
-
-
     @Test
     public void should_return_event_with_all_details_when_event_exists_in_event_store() {
+        EventRepository eventRepository = new JdbcEventRepository(dataSource);
+        eventRepository.saveEvent(createEvent());
+
         Event cmcFeatureEnableEvent = eventRepository.getEventByUUID("cmc-shutter-page", Timestamp.valueOf(localDateTime).getTime());
         assertThat(cmcFeatureEnableEvent.getName()).isEqualTo("Feature Enable event");
         assertThat(cmcFeatureEnableEvent.getAction()).isEqualTo("enableFeature");
@@ -46,6 +43,8 @@ public class Ff4jEventRepositoryTest {
 
     @Test
     public void should_return_null_when_event_does_not_exists() {
+        EventRepository eventRepository = new JdbcEventRepository(dataSource);
+
         Event cmcFeatureEnableEvent = eventRepository.getEventByUUID("doesnotexist", Timestamp.valueOf(localDateTime).getTime());
         assertThat(cmcFeatureEnableEvent).isNull();
     }
