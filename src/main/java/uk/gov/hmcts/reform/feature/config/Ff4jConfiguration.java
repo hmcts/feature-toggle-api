@@ -39,7 +39,9 @@ public class Ff4jConfiguration {
 
         bean.setName("ff4j-console");
         bean.setLoadOnStartup(1);
-        bean.setInitParameters(Collections.singletonMap(SERVLETPARAM_FF4JPROVIDER, FeatureProvider.class.getCanonicalName()));
+        bean.setInitParameters(Collections.singletonMap(
+            SERVLETPARAM_FF4JPROVIDER, FeatureProvider.class.getCanonicalName()
+        ));
 
         return bean;
     }
