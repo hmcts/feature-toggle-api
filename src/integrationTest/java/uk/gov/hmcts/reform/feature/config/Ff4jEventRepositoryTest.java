@@ -3,7 +3,6 @@ package uk.gov.hmcts.reform.feature.config;
 import org.ff4j.audit.Event;
 import org.ff4j.audit.repository.EventRepository;
 import org.ff4j.audit.repository.JdbcEventRepository;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +31,11 @@ public class Ff4jEventRepositoryTest {
         EventRepository eventRepository = new JdbcEventRepository(dataSource);
         eventRepository.saveEvent(createEvent());
 
-        Event cmcFeatureEnableEvent = eventRepository.getEventByUUID("cmc-shutter-page", Timestamp.valueOf(localDateTime).getTime());
+        Event cmcFeatureEnableEvent = eventRepository.getEventByUUID(
+            "cmc-shutter-page",
+            Timestamp.valueOf(localDateTime).getTime()
+        );
+
         assertThat(cmcFeatureEnableEvent.getName()).isEqualTo("Feature Enable event");
         assertThat(cmcFeatureEnableEvent.getAction()).isEqualTo("enableFeature");
         assertThat(cmcFeatureEnableEvent.getHostName()).isEqualTo("localhost");
@@ -45,7 +48,11 @@ public class Ff4jEventRepositoryTest {
     public void should_return_null_when_event_does_not_exists() {
         EventRepository eventRepository = new JdbcEventRepository(dataSource);
 
-        Event cmcFeatureEnableEvent = eventRepository.getEventByUUID("doesnotexist", Timestamp.valueOf(localDateTime).getTime());
+        Event cmcFeatureEnableEvent = eventRepository.getEventByUUID(
+            "doesnotexist",
+            Timestamp.valueOf(localDateTime).getTime()
+        );
+
         assertThat(cmcFeatureEnableEvent).isNull();
     }
 
