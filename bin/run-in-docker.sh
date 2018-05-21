@@ -38,8 +38,8 @@ execute_script() {
 
   if [ ${GRADLE_INSTALL} = true ]
   then
-    echo "Assembling distribution.."
-    ./gradlew assemble
+    echo "Installing distribution.."
+    ./gradlew installDist
   fi
 
   echo "Assigning environment variables.."
