@@ -5,7 +5,7 @@ plugins {
   id 'jacoco'
   id 'io.spring.dependency-management' version '1.0.5.RELEASE'
   id 'org.flywaydb.flyway' version '5.0.7'
-  id 'org.springframework.boot' version '1.5.10.RELEASE'
+  id 'org.springframework.boot' version '1.5.4.RELEASE'
   id 'org.owasp.dependencycheck' version '3.1.2'
   id 'com.github.ben-manes.versions' version '0.17.0'
 }
@@ -164,6 +164,8 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -181,6 +183,8 @@ dependencies {
     exclude group: 'javax.servlet', module: 'jstl'
   }
   compile group: 'org.ff4j', name: 'ff4j-spring-boot-web-api', version: versions.ff4j
+  compile group: 'org.ff4j', name: 'ff4j-store-springjdbc', version: versions.ff4j
+  compile group: 'org.ff4j', name: 'ff4j-spring-boot-starter', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
