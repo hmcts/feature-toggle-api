@@ -27,15 +27,16 @@ public class Ff4jPropertyStoreTest {
     @Before
     public void initStore() {
         propertyStore.setDataSource(dataSource);
-        propertyStore.createProperty(new PropertyString("testA", "testValueA"));
     }
 
     @Test
     public void should_return_property_with_values_when_property_exists_in_property_store() {
+        propertyStore.createProperty(new PropertyString("testA", "testValueA"));
+
         Property<?> testProperty = propertyStore.readProperty("testA");
 
         assertThat(propertyStore.existProperty("testA")).isTrue();
-        
+
         assertThat(testProperty.getName()).isEqualTo("testA");
         assertThat(testProperty.getType()).isEqualTo("org.ff4j.property.PropertyString");
         assertThat(testProperty.getValue()).isEqualTo("testValueA");
