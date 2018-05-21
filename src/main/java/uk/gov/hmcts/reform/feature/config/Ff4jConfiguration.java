@@ -6,9 +6,9 @@ import org.ff4j.audit.repository.JdbcEventRepository;
 import org.ff4j.springjdbc.store.FeatureStoreSpringJdbc;
 import org.ff4j.springjdbc.store.PropertyStoreSpringJdbc;
 import org.ff4j.web.FF4jDispatcherServlet;
+import org.ff4j.web.FF4jProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -28,13 +28,12 @@ import static org.ff4j.web.bean.WebConstants.SERVLETPARAM_FF4JPROVIDER;
 })
 @ConditionalOnClass(FF4j.class)
 @Configuration
-public class Ff4jConfiguration {
+public class Ff4jConfiguration implements FF4jProvider {
 
     @Autowired
     private DataSource dataSource;
 
     @Bean
-    @ConditionalOnMissingBean
     public FF4j getFF4j() {
         FF4j ff4j = new FF4j();
 
