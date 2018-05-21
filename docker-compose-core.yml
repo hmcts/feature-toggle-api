@@ -11,6 +11,7 @@ services:
     image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-api
     container_name: feature-toggle-api
     environment:
+      - APPINSIGHTS_INSTRUMENTATIONKEY
       - FLYWAY_ENABLED=false
       - FEATURES_DB_HOST
       - FEATURES_DB_PORT

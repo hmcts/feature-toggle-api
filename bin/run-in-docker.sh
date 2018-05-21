@@ -15,6 +15,7 @@ print_help() {
     --help, -h                    Print this help block
 
   Available parameters:
+    APPINSIGHTS                   Defaults to '00000000-0000-0000-0000-000000000000'
     DB_PASSWORD                   Defaults to 'password'
   "
 }
@@ -25,6 +26,7 @@ GRADLE_INSTALL=false
 FLYWAY_ENABLED=false
 
 # environment variables
+APPINSIGHTS="00000000-0000-0000-0000-000000000000"
 DB_PASSWORD="password"
 
 execute_script() {
@@ -38,12 +40,13 @@ execute_script() {
 
   if [ ${GRADLE_INSTALL} = true ]
   then
-    echo "Assembling distribution.."
-    ./gradlew assemble
+    echo "Installing distribution.."
+    ./gradlew installDist
   fi
 
   echo "Assigning environment variables.."
 
+  export APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS}
   export FEATURES_DB_PASSWORD=${DB_PASSWORD}
 
   echo "Bringing up docker containers.."
@@ -64,6 +67,7 @@ while true ; do
     -f|--with-flyway) FLYWAY_ENABLED=true ; shift ;;
     -p|--param)
       case "$2" in
+        APPINSIGHTS=*) APPINSIGHTS="${2#*=}" ; shift 2 ;;
         DB_PASSWORD=*) DB_PASSWORD="${2#*=}" ; shift 2 ;;
         *) shift 2 ;;
       esac ;;

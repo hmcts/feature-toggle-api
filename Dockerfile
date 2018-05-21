@@ -1,8 +1,6 @@
 FROM openjdk:8-jre
 
-COPY build/bootScripts/feature-toggle-api /opt/app/bin/
-
-COPY build/libs/feature-toggle-api.jar /opt/app/lib/
+COPY build/install/feature-toggle-api /opt/app/
 
 WORKDIR /opt/app
 
