@@ -10,6 +10,11 @@ resource "azurerm_resource_group" "rg" {
   location = "${var.location_app}"
 }
 
+# read the microservice key for tests from Vault
+data "vault_generic_secret" "tests_s2s_secret" {
+  path = "secret/${var.vault_section}/ccidam/service-auth-provider/api/microservice-keys/feature-toggle-tests"
+}
+
 locals {
   ase_name               = "${data.terraform_remote_state.core_apps_compute.ase_name[0]}"
 
@@ -46,6 +51,9 @@ module "feature-toggle-api" {
   subscription        = "${var.subscription}"
 
   app_settings = {
+    // s2s
+    S2S_URL                     = "${local.s2s_url}"
+    // db
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
     FEATURES_DB_PORT            = "${module.feature-toggle-db.postgresql_listen_port}"
     FEATURES_DB_USER_NAME       = "${module.feature-toggle-db.user_name}"
