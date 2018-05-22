@@ -1,54 +1,54 @@
 -- Main Table to store Features
 CREATE TABLE FF4J_FEATURES (
-  "FEAT_UID" VARCHAR(100),
-  "ENABLE" INTEGER NOT NULL,
-  "DESCRIPTION" VARCHAR(1000),
-  "STRATEGY" VARCHAR(1000),
-  "EXPRESSION" VARCHAR(255),
-  "GROUPNAME" VARCHAR(100),
-  PRIMARY KEY("FEAT_UID")
+  "feat_uid" VARCHAR(100),
+  "enable" INTEGER NOT NULL,
+  "description" VARCHAR(1000),
+  "strategy" VARCHAR(1000),
+  "expression" VARCHAR(255),
+  "groupname" VARCHAR(100),
+  PRIMARY KEY("feat_uid")
 );
 
 -- Roles to store ACL, FK to main table
 CREATE TABLE FF4J_ROLES (
-  "FEAT_UID" VARCHAR(100) REFERENCES FF4J_FEATURES("FEAT_UID"),
-  "ROLE_NAME" VARCHAR(100),
-  PRIMARY KEY("FEAT_UID", "ROLE_NAME")
+  "feat_uid" VARCHAR(100) REFERENCES FF4J_FEATURES("feat_uid"),
+  "role_name" VARCHAR(100),
+  PRIMARY KEY("feat_uid", "role_name")
 );
 
 -- Feature Internal Custom Properties
 CREATE TABLE FF4J_CUSTOM_PROPERTIES (
-  "PROPERTY_ID" VARCHAR(100) NOT NULL,
-  "CLAZZ" VARCHAR(255) NOT NULL,
-  "CURRENTVALUE" VARCHAR(255),
-  "FIXEDVALUES" VARCHAR(1000),
-  "DESCRIPTION" VARCHAR(1000),
-  "FEAT_UID" VARCHAR(100) REFERENCES FF4J_FEATURES("FEAT_UID"),
-  PRIMARY KEY("PROPERTY_ID", "FEAT_UID")
+  "property_id" VARCHAR(100) NOT NULL,
+  "clazz" VARCHAR(255) NOT NULL,
+  "currentvalue" VARCHAR(255),
+  "fixedvalues" VARCHAR(1000),
+  "description" VARCHAR(1000),
+  "feat_uid" VARCHAR(100) REFERENCES FF4J_FEATURES("feat_uid"),
+  PRIMARY KEY("property_id", "feat_uid")
 );
 
 -- @PropertyStore (edit general properties)
 CREATE TABLE FF4J_PROPERTIES (
-  "PROPERTY_ID" VARCHAR(100) NOT NULL,
-  "CLAZZ" VARCHAR(255) NOT NULL,
-  "CURRENTVALUE" VARCHAR(255),
-  "FIXEDVALUES" VARCHAR(1000),
-  "DESCRIPTION" VARCHAR(1000),
-  PRIMARY KEY("PROPERTY_ID")
+  "property_id" VARCHAR(100) NOT NULL,
+  "clazz" VARCHAR(255) NOT NULL,
+  "currentvalue" VARCHAR(255),
+  "fixedvalues" VARCHAR(1000),
+  "description" VARCHAR(1000),
+  PRIMARY KEY("property_id")
 );
 
 -- @see JdbcEventRepository (audit event)
 CREATE TABLE FF4J_AUDIT (
-  "EVT_UUID" VARCHAR(40) NOT NULL,
-  "EVT_TIME" TIMESTAMP NOT NULL,
-  "EVT_TYPE" VARCHAR(30) NOT NULL,
-  "EVT_NAME" VARCHAR(100) NOT NULL,
-  "EVT_ACTION" VARCHAR(100) NOT NULL,
-  "EVT_HOSTNAME" VARCHAR(100) NOT NULL,
-  "EVT_SOURCE" VARCHAR(30) NOT NULL,
-  "EVT_DURATION" INTEGER,
-  "EVT_USER" VARCHAR(30),
-  "EVT_VALUE" VARCHAR(100),
-  "EVT_KEYS" VARCHAR(255),
-  PRIMARY KEY("EVT_UUID", "EVT_TIME")
+  "evt_uuid" VARCHAR(40) NOT NULL,
+  "evt_time" TIMESTAMP NOT NULL,
+  "evt_type" VARCHAR(30) NOT NULL,
+  "evt_name" VARCHAR(100) NOT NULL,
+  "evt_action" VARCHAR(100) NOT NULL,
+  "evt_hostname" VARCHAR(100) NOT NULL,
+  "evt_source" VARCHAR(30) NOT NULL,
+  "evt_duration" INTEGER,
+  "evt_user" VARCHAR(30),
+  "evt_value" VARCHAR(100),
+  "evt_keys" VARCHAR(255),
+  PRIMARY KEY("evt_uuid", "evt_time")
 );
