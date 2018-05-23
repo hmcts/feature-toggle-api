@@ -45,7 +45,7 @@ public abstract class BaseTest {
             .and()
             .body(createRequestBody.replace("{uid}", featureUuid))
             .when()
-            .put("api/ff4j/store/features/" + featureUuid)
+            .put(API_FF4J_STORE_FEATURES + featureUuid)
             .then()
             .statusCode(201);
     }
