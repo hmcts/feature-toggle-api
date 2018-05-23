@@ -16,10 +16,10 @@ version = '0.0.1'
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 // enforces it's own (older) version which is not recommended.
 def versions = [
-  ff4j: '1.6.5',
-  reformLogging: '2.2.1',
-  springBoot: springBoot.class.package.implementationVersion,
-  springHystrix: '1.4.4.RELEASE',
+  ff4j            : '1.6.5',
+  reformLogging   : '2.2.1',
+  springBoot      : springBoot.class.package.implementationVersion,
+  springHystrix   : '1.4.4.RELEASE',
   springfoxSwagger: '2.9.0'
 ]
 
@@ -44,15 +44,6 @@ sourceSets {
     }
     resources.srcDirs += file('src/integrationTest/resources')
   }
-
-  smokeTest {
-    java {
-      compileClasspath += main.output
-      runtimeClasspath += main.output
-      srcDir file('src/smokeTest/java')
-    }
-    resources.srcDirs += file('src/smokeTest/resources')
-  }
 }
 
 tasks.withType(JavaCompile) {
@@ -72,14 +63,18 @@ task integration(type: Test, description: 'Runs integration tests', group: 'Veri
 }
 
 task smoke(type: Test, description: 'Runs smoke tests') {
-  testClassesDirs = sourceSets.smokeTest.output.classesDirs
-  classpath = sourceSets.smokeTest.runtimeClasspath
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  classpath = sourceSets.functionalTest.runtimeClasspath
+
+  useJUnit {
+    includeCategories 'uk.gov.hmcts.reform.feature.categories.SmokeTestCategory'
+  }
 }
 
 checkstyle {
   maxWarnings = 0
   toolVersion = '8.9'
-  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest, sourceSets.smokeTest]
+  sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest]
   // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
   configDir = new File(rootDir, 'config/checkstyle')
 }
@@ -105,7 +100,7 @@ repositories {
   jcenter()
   // until new projects get to jcenter
   maven {
-    url  "https://dl.bintray.com/hmcts/hmcts-maven"
+    url "https://dl.bintray.com/hmcts/hmcts-maven"
   }
 }
 
@@ -193,12 +188,11 @@ dependencies {
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
+  functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
+  functionalTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
-  smokeTestCompile sourceSets.main.runtimeClasspath
-  smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
-  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   // move to `compile`
-  smokeTestCompileOnly group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
 }
 
 mainClassName = 'uk.gov.hmcts.reform.feature.Application'
