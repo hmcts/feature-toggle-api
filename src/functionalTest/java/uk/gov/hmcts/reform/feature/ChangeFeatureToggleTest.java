@@ -7,7 +7,7 @@ import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 import java.io.IOException;
 import java.util.UUID;
 
-public class FeatureToggleTest extends BaseTest {
+public class ChangeFeatureToggleTest extends BaseTest {
 
 
     @Category(SmokeTestCategory.class)
