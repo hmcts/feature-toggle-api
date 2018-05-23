@@ -24,11 +24,11 @@ public class UpdateFeatureToggleTest extends BaseTest {
             .and()
             .body(loadJson("feature-toggle-update.json").replace("{uid}", featureUuid))
             .when()
-            .put(API_FF4J_STORE_FEATURES + featureUuid);
+            .put(FF4J_STORE_FEATURES_URL + featureUuid);
 
         //Retrieve updated feature toggle
         JsonPath jsonPath = requestSpecification()
-            .get(API_FF4J_STORE_FEATURES + featureUuid).jsonPath();
+            .get(FF4J_STORE_FEATURES_URL + featureUuid).jsonPath();
 
         assertThat(jsonPath.getString("uid")).isEqualTo(featureUuid);
         assertThat(jsonPath.getBoolean("enable")).isFalse();
@@ -36,6 +36,6 @@ public class UpdateFeatureToggleTest extends BaseTest {
 
         //Delete the created feature
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 }

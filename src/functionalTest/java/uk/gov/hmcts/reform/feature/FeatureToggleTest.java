@@ -23,13 +23,13 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post(API_FF4J_STORE_FEATURES + featureUuid + "/enable")
+            .post(FF4J_STORE_FEATURES_URL + featureUuid + "/enable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 
     @Category(SmokeTestCategory.class)
@@ -45,12 +45,12 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post(API_FF4J_STORE_FEATURES + featureUuid + "/disable")
+            .post(FF4J_STORE_FEATURES_URL + featureUuid + "/disable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 }

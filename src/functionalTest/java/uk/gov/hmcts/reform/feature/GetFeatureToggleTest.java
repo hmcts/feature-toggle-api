@@ -19,7 +19,7 @@ public class GetFeatureToggleTest extends BaseTest {
         createFeatureToggle(featureUuid, loadJson("feature-toggle-disabled.json"));
 
         JsonPath jsonPath = requestSpecification()
-            .get(API_FF4J_STORE_FEATURES + featureUuid).jsonPath();
+            .get(FF4J_STORE_FEATURES_URL + featureUuid).jsonPath();
 
         assertThat(jsonPath.getString("uid")).isEqualTo(featureUuid);
         assertThat(jsonPath.getBoolean("enable")).isFalse();
@@ -27,13 +27,13 @@ public class GetFeatureToggleTest extends BaseTest {
 
         //Delete the created feature
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 
     @Test
     public void should_return_response_body_containing_404_exception_when_feature_does_not_exists() {
         JsonPath jsonPath = requestSpecification()
-            .get(API_FF4J_STORE_FEATURES + "doesnotexist").jsonPath();
+            .get(FF4J_STORE_FEATURES_URL + "doesnotexist").jsonPath();
 
         assertThat(jsonPath.getInt("status")).isEqualTo(404);
         assertThat(jsonPath.getString("error")).isEqualTo("Not Found");
@@ -48,7 +48,7 @@ public class GetFeatureToggleTest extends BaseTest {
         deleteAllFeatures();
 
         requestSpecification()
-            .get(API_FF4J_STORE_FEATURES)
+            .get(FF4J_STORE_FEATURES_URL)
             .then()
             .body("$", Matchers.empty());
     }

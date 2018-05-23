@@ -18,7 +18,7 @@ public class DeleteFeatureToggleTest extends BaseTest {
         createFeatureToggle(featureUuid, loadJson("feature-toggle-disabled.json"));
 
         int statusCode = requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid)
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid)
             .getStatusCode();
 
         assertThat(statusCode).isEqualTo(HttpStatus.NO_CONTENT);
@@ -27,7 +27,7 @@ public class DeleteFeatureToggleTest extends BaseTest {
     @Test
     public void should_return_response_containing_404_error_when_feature_does_not_exists_in_feature_store() {
         JsonPath jsonPath = requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + "doesnotexist").jsonPath();
+            .delete(FF4J_STORE_FEATURES_URL + "doesnotexist").jsonPath();
 
         assertThat(jsonPath.getInt("status")).isEqualTo(404);
         assertThat(jsonPath.getString("error")).isEqualTo("Not Found");

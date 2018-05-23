@@ -31,8 +31,8 @@ public class FeatureStoreTest extends BaseTest {
         assertThat(jsonPath.getList("features")).containsExactly(featureUuid1, featureUuid2);
 
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid1);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid1);
         requestSpecification()
-            .delete(API_FF4J_STORE_FEATURES + featureUuid2);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid2);
     }
 }

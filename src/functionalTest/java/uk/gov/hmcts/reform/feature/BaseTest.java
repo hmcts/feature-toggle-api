@@ -24,7 +24,7 @@ public abstract class BaseTest {
 
     protected static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
 
-    protected static final String API_FF4J_STORE_FEATURES = "api/ff4j/store/features/";
+    protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
 
     protected String loadJson(String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
@@ -45,7 +45,7 @@ public abstract class BaseTest {
             .and()
             .body(createRequestBody.replace("{uid}", featureUuid))
             .when()
-            .put(API_FF4J_STORE_FEATURES + featureUuid)
+            .put(FF4J_STORE_FEATURES_URL + featureUuid)
             .then()
             .statusCode(201);
     }
