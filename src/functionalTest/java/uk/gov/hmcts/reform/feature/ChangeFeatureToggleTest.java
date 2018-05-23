@@ -7,7 +7,8 @@ import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 import java.io.IOException;
 import java.util.UUID;
 
-public class FeatureToggleTest extends BaseTest {
+public class ChangeFeatureToggleTest extends BaseTest {
+
 
     @Category(SmokeTestCategory.class)
     @Test
@@ -22,13 +23,13 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post("api/ff4j/store/features/" + featureUuid + "/enable")
+            .post(FF4J_STORE_FEATURES_URL + featureUuid + "/enable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete("api/ff4j/store/features/" + featureUuid);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 
     @Category(SmokeTestCategory.class)
@@ -44,24 +45,12 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post("api/ff4j/store/features/" + featureUuid + "/disable")
+            .post(FF4J_STORE_FEATURES_URL + featureUuid + "/disable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete("api/ff4j/store/features/" + featureUuid);
-
-    }
-
-    private void createFeatureToggle(String featureUuid, String createRequestBody) {
-        requestSpecification()
-            .log().uri()
-            .and()
-            .body(createRequestBody.replace("{uid}", featureUuid))
-            .when()
-            .put("api/ff4j/store/features/" + featureUuid)
-            .then()
-            .statusCode(201);
+            .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 }
