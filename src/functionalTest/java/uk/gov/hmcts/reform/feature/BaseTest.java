@@ -8,7 +8,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.logging.appinsights.SyntheticHeaders;
 
@@ -16,7 +15,6 @@ import java.io.IOException;
 
 @RunWith(SpringRunner.class)
 @SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
-@TestPropertySource("classpath:application.properties")
 public abstract class BaseTest {
 
     @Value("${test-url}")
