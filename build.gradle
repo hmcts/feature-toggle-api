@@ -193,12 +193,11 @@ dependencies {
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.7.3'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
+  functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
+  functionalTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
 
-  smokeTestCompile sourceSets.main.runtimeClasspath
-  smokeTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
-  smokeTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   // move to `compile`
-  smokeTestCompileOnly group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
 }
 
 mainClassName = 'uk.gov.hmcts.reform.feature.Application'
@@ -225,5 +224,15 @@ task migratePostgresDatabase(type: FlywayMigrateTask) {
   baselineOnMigrate = true
   if (project.hasProperty("dburl")) {
     url = "jdbc:postgresql://${dburl}"
+  }
+}
+
+smoke {
+  description = "Runs smoke tests"
+  testClassesDirs = sourceSets.functionalTest.output.classesDirs
+  setClasspath sourceSets.functionalTest.runtimeClasspath
+
+  useJUnit {
+    includeCategories 'uk.gov.hmcts.reform.feature.categories.SmokeTestCategory'
   }
 }
