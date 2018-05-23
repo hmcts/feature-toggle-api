@@ -22,12 +22,12 @@ public class CreateFeatureToggleTest extends BaseTest {
             .and()
             .body(createRequestBody.replace("{uid}", featureUuid))
             .when()
-            .put("api/ff4j/store/features/" + featureUuid)
+            .put(API_FF4J_STORE_FEATURES + featureUuid)
             .then()
             .statusCode(201);
 
         //Delete the created feature
         requestSpecification()
-            .delete("api/ff4j/store/features/" + featureUuid);
+            .delete(API_FF4J_STORE_FEATURES + featureUuid);
     }
 }

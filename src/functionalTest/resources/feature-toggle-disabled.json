@@ -1,5 +1,5 @@
 {
-  "description": "Create feature for smoke test",
+  "description": "Feature toggle for test",
   "enable": false,
   "uid": "{uid}"
 }

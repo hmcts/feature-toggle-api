@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class FeatureToggleTest extends BaseTest {
 
+
     @Category(SmokeTestCategory.class)
     @Test
     public void should_successfully_enable_feature_toggle_in_feature_store() throws IOException {
@@ -22,13 +23,13 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post("api/ff4j/store/features/" + featureUuid + "/enable")
+            .post(API_FF4J_STORE_FEATURES + featureUuid + "/enable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete("api/ff4j/store/features/" + featureUuid);
+            .delete(API_FF4J_STORE_FEATURES + featureUuid);
     }
 
     @Category(SmokeTestCategory.class)
@@ -44,24 +45,12 @@ public class FeatureToggleTest extends BaseTest {
             .log().uri()
             .and()
             .when()
-            .post("api/ff4j/store/features/" + featureUuid + "/disable")
+            .post(API_FF4J_STORE_FEATURES + featureUuid + "/disable")
             .then()
             .statusCode(202);
 
         //Delete the created feature
         requestSpecification()
-            .delete("api/ff4j/store/features/" + featureUuid);
-
-    }
-
-    private void createFeatureToggle(String featureUuid, String createRequestBody) {
-        requestSpecification()
-            .log().uri()
-            .and()
-            .body(createRequestBody.replace("{uid}", featureUuid))
-            .when()
-            .put("api/ff4j/store/features/" + featureUuid)
-            .then()
-            .statusCode(201);
+            .delete(API_FF4J_STORE_FEATURES + featureUuid);
     }
 }
