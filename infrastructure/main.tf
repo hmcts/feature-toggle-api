@@ -18,7 +18,7 @@ locals {
 
   s2s_url                = "http://rpe-service-auth-provider-${local.local_env}.service.${local.local_ase}.internal"
 
-  previewVaultName       = "${var.product}-${var.component}"
+  previewVaultName       = "${var.product}-ft-api"
   nonPreviewVaultName    = "${var.product}-ft-api-${var.env}"
   vaultName              = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
