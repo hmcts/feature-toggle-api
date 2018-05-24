@@ -67,4 +67,16 @@ The URL pattern of "" (the empty string) which exactly maps to the context root 
     <gav regex="true">^org\.codehaus\.groovy:groovy-(json|xml):2.4.13$</gav>
     <cve>CVE-2016-6497</cve>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[Allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attack]]></notes>
+    <gav regex="true">^jstl:jstl:.*$</gav>
+    <cve>CVE-2015-0254</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[when using the TCP socket server or UDP socket server to receive serialized log events from another application, a specially crafted binary payload can be sent that, when deserialized, can execute arbitrary code]]></notes>
+    <gav regex="true">^org\.zenframework\.z8\.dependencies\.commons:log4j-1\.2\.17:.*$</gav>
+    <cve>CVE-2017-5645</cve>
+  </suppress>
 </suppressions>
