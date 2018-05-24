@@ -15,11 +15,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
             .antMatchers("/", "/health", "/info").permitAll()
-            .antMatchers(HttpMethod.GET, "/api/ff4j/**").hasRole("USER")
-            .antMatchers(HttpMethod.OPTIONS, "/api/ff4j/**").hasRole("USER")
-            .antMatchers(HttpMethod.DELETE, "api/ff4j/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.POST, "api/ff4j/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.PUT, "api/ff4j/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET, "/api/ff4j/**").hasAuthority("READ")
+            .antMatchers(HttpMethod.OPTIONS, "/api/ff4j/**").hasAuthority("READ")
+            .antMatchers(HttpMethod.DELETE, "api/ff4j/**").hasAuthority("WRITE")
+            .antMatchers(HttpMethod.POST, "api/ff4j/**").hasAuthority("WRITE")
+            .antMatchers(HttpMethod.PUT, "api/ff4j/**").hasAuthority("WRITE")
             .antMatchers("/ff4j-web-console/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()
@@ -35,9 +35,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .withUser("user")
             .password("password")
             .roles("USER")
+            .authorities("READ")
             .and()
             .withUser("admin")
             .password("admin")
-            .roles("USER", "ADMIN");
+            .roles("USER", "ADMIN")
+            .authorities("READ", "WRITE");
     }
 }
