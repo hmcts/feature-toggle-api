@@ -35,7 +35,7 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() {
-        RestAssured.authentication = RestAssured.basic("user", "password");
+        RestAssured.authentication = RestAssured.basic("admin", "admin");
     }
 
     protected RequestSpecification requestSpecification() {
