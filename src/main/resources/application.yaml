@@ -10,7 +10,7 @@ info:
    app:
       name: Feature Toggle API
       description: This application allows to enable/disable features at runtime without deployment.
-      version: 1.0.0
+      version: 0.0.1
 
 spring:
   application:
