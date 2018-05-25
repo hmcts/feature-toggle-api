@@ -27,7 +27,7 @@ public class InfoEndpointTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.app.version")
-                .value("1.0.0"))
+                .value("0.0.1"))
             .andExpect(jsonPath("$.app.description")
                 .value("This application allows to enable/disable features at runtime without deployment."))
             .andExpect(jsonPath("$.app.name")
