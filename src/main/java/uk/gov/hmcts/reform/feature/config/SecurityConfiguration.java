@@ -24,21 +24,18 @@ public class SecurityConfiguration {
             .withUsername("user")
             .password("password")
             .roles("USER")
-            .authorities("READ")
             .build()
         );
         manager.createUser(User
             .withUsername("master")
             .password("password")
-            .roles("EDITOR")
-            .authorities("READ", "WRITE")
+            .roles("USER", "EDITOR")
             .build()
         );
         manager.createUser(User
             .withUsername("admin")
             .password("admin")
-            .roles("USER", "ADMIN")
-            .authorities("READ", "WRITE")
+            .roles("USER", "EDITOR", "ADMIN")
             .build()
         );
 
@@ -71,12 +68,12 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/api/ff4j/**")
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET).hasAuthority("READ")
-                .antMatchers(HttpMethod.OPTIONS).hasAuthority("READ")
-                .antMatchers(HttpMethod.DELETE).hasAuthority("WRITE")
-                .antMatchers(HttpMethod.POST).hasAuthority("WRITE")
-                .antMatchers(HttpMethod.PUT).hasAuthority("WRITE")
-                .anyRequest().hasAnyRole("USER", "EDITOR")
+                .antMatchers(HttpMethod.GET).hasRole("USER")
+                .antMatchers(HttpMethod.OPTIONS).hasRole("USER")
+                .antMatchers(HttpMethod.DELETE).hasRole("EDITOR")
+                .antMatchers(HttpMethod.POST).hasRole("EDITOR")
+                .antMatchers(HttpMethod.PUT).hasRole("EDITOR")
+                .anyRequest().authenticated()
                 .and()
                 .httpBasic()
                 .and()
