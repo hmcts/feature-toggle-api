@@ -19,5 +19,6 @@ public class AdminAccessTest extends BaseTest {
             .andReturn();
 
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
+        assertThat(response.body().htmlPath().getString("html.head.title")).isEqualTo("FF4J - Home");
     }
 }
