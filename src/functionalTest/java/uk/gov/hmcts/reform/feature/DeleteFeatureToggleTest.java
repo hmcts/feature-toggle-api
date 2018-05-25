@@ -21,7 +21,7 @@ public class DeleteFeatureToggleTest extends BaseTest {
             .delete(FF4J_STORE_FEATURES_URL + featureUuid)
             .getStatusCode();
 
-        assertThat(statusCode).isEqualTo(HttpStatus.NO_CONTENT);
+        assertThat(statusCode).isEqualTo(HttpStatus.NO_CONTENT.value());
     }
 
     @Test
