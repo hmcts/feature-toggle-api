@@ -29,6 +29,8 @@ public abstract class BaseTest {
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
 
+    protected static final String FF4J_WEB_CONSOLE_URL = "ff4j-web-console/";
+
     protected String loadJson(String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
     }
