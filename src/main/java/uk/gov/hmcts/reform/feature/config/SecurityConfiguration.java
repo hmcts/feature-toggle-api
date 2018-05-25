@@ -11,8 +11,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
-import static org.springframework.security.core.userdetails.User.UserBuilder;
-
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration {
@@ -22,12 +20,23 @@ public class SecurityConfiguration {
     public UserDetailsService userDetailsService() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
 
-        manager.createUser(getUserBuilder("user", "password")
+        manager.createUser(User
+            .withUsername("user")
+            .password("password")
             .roles("USER")
             .authorities("READ")
             .build()
         );
-        manager.createUser(getUserBuilder("admin", "admin")
+        manager.createUser(User
+            .withUsername("master")
+            .password("password")
+            .roles("EDITOR")
+            .authorities("READ", "WRITE")
+            .build()
+        );
+        manager.createUser(User
+            .withUsername("admin")
+            .password("admin")
             .roles("USER", "ADMIN")
             .authorities("READ", "WRITE")
             .build()
@@ -67,7 +76,7 @@ public class SecurityConfiguration {
                 .antMatchers(HttpMethod.DELETE).hasAuthority("WRITE")
                 .antMatchers(HttpMethod.POST).hasAuthority("WRITE")
                 .antMatchers(HttpMethod.PUT).hasAuthority("WRITE")
-                .anyRequest().hasRole("USER")
+                .anyRequest().hasAnyRole("USER", "EDITOR")
                 .and()
                 .httpBasic()
                 .and()
@@ -87,9 +96,5 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable();
         }
-    }
-
-    private UserBuilder getUserBuilder(String username, String password) {
-        return User.withUsername(username).password(password);
     }
 }
