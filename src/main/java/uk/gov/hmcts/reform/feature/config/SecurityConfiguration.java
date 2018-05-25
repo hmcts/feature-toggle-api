@@ -45,7 +45,7 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/ff4j-web-console/**")
                 .authorizeRequests()
-                .anyRequest().hasRole("USER")
+                .anyRequest().hasRole("ADMIN")
                 .and()
                 .httpBasic()
                 .and()
