@@ -18,9 +18,6 @@ public class AdminAccessTest extends BaseTest {
             .get(FF4J_WEB_CONSOLE_URL)
             .andReturn();
 
-        System.out.println(response.body().print());
-
         assertThat(response.statusCode()).isEqualTo(HttpStatus.OK.value());
-//        assertThat(response.body().print())
     }
 }
