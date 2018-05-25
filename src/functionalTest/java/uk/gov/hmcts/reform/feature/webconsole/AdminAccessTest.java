@@ -1,4 +1,4 @@
-package uk.gov.hmcts.reform.feature.webConsole;
+package uk.gov.hmcts.reform.feature.webconsole;
 
 import io.restassured.response.Response;
 import org.junit.Test;
