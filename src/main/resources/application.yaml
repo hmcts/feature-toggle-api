@@ -6,6 +6,12 @@ management:
     web:
       base-path: /
 
+info:
+   app:
+      name: Feature Toggle API
+      description: This application allows to enable/disable features at runtime without deployment.
+      version: 1.0.0
+
 spring:
   application:
     name: Feature Toggle API
