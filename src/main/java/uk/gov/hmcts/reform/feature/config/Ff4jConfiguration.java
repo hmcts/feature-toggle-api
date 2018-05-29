@@ -44,6 +44,6 @@ public class Ff4jConfiguration {
         EventRepository eventRepository = new JdbcEventRepository(dataSource);
         ff4j.setEventRepository(eventRepository);
 
-        return ff4j;
+        return ff4j.audit(true);
     }
 }

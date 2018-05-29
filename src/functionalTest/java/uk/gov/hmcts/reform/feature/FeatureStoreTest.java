@@ -25,7 +25,7 @@ public class FeatureStoreTest extends BaseTest {
         JsonPath jsonPath = requestSpecification()
             .get("/api/ff4j/store").jsonPath();
 
-        assertThat(jsonPath.getString("type")).isEqualTo("org.ff4j.springjdbc.store.FeatureStoreSpringJdbc");
+        assertThat(jsonPath.getString("type")).isEqualTo("org.ff4j.audit.proxy.FeatureStoreAuditProxy");
         assertThat(jsonPath.getInt("numberOfFeatures")).isEqualTo(2);
         assertThat(jsonPath.getString("cache")).isNull();
         assertThat(jsonPath.getList("features")).containsExactly(featureUuid1, featureUuid2);
