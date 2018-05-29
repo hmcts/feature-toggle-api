@@ -12,8 +12,8 @@ spring:
   datasource:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://${FEATURES_DB_HOST:localhost}:${FEATURES_DB_PORT:5432}/${FEATURES_DB_NAME:features}${FEATURES_DB_CONN_OPTIONS:}
-    username: ${FEATURES_DB_USER_NAME:postgres}
-    password: ${FEATURES_DB_PASSWORD:postgres}
+    username: ${FEATURES_DB_USER_NAME:featuretoggler}
+    password: ${FEATURES_DB_PASSWORD:}
     properties:
       charSet: UTF-8
     hikari:

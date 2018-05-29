@@ -19,6 +19,7 @@ public class GetFeatureToggleTest extends BaseTest {
         createFeatureToggle(featureUuid, loadJson("feature-toggle-disabled.json"));
 
         JsonPath jsonPath = requestSpecification()
+            .auth().preemptive().basic("user", "password")
             .get(FF4J_STORE_FEATURES_URL + featureUuid).jsonPath();
 
         assertThat(jsonPath.getString("uid")).isEqualTo(featureUuid);
@@ -33,6 +34,7 @@ public class GetFeatureToggleTest extends BaseTest {
     @Test
     public void should_return_response_body_containing_404_exception_when_feature_does_not_exists() {
         JsonPath jsonPath = requestSpecification()
+            .auth().preemptive().basic("user", "password")
             .get(FF4J_STORE_FEATURES_URL + "doesnotexist").jsonPath();
 
         assertThat(jsonPath.getInt("status")).isEqualTo(404);
