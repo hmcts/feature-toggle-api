@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.feature.config;
 import org.ff4j.FF4j;
 import org.ff4j.audit.repository.EventRepository;
 import org.ff4j.audit.repository.JdbcEventRepository;
+import org.ff4j.security.SpringSecurityAuthorisationManager;
 import org.ff4j.springjdbc.store.FeatureStoreSpringJdbc;
 import org.ff4j.springjdbc.store.PropertyStoreSpringJdbc;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,9 @@ public class Ff4jConfiguration {
         // So far the implementation with SpringJDBC is not there, leverage on default JDBC
         EventRepository eventRepository = new JdbcEventRepository(dataSource);
         ff4j.setEventRepository(eventRepository);
+
+        // Set authorisation manager
+        ff4j.setAuthorizationsManager(new SpringSecurityAuthorisationManager());
 
         return ff4j.audit(true);
     }

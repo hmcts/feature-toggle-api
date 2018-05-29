@@ -21,7 +21,6 @@ def versions = [
   reformLogging   : '2.2.1',
   springBoot      : springBoot.class.package.implementationVersion,
   springHystrix   : '1.4.4.RELEASE',
-  springSecurity  : '4.2.6.RELEASE',
   springfoxSwagger: '2.9.0'
 ]
 
@@ -172,8 +171,6 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
-  compile group: 'org.springframework.security', name: 'spring-security-config', version: versions.springSecurity
-  compile group: 'org.springframework.security', name: 'spring-security-web', version: versions.springSecurity
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
@@ -193,6 +190,7 @@ dependencies {
   compile group: 'org.ff4j', name: 'ff4j-spring-boot-web-api', version: versions.ff4j
   compile group: 'org.ff4j', name: 'ff4j-store-springjdbc', version: versions.ff4j
   compile group: 'org.ff4j', name: 'ff4j-spring-boot-starter', version: versions.ff4j
+  compile group: 'org.ff4j', name: 'ff4j-security-spring', version: versions.ff4j
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
@@ -204,7 +202,7 @@ dependencies {
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
   functionalTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
-  functionalTestCompile group: 'org.springframework.security', name: 'spring-security-test', version: versions.springSecurity
+  functionalTestCompile group: 'org.springframework.security', name: 'spring-security-test'
 
   // move to `compile`
   functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
