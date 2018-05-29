@@ -4,10 +4,12 @@ import com.google.common.io.Resources;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.Charsets;
+import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import uk.gov.hmcts.reform.logging.appinsights.SyntheticHeaders;
@@ -15,6 +17,7 @@ import uk.gov.hmcts.reform.logging.appinsights.SyntheticHeaders;
 import java.io.IOException;
 
 @RunWith(SpringRunner.class)
+@ContextConfiguration
 @SuppressWarnings("PMD.AbstractClassWithoutAbstractMethod")
 @TestPropertySource("classpath:application.properties")//Requires for executing tests through IntelliJ IDE
 public abstract class BaseTest {
@@ -26,8 +29,15 @@ public abstract class BaseTest {
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
 
+    protected static final String FF4J_WEB_CONSOLE_URL = "ff4j-web-console/";
+
     protected String loadJson(String fileName) throws IOException {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
+    }
+
+    @Before
+    public void setUp() {
+        RestAssured.authentication = RestAssured.basic("admin", "admin");
     }
 
     protected RequestSpecification requestSpecification() {
