@@ -11,6 +11,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
@@ -27,6 +31,12 @@ public class Ff4jAuditTest {
     @Autowired
     private FF4j ff4j;
 
+    private static final UserDetails ANONYMOUS_USER = User
+        .withUsername("anonymous")
+        .password("")
+        .roles("ANONYMOUS")
+        .build();
+
     private static final EventQueryDefinition EVENT_QUERY_DEFINITION =
         new EventQueryDefinition(0, TimeUtils.getTomorrowMidnightTime());
 
@@ -36,6 +46,13 @@ public class Ff4jAuditTest {
         ff4j.getEventRepository().purgeAuditTrail(EVENT_QUERY_DEFINITION);
         // make sure audit is enabled
         assertThat(ff4j.isEnableAudit()).isTrue();
+
+        // set up anonymous user for auditing check
+        SecurityContextHolder.getContext().setAuthentication(new AnonymousAuthenticationToken(
+            "anonymous-key",
+            ANONYMOUS_USER,
+            ANONYMOUS_USER.getAuthorities()
+        ));
     }
 
     @Test
@@ -67,7 +84,7 @@ public class Ff4jAuditTest {
             ACTION_CREATE, ACTION_DELETE, ACTION_TOGGLE_OFF
         );
         assertThat(events).extracting("user").containsExactlyElementsOf(
-            Collections.nCopies(3, null) // todo
+            Collections.nCopies(3, ANONYMOUS_USER.getUsername())
         );
     }
 }
