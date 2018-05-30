@@ -20,6 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.ff4j.audit.EventConstants.ACTION_CREATE;
 import static org.ff4j.audit.EventConstants.ACTION_DELETE;
 import static org.ff4j.audit.EventConstants.ACTION_TOGGLE_OFF;
@@ -63,17 +64,12 @@ public class Ff4jAuditTest {
         // given
         Feature newFeature = ff4j.createFeature(name, true, description).getFeature(name);
         Feature disabledNewFeature = ff4j.disable(name).getFeature(name);
-        Feature deletedNewFeature = null;
-        try {
-            deletedNewFeature = ff4j.delete(name).getFeature(name);
-        } catch (FeatureNotFoundException exception) {
-            // nothing to do - we have just deleted the feature
-        }
+        Throwable notFound = catchThrowable(() -> ff4j.delete(name).getFeature(name));
 
         // when (assure precondition succeeded to allow following set of actions)
         assertThat(newFeature.isEnable()).isTrue();
         assertThat(disabledNewFeature.isEnable()).isFalse();
-        assertThat(deletedNewFeature).isNull();
+        assertThat(notFound).isInstanceOf(FeatureNotFoundException.class);
 
         // and
         EventSeries events = ff4j.getEventRepository().getAuditTrail(EVENT_QUERY_DEFINITION);
