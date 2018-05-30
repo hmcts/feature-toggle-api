@@ -69,9 +69,6 @@ public class Ff4jAuditTest {
         EventSeries events = ff4j.getEventRepository().getAuditTrail(EVENT_QUERY_DEFINITION);
 
         // then
-        assertThat(events.size()).isEqualTo(4);
-
-        // and
         assertThat(events).extracting("action").containsExactlyInAnyOrder(
             ACTION_CREATE, ACTION_DELETE, ACTION_TOGGLE_OFF, ACTION_TOGGLE_ON
         );
