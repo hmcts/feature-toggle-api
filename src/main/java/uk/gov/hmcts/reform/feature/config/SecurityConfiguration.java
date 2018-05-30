@@ -68,8 +68,8 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/api/ff4j/**")
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET).hasRole("USER")
-                .antMatchers(HttpMethod.OPTIONS).hasRole("USER")
+                .antMatchers(HttpMethod.GET).permitAll()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 .antMatchers(HttpMethod.DELETE).hasRole("EDITOR")
                 .antMatchers(HttpMethod.POST).hasRole("EDITOR")
                 .antMatchers(HttpMethod.PUT).hasRole("EDITOR")
