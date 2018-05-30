@@ -67,16 +67,18 @@ public class Ff4jAuditTest {
         try {
             deletedNewFeature = ff4j.delete(name).getFeature(name);
         } catch (FeatureNotFoundException exception) {
-            // nothing
+            // nothing to do - we have just deleted the feature
         }
 
-        // when
+        // when (assure precondition succeeded to allow following set of actions)
         assertThat(newFeature.isEnable()).isTrue();
         assertThat(disabledNewFeature.isEnable()).isFalse();
         assertThat(deletedNewFeature).isNull();
 
-        // then
+        // and
         EventSeries events = ff4j.getEventRepository().getAuditTrail(EVENT_QUERY_DEFINITION);
+
+        // then
         assertThat(events.size()).isEqualTo(3); // only amendments count
 
         // and
