@@ -44,10 +44,11 @@ public class Ff4jConfiguration {
         // So far the implementation with SpringJDBC is not there, leverage on default JDBC
         EventRepository eventRepository = new JdbcEventRepository(dataSource);
         ff4j.setEventRepository(eventRepository);
+        ff4j.setEnableAudit(true);
 
         // Set authorisation manager
         ff4j.setAuthorizationsManager(new SpringSecurityAuthorisationManager());
 
-        return ff4j.audit(true);
+        return ff4j;
     }
 }
