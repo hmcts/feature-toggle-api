@@ -14,7 +14,7 @@ public class UnauthorizedAccessTest extends BaseTest {
     public void should_restrict_anonymous_access_to_api_ff4j() {
         requestSpecification()
             .auth().none()
-            .get(FF4J_STORE_FEATURES_URL + "doesnotexist")
+            .delete(FF4J_STORE_FEATURES_URL + "doesnotexist")
             .then()
             .statusCode(UNAUTHORIZED.value());
     }
