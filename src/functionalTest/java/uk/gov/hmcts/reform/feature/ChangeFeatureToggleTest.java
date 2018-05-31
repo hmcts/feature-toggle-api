@@ -9,7 +9,6 @@ import java.util.UUID;
 
 public class ChangeFeatureToggleTest extends BaseTest {
 
-
     @Category(SmokeTestCategory.class)
     @Test
     public void should_successfully_enable_feature_toggle_in_feature_store() throws IOException {

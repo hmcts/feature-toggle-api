@@ -37,7 +37,7 @@ public class DeleteFeatureToggleTest extends BaseTest {
 
     @Test
     public void should_allow_to_create_update_and_delete_feature_with_editor_access_levels() throws IOException {
-        RestAssured.authentication = RestAssured.preemptive().basic("master", "password");
+        RestAssured.authentication = RestAssured.preemptive().basic(testEditorUser, testEditorPassword);
 
         String featureUuid = UUID.randomUUID().toString();
 

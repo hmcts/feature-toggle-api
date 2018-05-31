@@ -25,6 +25,24 @@ public abstract class BaseTest {
     @Value("${test-url}")
     protected String testUrl;
 
+    @Value("${test-admin-user}")
+    private String testAdminUser;
+
+    @Value("${test-admin-password}")
+    private String testAdminPassword;
+
+    @Value("${test-editor-user}")
+    protected String testEditorUser;
+
+    @Value("${test-editor-password}")
+    protected String testEditorPassword;
+
+    @Value("${test-read-user}")
+    protected String testReadUser;
+
+    @Value("${test-read-password}")
+    protected String testReadPassword;
+
     protected static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
@@ -37,7 +55,7 @@ public abstract class BaseTest {
 
     @Before
     public void setUp() {
-        RestAssured.authentication = RestAssured.basic("admin", "admin");
+        RestAssured.authentication = RestAssured.basic(testAdminUser, testAdminPassword);
     }
 
     protected RequestSpecification requestSpecification() {

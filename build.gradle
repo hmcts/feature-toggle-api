@@ -191,6 +191,7 @@ dependencies {
   compile group: 'org.ff4j', name: 'ff4j-store-springjdbc', version: versions.ff4j
   compile group: 'org.ff4j', name: 'ff4j-spring-boot-starter', version: versions.ff4j
   compile group: 'org.ff4j', name: 'ff4j-security-spring', version: versions.ff4j
+  compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: versions.springBoot
 
   testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
   testCompile group: 'org.mockito', name: 'mockito-core', version: '2.18.3' // remove once spring boot is v2
@@ -202,7 +203,7 @@ dependencies {
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
   functionalTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
-  functionalTestCompile group: 'org.springframework.security', name: 'spring-security-test'
+  functionalTestCompile group: 'org.springframework.security', name: 'spring-security-test', version: versions.springBoot
 
   // move to `compile`
   functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging

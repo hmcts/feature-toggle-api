@@ -33,7 +33,7 @@ public class UnauthorizedAccessTest extends BaseTest {
     @Test
     public void should_restrict_access_for_read_only_user_to_access_write_api_endpoints() {
         requestSpecification()
-            .auth().preemptive().basic("user", "password")
+            .auth().preemptive().basic(testReadUser, testReadPassword)
             .delete(FF4J_STORE_FEATURES_URL + "doesnotexist")
             .then()
             .statusCode(FORBIDDEN.value());
@@ -43,7 +43,7 @@ public class UnauthorizedAccessTest extends BaseTest {
     @Test
     public void should_restrict_access_for_user_to_access_ff4j_web_console() {
         requestSpecification()
-            .auth().preemptive().basic("user", "password")
+            .auth().preemptive().basic(testReadUser, testReadPassword)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(FORBIDDEN.value());

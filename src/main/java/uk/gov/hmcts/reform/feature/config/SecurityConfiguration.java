@@ -1,45 +1,63 @@
 package uk.gov.hmcts.reform.feature.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.JdbcUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import uk.gov.hmcts.reform.feature.webconsole.WebconsoleUserConfig;
+
+import java.util.List;
+import javax.sql.DataSource;
 
 @Configuration
+@EnableConfigurationProperties(WebconsoleUserConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
-    // TODO replace with proper set up from configs and azure 'n' stuff
-    @Bean
-    public UserDetailsService userDetailsService() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
+    public static final String ROLE_USER = "USER";
+    public static final String ROLE_EDITOR = "EDITOR";
+    public static final String ROLE_ADMIN = "ADMIN";
 
-        manager.createUser(User
-            .withUsername("user")
-            .password("password")
-            .roles("USER")
-            .build()
-        );
-        manager.createUser(User
-            .withUsername("master")
-            .password("password")
-            .roles("USER", "EDITOR")
-            .build()
-        );
-        manager.createUser(User
-            .withUsername("admin")
-            .password("admin")
-            .roles("USER", "EDITOR", "ADMIN")
-            .build()
-        );
+    @Autowired
+    private DataSource dataSource;
 
-        return manager;
+    @Autowired
+    private WebconsoleUserConfig userConfig;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+
+        JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer =
+            auth.jdbcAuthentication().dataSource(dataSource);
+
+        //Create admin users
+        configureUsers(userConfig.getUsers().getAdmins(), jdbcConfigurer, ROLE_ADMIN);
+
+        //Create editor users
+        configureUsers(userConfig.getUsers().getEditors(), jdbcConfigurer, ROLE_EDITOR);
+
+        //Create read only users
+        configureUsers(userConfig.getUsers().getReaders(), jdbcConfigurer, ROLE_USER);
+    }
+
+    @Bean(name = "passwordEncoder")
+    public PasswordEncoder passwordencoder() {
+        return new BCryptPasswordEncoder();
     }
 
     @Configuration
@@ -51,7 +69,7 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/ff4j-web-console/**")
                 .authorizeRequests()
-                .anyRequest().hasRole("ADMIN")
+                .anyRequest().hasRole(ROLE_ADMIN)
                 .and()
                 .httpBasic()
                 .and()
@@ -70,9 +88,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole("EDITOR")
-                .antMatchers(HttpMethod.POST).hasRole("EDITOR")
-                .antMatchers(HttpMethod.PUT).hasRole("EDITOR")
+                .antMatchers(HttpMethod.DELETE).hasRole(ROLE_EDITOR)
+                .antMatchers(HttpMethod.POST).hasRole(ROLE_EDITOR)
+                .antMatchers(HttpMethod.PUT).hasRole(ROLE_EDITOR)
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -94,4 +112,19 @@ public class SecurityConfiguration {
                 .csrf().disable();
         }
     }
+
+    private void configureUsers(
+        List<WebconsoleUserConfig.UserDetails> userDetails,
+        JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer,
+        String role
+    ) {
+        userDetails.stream()
+            .filter(user -> !jdbcConfigurer.getUserDetailsService().userExists(user.getUsername()))
+            .forEach(user -> jdbcConfigurer
+                .withUser(user.getUsername())
+                .password(passwordencoder().encode(user.getPassword()))
+                .authorities(new SimpleGrantedAuthority(role))
+            );
+    }
+
 }
