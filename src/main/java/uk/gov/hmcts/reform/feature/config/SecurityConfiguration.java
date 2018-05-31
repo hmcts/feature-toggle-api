@@ -141,7 +141,15 @@ public class SecurityConfiguration {
             public void onAuthenticationSuccess(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
-                response.sendRedirect(response.encodeRedirectURL("/ff4j-web-console/home"));
+                boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
+                    authority.getAuthority().equals("ROLE_ADMIN")
+                );
+
+                if (isAdmin) {
+                    response.sendRedirect(response.encodeRedirectURL("/ff4j-web-console/home"));
+                } else {
+                    response.sendRedirect(response.encodeRedirectURL("/?login"));
+                }
             }
         }
     }
