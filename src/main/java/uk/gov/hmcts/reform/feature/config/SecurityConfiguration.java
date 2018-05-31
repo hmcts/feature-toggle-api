@@ -1,5 +1,7 @@
 package uk.gov.hmcts.reform.feature.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -10,11 +12,19 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uk.gov.hmcts.reform.feature.webconsole.WebconsoleUserConfig;
 
+import java.io.IOException;
 import java.util.List;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 @Configuration
@@ -66,9 +76,23 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .anyRequest().hasRole(ROLE_ADMIN)
                 .and()
-                .httpBasic()
+                .exceptionHandling().authenticationEntryPoint(new EntryPoint())
                 .and()
                 .csrf().disable();
+        }
+
+        private static class EntryPoint implements AuthenticationEntryPoint {
+
+            static final Logger log = LoggerFactory.getLogger(EntryPoint.class);
+
+            @Override
+            public void commence(HttpServletRequest request,
+                                 HttpServletResponse response,
+                                 AuthenticationException authException) throws IOException, ServletException {
+                log.warn(authException.getMessage(), authException);
+
+                response.sendRedirect(response.encodeRedirectURL("/login?accessDenied"));
+            }
         }
     }
 
@@ -104,7 +128,21 @@ public class SecurityConfiguration {
                 .antMatchers("/", "/health", "/info", "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
+                .formLogin().successHandler(new SuccessHandler()).permitAll()
+                .and()
+                .logout().logoutSuccessUrl("/?logout").permitAll()
+                .and()
                 .csrf().disable();
+        }
+
+        private static class SuccessHandler implements AuthenticationSuccessHandler {
+
+            @Override
+            public void onAuthenticationSuccess(HttpServletRequest request,
+                                                HttpServletResponse response,
+                                                Authentication authentication) throws IOException, ServletException {
+                response.sendRedirect(response.encodeRedirectURL("/ff4j-web-console/home"));
+            }
         }
     }
 
