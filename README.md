@@ -46,7 +46,7 @@ webconsole:
  Passwords needs to be in plain text in the vault and they will be hashed(BCrypt Password encryption) before saving it in database.
  
  :bulb: *Recommendation is to configure username using pattern servicename-admin@hmcts.net and a strong secured password.
- Usernames has to unique hence do not use generic user names.*
+ Usernames have to be unique hence do not use generic user names.*
  
  - Add below code in [main.tf](infrastructure/main.tf)
   
