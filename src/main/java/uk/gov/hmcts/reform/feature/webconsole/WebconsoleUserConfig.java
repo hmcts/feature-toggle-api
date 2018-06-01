@@ -6,17 +6,17 @@ import java.util.List;
 
 @ConfigurationProperties("webconsole")
 public class WebconsoleUserConfig {
-    private User users;
+    private Users users;
 
-    public User getUsers() {
+    public Users getUsers() {
         return users;
     }
 
-    public void setUsers(User users) {
+    public void setUsers(Users users) {
         this.users = users;
     }
 
-    public static class User {
+    public static class Users {
         private List<UserDetails> admins;
         private List<UserDetails> editors;
         private List<UserDetails> readers;

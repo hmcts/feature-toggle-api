@@ -15,7 +15,7 @@
 
   - Admin: These users can login into FF4J web console and perform all operations on feature toggles(create, update, delete, enable, disable and access auditing information using web console).
   - Editor: These users cannot access the FF4J web console but can perform operations such as create, update, delete, enable and disable feature toggle through FF4J REST API.
-  - Read: These users can only read feature toggle values through FF4J REST API and cannot perform any other operations.They also cannot access web console.
+  - Read: These users can only read feature toggle values through FF4J REST API and cannot perform any other operations. They also cannot access web console.
   
  :bulb: *Currently feature toggle values can be read without authentication.*
  
