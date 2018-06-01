@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.feature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -14,7 +13,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import uk.gov.hmcts.reform.feature.webconsole.WebconsoleUserConfig;
 
 import java.util.List;
@@ -39,8 +37,11 @@ public class SecurityConfiguration {
     private UserDetailsService userDetailsService;
 
     @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
+    @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordencoder());
+        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 
         JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer =
             auth.jdbcAuthentication().dataSource(dataSource);
@@ -53,11 +54,6 @@ public class SecurityConfiguration {
 
         //Create read only users
         configureUsers(userConfig.getUsers().getReaders(), jdbcConfigurer, ROLE_USER);
-    }
-
-    @Bean(name = "passwordEncoder")
-    public PasswordEncoder passwordencoder() {
-        return new BCryptPasswordEncoder();
     }
 
     @Configuration
@@ -122,7 +118,7 @@ public class SecurityConfiguration {
             .filter(user -> !jdbcConfigurer.getUserDetailsService().userExists(user.getUsername()))
             .forEach(user -> jdbcConfigurer
                 .withUser(user.getUsername())
-                .password(passwordencoder().encode(user.getPassword()))
+                .password(passwordEncoder.encode(user.getPassword()))
                 .authorities(new SimpleGrantedAuthority(role))
             );
     }
