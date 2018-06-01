@@ -126,5 +126,4 @@ public class SecurityConfiguration {
                 .authorities(new SimpleGrantedAuthority(role))
             );
     }
-
 }
