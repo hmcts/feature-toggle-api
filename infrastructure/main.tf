@@ -51,6 +51,7 @@ module "feature-toggle-api" {
   ilbIp               = "${var.ilbIp}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   subscription        = "${var.subscription}"
+  capacity            = "${var.capacity}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
