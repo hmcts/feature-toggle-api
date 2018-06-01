@@ -47,7 +47,7 @@ public class SecurityConfiguration {
             auth.jdbcAuthentication().dataSource(dataSource);
 
         //Create admin users
-        configureUsers(userConfig.getUsers().getAdmins(), jdbcConfigurer, ROLE_ADMIN);
+        configureUsers(userConfig.getUsers().getAdmins(), jdbcConfigurer, ROLE_ADMIN, ROLE_EDITOR);
 
         //Create editor users
         configureUsers(userConfig.getUsers().getEditors(), jdbcConfigurer, ROLE_EDITOR);
@@ -112,14 +112,14 @@ public class SecurityConfiguration {
     private void configureUsers(
         List<WebconsoleUserConfig.UserDetails> userDetails,
         JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer,
-        String role
+        String... roles
     ) {
         userDetails.stream()
             .filter(user -> !jdbcConfigurer.getUserDetailsService().userExists(user.getUsername()))
             .forEach(user -> jdbcConfigurer
                 .withUser(user.getUsername())
                 .password(passwordEncoder.encode(user.getPassword()))
-                .authorities(new SimpleGrantedAuthority(role))
+                .roles(roles)
             );
     }
 }
