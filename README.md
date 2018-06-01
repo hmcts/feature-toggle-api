@@ -11,20 +11,20 @@
 ## Configuring Users for feature toggle
 
 # Users and Roles
-- There are three different types of users which can configured for feature toggle
+- There are three different types of users which can be configured for feature toggle
 
-  - Admin : These users can login into FF4J web console and perform all operations on feature toggles(create,update,delete,enable,disable and access auditing information using web console)
-  - Editor : These users cannot access the FF4J web console but can perform operations such as create,update,delete,enable and disable feature toggle through FF4J REST API.
-  - Read : These users can only read feature toggle values through FF4J REST API and cannot perform any other operations.They also cannot access web console.
+  - Admin: These users can login into FF4J web console and perform all operations on feature toggles(create, update, delete, enable, disable and access auditing information using web console). 
+  - Editor: These users cannot access the FF4J web console but can perform operations such as create, update, delete, enable and disable feature toggle through FF4J REST API. 
+  - Read: These users can only read feature toggle values through FF4J REST API and cannot perform any other operations.They also cannot access web console. 
   
  :bulb: *Currently feature toggle values can be read without authentication.*
  
- - Roles are dynamically assigned based on the configuration.
+ - Roles are dynamically assigned based on the configuration. 
  
 ## Configuring users using spring config file.
 - Users needs to added to below section in [application.yaml](src/main/resources/application.yaml)
-- Depending on the section in which you add users they will be assigned roles.
-- Username and password are set as environment variable through terraform configuration.
+- Depending on the section in which you add users they will be assigned roles. 
+- Username and password are set as environment variable through terraform configuration. 
  
 ```
 webconsole:
