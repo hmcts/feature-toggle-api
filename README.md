@@ -10,7 +10,8 @@
 
 ## Configuring Users for feature toggle
 
-# Users and Roles
+### Users and Roles
+
 - There are three different types of users which can be configured for feature toggle
 
   - Admin: These users can login into FF4J web console and perform all operations on feature toggles(create, update, delete, enable, disable and access auditing information using web console).
@@ -21,11 +22,12 @@
  
  - Roles are dynamically assigned based on the configuration.
  
-## Configuring users using spring config file.
+### Configuring users using spring config file.
+
 - Users needs to added to below section in [application.yaml](src/main/resources/application.yaml)
 - Depending on the section in which you add users they will be assigned roles.
 - Username and password are set as environment variable through terraform configuration.
- 
+
 ```
 webconsole:
   users:
@@ -75,6 +77,20 @@ webconsole:
        SERVICENAME_ADMIN_PASSWORD          = "${local.servicename_admin_password}"
       }  
      ```
+
+## Access to API and Web Console
+
+API and Web Console is restricted to certain user roles discussed above.
+
+In order to see possible actions one should navigate to root (index) page where together with welcome message inspect the links to login/logout pages and ff4j web console.
+
+**NOTE**. If logged in user does not have sufficient access levels to web console the server response will be parsed to *403 FORBIDDEN* and, despite the fact of API allowance, user will only be able to logout.
+
+API has Basic Authorisation configured which allows following action:
+
+```bash
+curl -X PUT -u username:password -d 'let us create some feature' localhost:8580/api/ff4j/store/features
+```
 
 ## Building and deploying the application
 
