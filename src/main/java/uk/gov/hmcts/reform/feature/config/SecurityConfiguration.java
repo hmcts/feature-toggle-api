@@ -101,7 +101,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                .antMatchers("/", "/health", "/info").permitAll()
+                .antMatchers("/", "/health", "/info", "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .csrf().disable();
