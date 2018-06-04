@@ -8,6 +8,24 @@ def component = "feature-toggle-api"
 
 def channel = '#rpe-build-notices'
 
+List<LinkedHashMap<String, Object>> secrets = [
+  secret('test-admin-user', 'TEST_ADMIN_USERNAME'),
+  secret('test-admin-password', 'TEST_ADMIN_PASSWORD'),
+  secret('test-editor-user', 'TEST_EDITOR_USERNAME'),
+  secret('test-editor-password', 'TEST_EDITOR_PASSWORD'),
+  secret('test-read-user', 'TEST_READ_USERNAME'),
+  secret('test-read-password', 'TEST_READ_PASSWORD')
+]
+
+static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
+  [ $class: 'AzureKeyVaultSecret',
+    secretType: 'Secret',
+    name: secretName,
+    version: '',
+    envVariable: envVar
+  ]
+}
+
 withPipeline(type , product, component) {
    after('test') {
         sh './gradlew integration'
@@ -15,4 +33,5 @@ withPipeline(type , product, component) {
 
   enableDbMigration()
   enableSlackNotifications(channel)
+  loadVaultSecrets(secrets)
 }

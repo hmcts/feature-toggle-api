@@ -44,3 +44,7 @@ variable "jenkins_AAD_objectId" {
 variable "deployment_namespace" {
   default = ""
 }
+
+variable "capacity" {
+  default = "1"
+}

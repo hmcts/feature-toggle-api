@@ -23,6 +23,13 @@ locals {
   vaultName              = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
   db_connection_options  = "?ssl=true"
+
+  test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
+  test_admin_password    = "${data.vault_generic_secret.test-admin-password.data["value"]}"
+  test_editor_user       = "${data.vault_generic_secret.test-editor-user.data["value"]}"
+  test_editor_password   = "${data.vault_generic_secret.test-editor-password.data["value"]}"
+  test_read_user         = "${data.vault_generic_secret.test-read-user.data["value"]}"
+  test_read_password     = "${data.vault_generic_secret.test-read-password.data["value"]}"
 }
 
 module "feature-toggle-db" {
@@ -44,6 +51,7 @@ module "feature-toggle-api" {
   ilbIp               = "${var.ilbIp}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   subscription        = "${var.subscription}"
+  capacity            = "${var.capacity}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
@@ -55,6 +63,12 @@ module "feature-toggle-api" {
     FLYWAY_URL                  = "jdbc:postgresql://${module.feature-toggle-db.host_name}:${module.feature-toggle-db.postgresql_listen_port}/${module.feature-toggle-db.postgresql_database}${local.db_connection_options}"
     FLYWAY_USER                 = "${module.feature-toggle-db.user_name}"
     FLYWAY_PASSWORD             = "${module.feature-toggle-db.postgresql_password}"
+    TEST_ADMIN_USERNAME         = "${local.test_admin_user}"
+    TEST_ADMIN_PASSWORD         = "${local.test_admin_password}"
+    TEST_EDITOR_USERNAME        = "${local.test_editor_user}"
+    TEST_EDITOR_PASSWORD        = "${local.test_editor_password}"
+    TEST_READ_USERNAME          = "${local.test_read_user}"
+    TEST_READ_PASSWORD          = "${local.test_read_password}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false

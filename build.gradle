@@ -202,7 +202,6 @@ dependencies {
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
   functionalTestCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: versions.springBoot
-  functionalTestCompile group: 'org.springframework.security', name: 'spring-security-test'
 
   // move to `compile`
   functionalTestCompile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
