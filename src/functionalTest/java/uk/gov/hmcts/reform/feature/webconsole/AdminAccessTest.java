@@ -20,8 +20,8 @@ public class AdminAccessTest extends BaseTest {
 
         String location = specification
             .contentType(ContentType.URLENC)
-            .formParam("username", "admin")
-            .formParam("password", "admin")
+            .formParam("username", testAdminUser)
+            .formParam("password", testAdminPassword)
             .post("/login")
             .then()
             .statusCode(FOUND.value())

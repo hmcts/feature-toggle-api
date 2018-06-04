@@ -19,8 +19,8 @@ public class LoginTest extends BaseTest {
 
         String location = specification
             .contentType(ContentType.URLENC)
-            .formParam("username", "user")
-            .formParam("password", "password")
+            .formParam("username", testReadUser)
+            .formParam("password", testReadPassword)
             .post("/login")
             .then()
             .statusCode(FOUND.value())

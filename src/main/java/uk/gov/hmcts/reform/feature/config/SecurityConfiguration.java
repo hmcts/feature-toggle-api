@@ -142,7 +142,7 @@ public class SecurityConfiguration {
                                                 HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
                 boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
-                    authority.getAuthority().equals("ROLE_ADMIN")
+                    authority.getAuthority().equals(ROLE_ADMIN)
                 );
 
                 if (isAdmin) {

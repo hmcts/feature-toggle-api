@@ -26,10 +26,10 @@ public abstract class BaseTest {
     protected String testUrl;
 
     @Value("${test-admin-user}")
-    private String testAdminUser;
+    protected String testAdminUser;
 
     @Value("${test-admin-password}")
-    private String testAdminPassword;
+    protected String testAdminPassword;
 
     @Value("${test-editor-user}")
     protected String testEditorUser;
