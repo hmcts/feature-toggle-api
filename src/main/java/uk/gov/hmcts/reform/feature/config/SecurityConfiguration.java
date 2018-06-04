@@ -144,12 +144,9 @@ public class SecurityConfiguration {
                 boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
                     authority.getAuthority().equals(ROLE_ADMIN)
                 );
+                String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
 
-                if (isAdmin) {
-                    response.sendRedirect(response.encodeRedirectURL("/ff4j-web-console/home"));
-                } else {
-                    response.sendRedirect(response.encodeRedirectURL("/?login"));
-                }
+                response.sendRedirect(response.encodeRedirectURL(targetUrl));
             }
         }
     }
