@@ -8,12 +8,50 @@ import uk.gov.hmcts.reform.feature.BaseTest;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.LOCATION;
 import static org.springframework.http.HttpStatus.FOUND;
+import static org.springframework.http.HttpStatus.OK;
 
 public class AdminAccessTest extends BaseTest {
 
     @Category(SmokeTestCategory.class)
+    @Test
+    public void should_verify_login_logour_journey() {
+        RequestSpecification specification = requestSpecification();
+        String jSessionHeader = "JSESSIONID";
+
+        String jSessionId = specification
+            .contentType(ContentType.URLENC)
+            .formParam("username", testAdminUser)
+            .formParam("password", testAdminPassword)
+            .post("/login")
+            .then()
+            .statusCode(FOUND.value())
+            .extract()
+            .cookie(jSessionHeader);
+
+        specification
+            .cookie(jSessionHeader, jSessionId)
+            .get(FF4J_WEB_CONSOLE_URL)
+            .then()
+            .statusCode(OK.value())
+            .body("html.head.title", equalTo("FF4J - Home"));
+
+        specification
+            .cookie(jSessionHeader, jSessionId)
+            .get("/logout")
+            .then()
+            .statusCode(OK.value());
+
+        specification
+            .cookie(jSessionHeader, jSessionId)
+            .get(FF4J_WEB_CONSOLE_URL)
+            .then()
+            .statusCode(OK.value())
+            .body("html.head.title", equalTo("Login Page"));
+    }
+
     @Test
     public void should_allow_admin_to_login_to_ff4j_web_console() {
         RequestSpecification specification = requestSpecification();
