@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureAfter(FlywayAutoConfiguration.class)
-@DependsOn( {"flyway", "flywayInitializer"})
+@DependsOn({"flyway", "flywayInitializer"})
 public class FlywayIntegrationConfig {
     @Autowired
     private DataSource dataSource;
