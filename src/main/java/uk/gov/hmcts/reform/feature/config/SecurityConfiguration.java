@@ -15,9 +15,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import uk.gov.hmcts.reform.feature.webconsole.WebconsoleUserConfig;
 
 import java.io.IOException;
@@ -142,7 +142,9 @@ public class SecurityConfiguration {
                                                 HttpServletResponse response,
                                                 Authentication authentication) throws IOException, ServletException {
                 boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
-                    authority.getAuthority().equals(ROLE_ADMIN)
+                    // since roles are created with automatic prefix of `ROLE_` - authorities come in raw
+                    // need to strip the prefix to match successfully
+                    authority.getAuthority().replaceFirst("ROLE_", "").equals(ROLE_ADMIN)
                 );
                 String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
 
