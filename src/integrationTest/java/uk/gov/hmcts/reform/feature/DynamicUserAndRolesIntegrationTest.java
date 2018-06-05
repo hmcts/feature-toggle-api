@@ -54,7 +54,7 @@ public class DynamicUserAndRolesIntegrationTest {
                 .param("password", "admin123")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             )
-            .andExpect(status().is(HttpStatus.valueOf(302).value()))
+            .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl("/?login"));
     }
 
@@ -66,7 +66,7 @@ public class DynamicUserAndRolesIntegrationTest {
                 .param("password", "admin456")
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
             )
-            .andExpect(status().is(HttpStatus.valueOf(302).value()))
+            .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl(FF4J_WEB_CONSOLE_URL));
     }
 
