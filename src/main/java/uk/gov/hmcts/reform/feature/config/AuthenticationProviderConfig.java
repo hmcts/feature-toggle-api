@@ -9,18 +9,19 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.jdbc.JdbcDaoImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureBefore({SecurityConfiguration.class})
-@ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
 public class AuthenticationProviderConfig {
 
     @Autowired
     private DataSource dataSource;
 
     @Bean
+    @ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
     public UserDetailsService userDetailsService() {
         JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
 
@@ -30,6 +31,12 @@ public class AuthenticationProviderConfig {
         jdbcImpl.setAuthoritiesByUsernameQuery("select username, authority "
             + "from authorities where username=?");
         return jdbcImpl;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = "flyway", name = "enabled", havingValue = "false")
+    public UserDetailsService inMemoryUserDetailsService() {
+        return new InMemoryUserDetailsManager();
     }
 
     @Bean
