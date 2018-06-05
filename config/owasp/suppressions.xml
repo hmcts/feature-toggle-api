@@ -1,59 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
 
-  <!-- -->
-
-  <suppress>
-    <notes>
-<![CDATA[
-Apache Standard Taglibs before 1.2.3 allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attacks via a crafted XSLT extension in a (1) <x:parse> or (2) <x:transform> JSTL XML tag.
-
-The project has been moved to `taglibs-standard-impl` cannot override via dependency management.
-See: https://github.com/ff4j/ff4j/commit/bb62e6c133c1d3f56a6e4f67d8cc613fe69e25d0
-]]>
-    </notes>
-    <gav regex="true">taglibs:standard:1\.1\.2</gav>
-    <cve>CVE-2015-0254</cve>
-  </suppress>
-
-  <!-- server related, mostly applicable to linux. will get better cover with spring boot 2 -->
-
-  <suppress>
-      <notes>
-<![CDATA[
-## CVE-2016-5425
-
-The Tomcat package on Red Hat Enterprise Linux (RHEL) 7, Fedora, CentOS, Oracle Linux, and possibly other Linux distributions uses weak permissions for /usr/lib/tmpfiles.d/tomcat.conf, which allows local users to gain root privileges by leveraging membership in the tomcat group.
-
-## CVE-2016-6325
-
-The Tomcat package on Red Hat Enterprise Linux (RHEL) 5 through 7, JBoss Web Server 3.0, and JBoss EWS 2 uses weak permissions for (1) /etc/sysconfig/tomcat and (2) /etc/tomcat/tomcat.conf, which allows local users to gain privileges by leveraging membership in the tomcat group.
-
-## CVE-2017-6056
-
-Programming error in the processing of HTTPS requests in the Apache Tomcat servlet and JSP engine may result in denial of service via an infinite loop. The denial of service is easily achievable as a consequence of backporting a CVE-2016-6816 fix but not backporting the fix for Tomcat bug 57544. Distributions affected by this backporting issue include Debian (before 7.0.56-3+deb8u8 and 8.0.14-1+deb8u7 in jessie) and Ubuntu.
-
-## CVE-2018-1304
-
-The URL pattern of "" (the empty string) which exactly maps to the context root was not correctly handled in Apache Tomcat 9.0.0.M1 to 9.0.4, 8.5.0 to 8.5.27, 8.0.0.RC1 to 8.0.49 and 7.0.0 to 7.0.84 when used as part of a security constraint definition. This caused the constraint to be ignored. It was, therefore, possible for unauthorised users to gain access to web application resources that should have been protected. Only security constraints with a URL pattern of the empty string were affected.
-]]>
-    </notes>
-    <gav regex="true">org\.apache\.tomcat:tomcat-annotations-api:8\.5\.27</gav>
-    <cve>CVE-2016-5425</cve>
-    <cve>CVE-2016-6325</cve>
-    <cve>CVE-2017-6056</cve>
-    <cve>CVE-2018-1304</cve>
-    <cve>CVE-2018-1305</cve>
-  </suppress>
-
-  <!-- postgresql -->
-
-  <suppress>
-    <notes><![CDATA[A race condition in the postgresql init script could be used by attackers able to access the postgresql account to escalate their privileges to root]]></notes>
-    <gav regex="true">org\.postgresql:postgresql:42\.2\.2</gav>
-    <cve>CVE-2017-14798</cve>
-  </suppress>
-
   <!-- not used by server -->
 
   <suppress>
@@ -69,20 +16,8 @@ The URL pattern of "" (the empty string) which exactly maps to the context root 
   </suppress>
 
   <suppress>
-    <notes><![CDATA[Allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attack]]></notes>
-    <gav regex="true">^jstl:jstl:.*$</gav>
-    <cve>CVE-2015-0254</cve>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[when using the TCP socket server or UDP socket server to receive serialized log events from another application, a specially crafted binary payload can be sent that, when deserialized, can execute arbitrary code]]></notes>
-    <gav regex="true">^org\.zenframework\.z8\.dependencies\.commons:log4j-1\.2\.17:.*$</gav>
-    <cve>CVE-2017-5645</cve>
-  </suppress>
-
-  <suppress>
     <notes><![CDATA[Allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attacks]]></notes>
-    <gav regex="true">^javax\.servlet:jstl:.*$</gav>
+    <gav regex="true">^javax\.servlet:jstl:1\.2$</gav>
     <cve>CVE-2015-0254</cve>
   </suppress>
 </suppressions>
