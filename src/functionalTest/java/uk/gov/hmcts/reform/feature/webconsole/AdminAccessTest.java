@@ -19,9 +19,9 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logour_journey() {
         RequestSpecification specification = requestSpecification();
-        String jSessionHeader = "JSESSIONID";
+        String sessionCookieName = "JSESSIONID";
 
-        String jSessionId = specification
+        String sessionCookieValue = specification
             .contentType(ContentType.URLENC)
             .formParam("username", testAdminUser)
             .formParam("password", testAdminPassword)
@@ -29,23 +29,23 @@ public class AdminAccessTest extends BaseTest {
             .then()
             .statusCode(FOUND.value())
             .extract()
-            .cookie(jSessionHeader);
+            .cookie(sessionCookieName);
 
         specification
-            .cookie(jSessionHeader, jSessionId)
+            .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())
             .body("html.head.title", equalTo("FF4J - Home"));
 
         specification
-            .cookie(jSessionHeader, jSessionId)
+            .cookie(sessionCookieName, sessionCookieValue)
             .get("/logout")
             .then()
             .statusCode(OK.value());
 
         specification
-            .cookie(jSessionHeader, jSessionId)
+            .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())
