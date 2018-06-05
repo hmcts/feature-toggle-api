@@ -4,7 +4,9 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
+import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 public class UnauthorizedAccessTest extends BaseTest {
@@ -26,7 +28,9 @@ public class UnauthorizedAccessTest extends BaseTest {
             .auth().none()
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
-            .statusCode(UNAUTHORIZED.value());
+            .statusCode(OK.value())
+            .and()
+            .body("html.head.title", equalTo("Login Page"));
     }
 
     @Category(SmokeTestCategory.class)
@@ -46,6 +50,8 @@ public class UnauthorizedAccessTest extends BaseTest {
             .auth().preemptive().basic(testReadUser, testReadPassword)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
-            .statusCode(FORBIDDEN.value());
+            .statusCode(OK.value())
+            .and()
+            .body("html.head.title", equalTo("Login Page"));
     }
 }
