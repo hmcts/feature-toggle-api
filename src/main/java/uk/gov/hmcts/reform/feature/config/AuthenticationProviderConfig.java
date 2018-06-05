@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.feature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +14,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureBefore({SecurityConfiguration.class})
+@ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
 public class AuthenticationProviderConfig {
 
     @Autowired

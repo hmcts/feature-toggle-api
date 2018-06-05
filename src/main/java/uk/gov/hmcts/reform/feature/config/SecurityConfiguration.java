@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.feature.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -31,6 +32,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
+@ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
 public class SecurityConfiguration {
 
     public static final String ROLE_USER = "USER";
