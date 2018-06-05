@@ -6,17 +6,16 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.util.Base64Utils;
 
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -64,7 +63,6 @@ public class DynamicUserAndRolesIntegrationTest {
 
     @Test
     public void should_allow_new_user_to_create_feature_toggle_when_configured_as_editor() throws Exception {
-        final String auth = "Basic " + Base64Utils.encodeToString("editortest1@hmcts.net:editor456".getBytes());
         String featureUid = UUID.randomUUID().toString();
 
         JSONObject createFeatureJson = new JSONObject();
@@ -75,9 +73,9 @@ public class DynamicUserAndRolesIntegrationTest {
         mockMvc
             .perform(
                 put(FF4J_STORE_FEATURES_URL + featureUid)
-                    .header(HttpHeaders.AUTHORIZATION, auth)
-                    .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                    .contentType(MediaType.APPLICATION_JSON_VALUE)
                     .content(createFeatureJson.toString())
+                    .with(httpBasic("editortest1@hmcts.net", "editor456"))
             ).andExpect(status().isCreated());
     }
 }
