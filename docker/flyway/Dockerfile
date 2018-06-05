@@ -4,7 +4,7 @@ RUN apt-get update && apt-get -y install postgresql-client
 
 WORKDIR /flyway
 
-ENV FLYWAY_VERSION 5.0.7
+ENV FLYWAY_VERSION 5.1.1
 
 ADD http://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${FLYWAY_VERSION}/flyway-commandline-${FLYWAY_VERSION}.tar.gz flyway-commandline-${FLYWAY_VERSION}.tar.gz
 
