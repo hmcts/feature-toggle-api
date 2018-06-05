@@ -17,7 +17,7 @@ public class AdminAccessTest extends BaseTest {
 
     @Category(SmokeTestCategory.class)
     @Test
-    public void should_verify_login_logour_journey() {
+    public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
         String sessionCookieName = "JSESSIONID";
 
