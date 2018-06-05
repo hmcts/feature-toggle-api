@@ -16,7 +16,7 @@ import org.springframework.util.Base64Utils;
 
 import java.util.UUID;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -49,11 +49,7 @@ public class DynamicUserAndRolesIntegrationTest {
     @Test
     public void should_not_allow_user_to_access_webconsole_when_admin_user_is_changed_to_read_user() throws Exception {
         mockMvc
-            .perform(post("/login")
-                .param("username", "admintest@hmcts.net")
-                .param("password", "admin123")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            )
+            .perform(formLogin().user("admintest@hmcts.net").password("admin123"))
             .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl("/?login"));
     }
@@ -61,11 +57,7 @@ public class DynamicUserAndRolesIntegrationTest {
     @Test
     public void should_allow_new_user_to_access_webconsole_when_configured_as_admin() throws Exception {
         mockMvc
-            .perform(post("/login")
-                .param("username", "admintest1@hmcts.net")
-                .param("password", "admin456")
-                .contentType(MediaType.APPLICATION_FORM_URLENCODED)
-            )
+            .perform(formLogin().user("admintest1@hmcts.net").password("admin456"))
             .andExpect(status().is(HttpStatus.FOUND.value()))
             .andExpect(redirectedUrl(FF4J_WEB_CONSOLE_URL));
     }
