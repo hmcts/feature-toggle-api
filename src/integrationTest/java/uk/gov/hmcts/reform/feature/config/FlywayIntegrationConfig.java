@@ -14,7 +14,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureAfter(FlywayAutoConfiguration.class)
-@DependsOn({"flyway", "flywayInitializer"})
+@DependsOn( {"flyway", "flywayInitializer"})
 public class FlywayIntegrationConfig {
     @Autowired
     private DataSource dataSource;
@@ -31,6 +31,6 @@ public class FlywayIntegrationConfig {
     private void executeSql(String sqlFile) {
         ScriptUtils.executeSqlScript(
             DataSourceUtils.getConnection(dataSource),
-            new ClassPathResource("delete-exisiting-data.sql"));
+            new ClassPathResource(sqlFile));
     }
 }
