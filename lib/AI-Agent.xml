@@ -3,7 +3,6 @@
     <AgentLogger>INFO</AgentLogger>
     <Instrumentation>
         <BuiltIn enabled="true">
-            <HIBERNATE enabled="true"/>
             <HTTP enabled="true"/>
             <JDBC enabled="true"/>
         </BuiltIn>
