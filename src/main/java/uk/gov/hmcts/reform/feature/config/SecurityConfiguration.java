@@ -16,9 +16,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import uk.gov.hmcts.reform.feature.webconsole.WebconsoleUserConfig;
+import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
 import java.io.IOException;
 import java.util.List;
@@ -28,7 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableConfigurationProperties(WebconsoleUserConfig.class)
+@EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -40,7 +41,7 @@ public class SecurityConfiguration {
     private DataSource dataSource;
 
     @Autowired
-    private WebconsoleUserConfig userConfig;
+    private Ff4jUsersConfig userConfig;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -56,13 +57,13 @@ public class SecurityConfiguration {
             auth.jdbcAuthentication().dataSource(dataSource);
 
         //Create admin users
-        configureUsers(userConfig.getUsers().getAdmins(), jdbcConfigurer, ROLE_ADMIN, ROLE_EDITOR);
+        configureUsers(userConfig.getAdmins(), jdbcConfigurer, ROLE_ADMIN, ROLE_EDITOR);
 
         //Create editor users
-        configureUsers(userConfig.getUsers().getEditors(), jdbcConfigurer, ROLE_EDITOR);
+        configureUsers(userConfig.getEditors(), jdbcConfigurer, ROLE_EDITOR);
 
         //Create read only users
-        configureUsers(userConfig.getUsers().getReaders(), jdbcConfigurer, ROLE_USER);
+        configureUsers(userConfig.getReaders(), jdbcConfigurer, ROLE_USER);
     }
 
     @Configuration
@@ -154,16 +155,26 @@ public class SecurityConfiguration {
     }
 
     private void configureUsers(
-        List<WebconsoleUserConfig.UserDetails> userDetails,
+        List<Ff4jUsersConfig.UserDetails> userDetails,
         JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer,
         String... roles
     ) {
         userDetails.stream()
-            .filter(user -> !jdbcConfigurer.getUserDetailsService().userExists(user.getUsername()))
-            .forEach(user -> jdbcConfigurer
-                .withUser(user.getUsername())
-                .password(passwordEncoder.encode(user.getPassword()))
-                .roles(roles)
-            );
+            .forEach(user -> {
+                final String username = user.getUsername();
+                final String password = user.getPassword();
+
+                JdbcUserDetailsManager userDetailsService = jdbcConfigurer.getUserDetailsService();
+
+                if (userDetailsService.userExists(username)) {
+                    //This will delete authorities and then user
+                    userDetailsService.deleteUser(username);
+                }
+
+                jdbcConfigurer
+                    .withUser(username)
+                    .password(passwordEncoder.encode(password))
+                    .roles(roles);
+            });
     }
 }

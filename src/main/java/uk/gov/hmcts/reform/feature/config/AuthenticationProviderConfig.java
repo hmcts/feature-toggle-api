@@ -18,7 +18,7 @@ public class AuthenticationProviderConfig {
     @Autowired
     private DataSource dataSource;
 
-    @Bean(name = "userDetailsService")
+    @Bean
     public UserDetailsService userDetailsService() {
         JdbcDaoImpl jdbcImpl = new JdbcDaoImpl();
 
@@ -30,7 +30,7 @@ public class AuthenticationProviderConfig {
         return jdbcImpl;
     }
 
-    @Bean(name = "passwordEncoder")
+    @Bean
     public PasswordEncoder passwordencoder() {
         return new BCryptPasswordEncoder();
     }

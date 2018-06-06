@@ -29,17 +29,18 @@
 - Username and password are set as environment variable through terraform configuration.
 
 ```
-webconsole:
-  users:
-    admins:
-      - username: ${SERVICENAME_ADMIN_USERNAME}
-        password: ${CMC_ADMIN_PASSWORD}
-    editors:
-      - username: ${SERVICENAME_EDITOR_USERNAME}
-        password: ${CMC_EDITOR_PASSWORD}
-    readers:
-      - username: ${SERVICENAME_READ_USERNAME}
-        password: ${SERVICENAME_READ_PASSWORD}
+users:
+  admins:
+    - username: ${TEST_ADMIN_USERNAME}
+      password: ${TEST_ADMIN_PASSWORD}
+
+  editors:
+    - username: ${TEST_EDITOR_USERNAME}
+      password: ${TEST_EDITOR_PASSWORD}
+
+  readers:
+    - username: ${TEST_READ_USERNAME}
+      password: ${TEST_READ_PASSWORD}
 ```
 
 ### Steps to setup environment variable through terraform are as below
