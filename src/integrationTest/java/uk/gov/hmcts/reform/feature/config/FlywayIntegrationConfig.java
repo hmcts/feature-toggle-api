@@ -21,7 +21,7 @@ public class FlywayIntegrationConfig {
 
     @PostConstruct
     public void loadSqlData() {
-        //Clear data
+        //Clear data-Postconstructs are executed twice.Can be removed once we migrate to Spring boot 2.0.2 RELEASE
         executeSql("delete-exisiting-data.sql");
 
         //load data
