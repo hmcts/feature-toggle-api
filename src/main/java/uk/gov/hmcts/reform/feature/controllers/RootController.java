@@ -5,11 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import static org.springframework.http.ResponseEntity.ok;
@@ -32,12 +31,12 @@ public class RootController {
      * @return Welcome message from the service.
      */
     @GetMapping
-    public ResponseEntity<String> welcome() throws URISyntaxException, IOException {
+    public ResponseEntity<String> welcome() throws IOException {
         String response = TITLE;
-        URL url = getClass().getClassLoader().getResource("index.html");
+        URL url = getClass().getResource("index.html");
 
         if (url != null) {
-            Path path = Paths.get(url.toURI());
+            Path path = FileSystems.getDefault().getPath(url.toString());
             StringBuilder builder = new StringBuilder();
 
             try (Stream<String> lines = Files.lines(path)) {
