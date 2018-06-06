@@ -28,6 +28,6 @@ public class GetWelcomeTest {
             .getResponse()
             .getContentAsString();
 
-        assertThat(response).contains(RootController.TITLE);
+        assertThat(response).contains("Welcome to Feature Toggle API");
     }
 }
