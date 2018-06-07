@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.feature.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
@@ -14,22 +12,19 @@ import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
 import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
 import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_USER;
 
-@EnableConfigurationProperties(Ff4jUsersConfig.class)
 public class UserDetailsConfigurer {
 
     private final UserDetailsManagerConfigurer<?, ?> configurer;
 
     private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private Ff4jUsersConfig userConfig;
 
     public UserDetailsConfigurer(UserDetailsManagerConfigurer<?, ?> configurer, PasswordEncoder passwordEncoder) {
         this.configurer = configurer;
         this.passwordEncoder = passwordEncoder;
     }
 
-    public void configure() {
+    public void configure(Ff4jUsersConfig userConfig) {
         configureUsers(userConfig.getAdmins(), ROLE_ADMIN, ROLE_EDITOR);
         configureUsers(userConfig.getEditors(), ROLE_EDITOR);
         configureUsers(userConfig.getReaders(), ROLE_USER);

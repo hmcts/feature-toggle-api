@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.feature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
+import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
 import javax.sql.DataSource;
 
@@ -22,11 +24,15 @@ import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
 import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
 
 @Configuration
+@EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
     @Autowired
     private DataSource dataSource;
+
+    @Autowired
+    private Ff4jUsersConfig userConfig;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -49,7 +55,7 @@ public class SecurityConfiguration {
             configurer = auth.inMemoryAuthentication();
         }
 
-        new UserDetailsConfigurer(configurer, passwordEncoder).configure();
+        new UserDetailsConfigurer(configurer, passwordEncoder).configure(userConfig);
     }
 
     @Configuration
