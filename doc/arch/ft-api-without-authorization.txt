@@ -1,0 +1,13 @@
+title Feature Toggle API flow
+participant Feature Toggle Client
+participant Feature Toggle (FF4J REST) API
+participant Feature Toggle database
+
+
+Feature Toggle Client->Feature Toggle (FF4J REST) API:Read feature toggle value
+
+Feature Toggle (FF4J REST) API->Feature Toggle database:Retrieve feature toggle value
+
+Feature Toggle (FF4J REST) API<-Feature Toggle database:Feature toggle
+
+Feature Toggle Client<-Feature Toggle (FF4J REST) API:Feature Toggle (if exists else FeatureNotFound response)
