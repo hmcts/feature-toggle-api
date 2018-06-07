@@ -9,9 +9,9 @@ import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig.UserDetails;
 
 import java.util.List;
 
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_USER;
+import static uk.gov.hmcts.reform.feature.security.Roles.ADMIN;
+import static uk.gov.hmcts.reform.feature.security.Roles.EDITOR;
+import static uk.gov.hmcts.reform.feature.security.Roles.USER;
 
 public class UserDetailsConfigurer {
 
@@ -28,9 +28,9 @@ public class UserDetailsConfigurer {
     }
 
     public void configure(Ff4jUsersConfig userConfig) {
-        configureUsers(userConfig.getAdmins(), ROLE_ADMIN, ROLE_EDITOR);
-        configureUsers(userConfig.getEditors(), ROLE_EDITOR);
-        configureUsers(userConfig.getReaders(), ROLE_USER);
+        configureUsers(userConfig.getAdmins(), ADMIN, EDITOR);
+        configureUsers(userConfig.getEditors(), EDITOR);
+        configureUsers(userConfig.getReaders(), USER);
     }
 
     private void configureUsers(List<UserDetails> userDetails, String... roles) {

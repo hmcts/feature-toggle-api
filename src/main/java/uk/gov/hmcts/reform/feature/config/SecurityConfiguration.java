@@ -20,8 +20,8 @@ import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
 import javax.sql.DataSource;
 
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
+import static uk.gov.hmcts.reform.feature.security.Roles.ADMIN;
+import static uk.gov.hmcts.reform.feature.security.Roles.EDITOR;
 
 @Configuration
 @EnableConfigurationProperties(Ff4jUsersConfig.class)
@@ -67,7 +67,7 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/ff4j-web-console/**")
                 .authorizeRequests()
-                .anyRequest().hasRole(ROLE_ADMIN)
+                .anyRequest().hasRole(ADMIN)
                 .and()
                 .exceptionHandling().authenticationEntryPoint(new AuthExceptionEntryPoint())
                 .and()
@@ -86,9 +86,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole(ROLE_EDITOR)
-                .antMatchers(HttpMethod.POST).hasRole(ROLE_EDITOR)
-                .antMatchers(HttpMethod.PUT).hasRole(ROLE_EDITOR)
+                .antMatchers(HttpMethod.DELETE).hasRole(EDITOR)
+                .antMatchers(HttpMethod.POST).hasRole(EDITOR)
+                .antMatchers(HttpMethod.PUT).hasRole(EDITOR)
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()

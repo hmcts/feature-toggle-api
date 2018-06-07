@@ -17,7 +17,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
             // since roles are created with automatic prefix of `ROLE_` - authorities come in raw
             // need to strip the prefix to match successfully
-            authority.getAuthority().replaceFirst("ROLE_", "").equals(Roles.ROLE_ADMIN)
+            authority.getAuthority().replaceFirst("ROLE_", "").equals(Roles.ADMIN)
         );
         String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
 
