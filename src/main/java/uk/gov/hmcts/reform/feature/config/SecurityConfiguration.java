@@ -2,7 +2,6 @@ package uk.gov.hmcts.reform.feature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
@@ -13,28 +12,21 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
-import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
+import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 
-import java.util.List;
 import javax.sql.DataSource;
 
 import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
 import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
-import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_USER;
 
 @Configuration
-@EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
     @Autowired
     private DataSource dataSource;
-
-    @Autowired
-    private Ff4jUsersConfig userConfig;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -57,14 +49,7 @@ public class SecurityConfiguration {
             configurer = auth.inMemoryAuthentication();
         }
 
-        //Create admin users
-        configureUsers(userConfig.getAdmins(), configurer, ROLE_ADMIN, ROLE_EDITOR);
-
-        //Create editor users
-        configureUsers(userConfig.getEditors(), configurer, ROLE_EDITOR);
-
-        //Create read only users
-        configureUsers(userConfig.getReaders(), configurer, ROLE_USER);
+        new UserDetailsConfigurer(configurer, passwordEncoder).configure();
     }
 
     @Configuration
@@ -122,28 +107,5 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable();
         }
-    }
-
-    private void configureUsers(
-        List<Ff4jUsersConfig.UserDetails> userDetails,
-        UserDetailsManagerConfigurer<?, ?> configurer,
-        String... roles
-    ) {
-        userDetails.forEach(user -> {
-            final String username = user.getUsername();
-            final String password = user.getPassword();
-
-            UserDetailsManager userDetailsService = configurer.getUserDetailsService();
-
-            if (userDetailsService.userExists(username)) {
-                //This will delete authorities and then user
-                userDetailsService.deleteUser(username);
-            }
-
-            configurer
-                .withUser(username)
-                .password(passwordEncoder.encode(password))
-                .roles(roles);
-        });
     }
 }
