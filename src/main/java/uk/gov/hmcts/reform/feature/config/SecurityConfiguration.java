@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.feature.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -14,12 +12,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
 import java.io.IOException;
@@ -86,23 +83,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .anyRequest().hasRole(ROLE_ADMIN)
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new EntryPoint())
+                .exceptionHandling().authenticationEntryPoint(new AuthExceptionEntryPoint())
                 .and()
                 .csrf().disable();
-        }
-
-        private static class EntryPoint implements AuthenticationEntryPoint {
-
-            static final Logger log = LoggerFactory.getLogger(EntryPoint.class);
-
-            @Override
-            public void commence(HttpServletRequest request,
-                                 HttpServletResponse response,
-                                 AuthenticationException authException) throws IOException, ServletException {
-                log.warn(authException.getMessage(), authException);
-
-                response.sendRedirect(response.encodeRedirectURL("/login?accessDenied"));
-            }
         }
     }
 
