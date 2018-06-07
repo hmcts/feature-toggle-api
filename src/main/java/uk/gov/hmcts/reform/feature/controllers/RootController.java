@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.Charset;
 
+import static org.springframework.http.MediaType.TEXT_HTML_VALUE;
 import static org.springframework.http.ResponseEntity.ok;
 
 /**
@@ -26,7 +27,7 @@ public class RootController {
      *
      * @return Welcome message from the service.
      */
-    @GetMapping
+    @GetMapping(produces = TEXT_HTML_VALUE)
     public ResponseEntity<String> welcome() throws IOException {
         InputStream in = getClass().getResourceAsStream("/index.html");
 

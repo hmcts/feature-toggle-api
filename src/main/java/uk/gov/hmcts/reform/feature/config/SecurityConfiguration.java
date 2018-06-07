@@ -3,12 +3,13 @@ package uk.gov.hmcts.reform.feature.config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configurers.provisioning.JdbcUserDetailsManagerConfigurer;
+import org.springframework.security.config.annotation.authentication.configurers.provisioning.UserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,7 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
@@ -49,21 +50,29 @@ public class SecurityConfiguration {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Value("${flyway.enabled:true}")
+    private boolean flywayEnabled;
+
     @Autowired
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
 
-        JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer =
-            auth.jdbcAuthentication().dataSource(dataSource);
+        UserDetailsManagerConfigurer<?, ?> configurer;
+
+        if (flywayEnabled) {
+            configurer = auth.jdbcAuthentication().dataSource(dataSource);
+        } else {
+            configurer = auth.inMemoryAuthentication();
+        }
 
         //Create admin users
-        configureUsers(userConfig.getAdmins(), jdbcConfigurer, ROLE_ADMIN, ROLE_EDITOR);
+        configureUsers(userConfig.getAdmins(), configurer, ROLE_ADMIN, ROLE_EDITOR);
 
         //Create editor users
-        configureUsers(userConfig.getEditors(), jdbcConfigurer, ROLE_EDITOR);
+        configureUsers(userConfig.getEditors(), configurer, ROLE_EDITOR);
 
         //Create read only users
-        configureUsers(userConfig.getReaders(), jdbcConfigurer, ROLE_USER);
+        configureUsers(userConfig.getReaders(), configurer, ROLE_USER);
     }
 
     @Configuration
@@ -156,7 +165,7 @@ public class SecurityConfiguration {
 
     private void configureUsers(
         List<Ff4jUsersConfig.UserDetails> userDetails,
-        JdbcUserDetailsManagerConfigurer<AuthenticationManagerBuilder> jdbcConfigurer,
+        UserDetailsManagerConfigurer<?, ?> configurer,
         String... roles
     ) {
         userDetails.stream()
@@ -164,14 +173,14 @@ public class SecurityConfiguration {
                 final String username = user.getUsername();
                 final String password = user.getPassword();
 
-                JdbcUserDetailsManager userDetailsService = jdbcConfigurer.getUserDetailsService();
+                UserDetailsManager userDetailsService = configurer.getUserDetailsService();
 
                 if (userDetailsService.userExists(username)) {
                     //This will delete authorities and then user
                     userDetailsService.deleteUser(username);
                 }
 
-                jdbcConfigurer
+                configurer
                     .withUser(username)
                     .password(passwordEncoder.encode(password))
                     .roles(roles);

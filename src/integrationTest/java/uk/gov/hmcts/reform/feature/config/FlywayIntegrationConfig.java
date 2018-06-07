@@ -2,6 +2,7 @@ package uk.gov.hmcts.reform.feature.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -14,6 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureAfter(FlywayAutoConfiguration.class)
+@ConditionalOnProperty(prefix = "flyway", name = "enabled", matchIfMissing = true)
 @DependsOn({"flyway", "flywayInitializer"})
 public class FlywayIntegrationConfig {
     @Autowired
