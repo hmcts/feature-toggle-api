@@ -1,0 +1,24 @@
+title Feature Toggle API flow(With Authorization Manager)
+participant Feature Toggle Client
+participant Feature Toggle (FF4J REST) API
+participant Authorization Manager
+participant Feature Toggle database
+
+Feature Toggle Client->Feature Toggle (FF4J REST) API:Read feature toggle value
+
+Feature Toggle (FF4J REST) API->Authorization Manager:Get User Permissions
+
+Authorization Manager->Feature Toggle database:Get Permission lists
+
+Authorization Manager<-Feature Toggle database:Permisssions
+
+Feature Toggle (FF4J REST) API<-Authorization Manager:Permisssions
+
+Feature Toggle (FF4J REST) API->Feature Toggle database:If authorized retrieve feature toggle value
+
+Feature Toggle Client<--Feature Toggle (FF4J REST) API:If unauthorized then return Forbidden response
+
+Feature Toggle (FF4J REST) API<-Feature Toggle database:Feature toggle
+
+Feature Toggle Client<-Feature Toggle (FF4J REST) API:Feature Toggle (if exists else FeatureNotFound response)
+

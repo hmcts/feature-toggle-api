@@ -4,9 +4,11 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ace85050970d4ea99e8034a4dc768b63)](https://www.codacy.com/app/HMCTS/feature-toggle-api)
 [![codecov](https://codecov.io/gh/hmcts/feature-toggle-api/branch/master/graph/badge.svg)](https://codecov.io/gh/hmcts/feature-toggle-api)
 
-![LLD](/doc/arch/diagram.png)
+![LLD](/doc/arch/ft-api-component.png)
 
-![sequence](/doc/arch/sequence.png)
+![Sequence diagram without authorization](/doc/arch/ft-api-without-authorization-sequence-diag.png)
+
+![Sequence diagram with authorization](/doc/arch/ft-api-with-authorization-sequence-diag.png)
 
 ## Configuring Users for feature toggle
 
