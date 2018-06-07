@@ -11,19 +11,14 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
+import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
-import java.io.IOException;
 import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 @Configuration
@@ -121,28 +116,11 @@ public class SecurityConfiguration {
                 .antMatchers("/", "/health", "/info", "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(new SuccessHandler()).permitAll()
+                .formLogin().successHandler(new LoginSuccessHandler()).permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/?logout").permitAll()
                 .and()
                 .csrf().disable();
-        }
-
-        private static class SuccessHandler implements AuthenticationSuccessHandler {
-
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                Authentication authentication) throws IOException, ServletException {
-                boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
-                    // since roles are created with automatic prefix of `ROLE_` - authorities come in raw
-                    // need to strip the prefix to match successfully
-                    authority.getAuthority().replaceFirst("ROLE_", "").equals(ROLE_ADMIN)
-                );
-                String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
-
-                response.sendRedirect(response.encodeRedirectURL(targetUrl));
-            }
         }
     }
 
