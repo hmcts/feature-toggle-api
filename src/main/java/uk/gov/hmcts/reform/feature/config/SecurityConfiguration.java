@@ -129,22 +129,21 @@ public class SecurityConfiguration {
         UserDetailsManagerConfigurer<?, ?> configurer,
         String... roles
     ) {
-        userDetails.stream()
-            .forEach(user -> {
-                final String username = user.getUsername();
-                final String password = user.getPassword();
+        userDetails.forEach(user -> {
+            final String username = user.getUsername();
+            final String password = user.getPassword();
 
-                UserDetailsManager userDetailsService = configurer.getUserDetailsService();
+            UserDetailsManager userDetailsService = configurer.getUserDetailsService();
 
-                if (userDetailsService.userExists(username)) {
-                    //This will delete authorities and then user
-                    userDetailsService.deleteUser(username);
-                }
+            if (userDetailsService.userExists(username)) {
+                //This will delete authorities and then user
+                userDetailsService.deleteUser(username);
+            }
 
-                configurer
-                    .withUser(username)
-                    .password(passwordEncoder.encode(password))
-                    .roles(roles);
-            });
+            configurer
+                .withUser(username)
+                .password(passwordEncoder.encode(password))
+                .roles(roles);
+        });
     }
 }
