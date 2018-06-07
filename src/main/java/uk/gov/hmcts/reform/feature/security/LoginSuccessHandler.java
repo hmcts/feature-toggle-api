@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static uk.gov.hmcts.reform.feature.config.SecurityConfiguration.ROLE_ADMIN;
-
 public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Override
@@ -19,7 +17,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
             // since roles are created with automatic prefix of `ROLE_` - authorities come in raw
             // need to strip the prefix to match successfully
-            authority.getAuthority().replaceFirst("ROLE_", "").equals(ROLE_ADMIN)
+            authority.getAuthority().replaceFirst("ROLE_", "").equals(Roles.ROLE_ADMIN)
         );
         String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
 

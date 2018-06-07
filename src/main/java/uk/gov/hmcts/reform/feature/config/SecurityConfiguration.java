@@ -21,14 +21,14 @@ import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 import java.util.List;
 import javax.sql.DataSource;
 
+import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_ADMIN;
+import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_EDITOR;
+import static uk.gov.hmcts.reform.feature.security.Roles.ROLE_USER;
+
 @Configuration
 @EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
-
-    public static final String ROLE_USER = "USER";
-    public static final String ROLE_EDITOR = "EDITOR";
-    public static final String ROLE_ADMIN = "ADMIN";
 
     @Autowired
     private DataSource dataSource;
