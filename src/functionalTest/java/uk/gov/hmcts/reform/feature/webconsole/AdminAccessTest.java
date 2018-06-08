@@ -21,7 +21,7 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
-        String jSessionCookieName = "JSESSIONID";
+        String javaSessionCookieName = "JSESSIONID";
         String sessionCookieName = "SESSION";
 
         Map<String, String> cookies = specification
@@ -34,11 +34,11 @@ public class AdminAccessTest extends BaseTest {
             .extract()
             .cookies();
 
-        String jSessionCookieValue = cookies.getOrDefault(jSessionCookieName, "");
+        String javaSessionCookieValue = cookies.getOrDefault(javaSessionCookieName, "");
         String sessionCookieValue = cookies.getOrDefault(sessionCookieName, "");
 
         specification
-            .cookie(jSessionCookieName, jSessionCookieValue)
+            .cookie(javaSessionCookieName, javaSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
@@ -46,14 +46,14 @@ public class AdminAccessTest extends BaseTest {
             .body("html.head.title", equalTo("FF4J - Home"));
 
         specification
-            .cookie(jSessionCookieName, jSessionCookieValue)
+            .cookie(javaSessionCookieName, javaSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get("/logout")
             .then()
             .statusCode(OK.value());
 
         specification
-            .cookie(jSessionCookieName, jSessionCookieValue)
+            .cookie(javaSessionCookieName, javaSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
