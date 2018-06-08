@@ -53,7 +53,7 @@ module "feature-toggle-api" {
   subscription         = "${var.subscription}"
   capacity             = "${var.capacity}"
   additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
-  is_frontend          = "${var.env != "preview" ? 1: 0}"
+  is_frontend          = "${var.env != "preview" ? true: false}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
