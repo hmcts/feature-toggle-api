@@ -28,6 +28,8 @@ spring:
       poolName: FeatureToggleHikariCP
       maxLifetime: 7200000
       connectionTimeout: 30000
+  session:
+    store-type: jdbc
 
 users:
   admins:

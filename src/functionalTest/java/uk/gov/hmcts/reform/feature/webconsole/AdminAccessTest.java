@@ -7,6 +7,8 @@ import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.BaseTest;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
+import java.util.Map;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.http.HttpHeaders.LOCATION;
@@ -19,9 +21,10 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
-        String sessionCookieName = "JSESSIONID";
+        String jSessionCookieName = "JSESSIONID";
+        String sessionCookieName = "SESSION";
 
-        String sessionCookieValue = specification
+        Map<String, String> cookies = specification
             .contentType(ContentType.URLENC)
             .formParam("username", testAdminUser)
             .formParam("password", testAdminPassword)
@@ -29,9 +32,13 @@ public class AdminAccessTest extends BaseTest {
             .then()
             .statusCode(FOUND.value())
             .extract()
-            .cookie(sessionCookieName);
+            .cookies();
+
+        String jSessionCookieValue = cookies.getOrDefault(jSessionCookieName, "");
+        String sessionCookieValue = cookies.getOrDefault(sessionCookieName, "");
 
         specification
+            .cookie(jSessionCookieName, jSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
@@ -39,12 +46,14 @@ public class AdminAccessTest extends BaseTest {
             .body("html.head.title", equalTo("FF4J - Home"));
 
         specification
+            .cookie(jSessionCookieName, jSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get("/logout")
             .then()
             .statusCode(OK.value());
 
         specification
+            .cookie(jSessionCookieName, jSessionCookieValue)
             .cookie(sessionCookieName, sessionCookieValue)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
