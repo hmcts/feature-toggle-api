@@ -1,5 +1,8 @@
 server:
   port: 8580
+  servlet:
+      session:
+        timeout: ${SERVER_SESSION_TIMEOUT:1800}
 
 management:
   endpoints:
