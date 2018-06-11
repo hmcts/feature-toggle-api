@@ -17,6 +17,30 @@ public class AdminAccessTest extends BaseTest {
 
     @Category(SmokeTestCategory.class)
     @Test
+    public void should_not_allow_access_for_non_admin_user() {
+        RequestSpecification specification = requestSpecification();
+        String sessionCookieName = "SESSION";
+
+        String sessionCookieValue = specification
+            .contentType(ContentType.URLENC)
+            .formParam("username", testEditorUser)
+            .formParam("password", testEditorPassword)
+            .post("/login")
+            .then()
+            .statusCode(FOUND.value())
+            .extract()
+            .cookie(sessionCookieName);
+
+        specification
+            .cookie(sessionCookieName, sessionCookieValue)
+            .get(FF4J_WEB_CONSOLE_URL)
+            .then()
+            .statusCode(OK.value())
+            .body("html.head.title", equalTo("Error"));
+    }
+
+    @Category(SmokeTestCategory.class)
+    @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
         String sessionCookieName = "SESSION";
