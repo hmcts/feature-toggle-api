@@ -19,7 +19,7 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
-        String sessionCookieName = "JSESSIONID";
+        String sessionCookieName = "SESSION";
 
         String sessionCookieValue = specification
             .contentType(ContentType.URLENC)
