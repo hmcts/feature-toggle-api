@@ -48,3 +48,7 @@ variable "deployment_namespace" {
 variable "capacity" {
   default = "1"
 }
+
+variable "external_host_name" {
+  default = "www.featuretoggle.sandbox.platform.hmcts.net"
+}

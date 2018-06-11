@@ -44,14 +44,16 @@ module "feature-toggle-db" {
 }
 
 module "feature-toggle-api" {
-  source              = "git@github.com:hmcts/moj-module-webapp?ref=master"
-  product             = "${var.product}-${var.component}"
-  location            = "${var.location_app}"
-  env                 = "${var.env}"
-  ilbIp               = "${var.ilbIp}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-  subscription        = "${var.subscription}"
-  capacity            = "${var.capacity}"
+  source               = "git@github.com:hmcts/moj-module-webapp?ref=master"
+  product              = "${var.product}-${var.component}"
+  location             = "${var.location_app}"
+  env                  = "${var.env}"
+  ilbIp                = "${var.ilbIp}"
+  resource_group_name  = "${azurerm_resource_group.rg.name}"
+  subscription         = "${var.subscription}"
+  capacity             = "${var.capacity}"
+  additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
+  is_frontend          = "${var.env != "preview" ? 1: 0}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
