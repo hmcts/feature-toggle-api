@@ -171,6 +171,7 @@ dependencies {
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-aop', version: versions.springBoot
   compile group: 'org.springframework.boot', name: 'spring-boot-starter-jdbc', version: versions.springBoot
+  compile group: 'org.springframework.session', name: 'spring-session-jdbc', version: '1.3.3.RELEASE'
 
   compile group: 'io.springfox', name: 'springfox-swagger2', version: versions.springfoxSwagger
   compile group: 'io.springfox', name: 'springfox-swagger-ui', version: versions.springfoxSwagger
