@@ -13,10 +13,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
+import javax.servlet.http.Cookie;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -47,10 +51,17 @@ public class DynamicUserAndRolesIntegrationTest {
 
     @Test
     public void should_not_allow_user_to_access_webconsole_when_admin_user_is_changed_to_read_user() throws Exception {
-        mockMvc
+        Cookie cookie = mockMvc
             .perform(formLogin().user("admintest@hmcts.net").password("admin123"))
             .andExpect(status().is(HttpStatus.FOUND.value()))
-            .andExpect(redirectedUrl("/?login"));
+            .andExpect(redirectedUrl("/?login"))
+            .andReturn()
+            .getResponse()
+            .getCookie("SESSION");
+        mockMvc
+            .perform(get(FF4J_WEB_CONSOLE_URL).cookie(cookie))
+            .andExpect(status().isOk())
+            .andExpect(content().string(containsString("<title>Error</title>")));
     }
 
     @Test
