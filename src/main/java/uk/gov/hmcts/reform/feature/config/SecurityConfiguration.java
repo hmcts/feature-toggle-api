@@ -1,7 +1,5 @@
 package uk.gov.hmcts.reform.feature.config;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -13,30 +11,22 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
+import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
+import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
-import java.io.IOException;
-import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+
+import static uk.gov.hmcts.reform.feature.security.Roles.ADMIN;
+import static uk.gov.hmcts.reform.feature.security.Roles.EDITOR;
 
 @Configuration
 @EnableConfigurationProperties(Ff4jUsersConfig.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
-
-    public static final String ROLE_USER = "USER";
-    public static final String ROLE_EDITOR = "EDITOR";
-    public static final String ROLE_ADMIN = "ADMIN";
 
     @Autowired
     private DataSource dataSource;
@@ -65,14 +55,7 @@ public class SecurityConfiguration {
             configurer = auth.inMemoryAuthentication();
         }
 
-        //Create admin users
-        configureUsers(userConfig.getAdmins(), configurer, ROLE_ADMIN, ROLE_EDITOR);
-
-        //Create editor users
-        configureUsers(userConfig.getEditors(), configurer, ROLE_EDITOR);
-
-        //Create read only users
-        configureUsers(userConfig.getReaders(), configurer, ROLE_USER);
+        new UserDetailsConfigurer(configurer, passwordEncoder).configure(userConfig);
     }
 
     @Configuration
@@ -84,25 +67,11 @@ public class SecurityConfiguration {
             http
                 .antMatcher("/ff4j-web-console/**")
                 .authorizeRequests()
-                .anyRequest().hasRole(ROLE_ADMIN)
+                .anyRequest().hasRole(ADMIN)
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new EntryPoint())
+                .exceptionHandling().authenticationEntryPoint(new AuthExceptionEntryPoint())
                 .and()
                 .csrf().disable();
-        }
-
-        private static class EntryPoint implements AuthenticationEntryPoint {
-
-            static final Logger log = LoggerFactory.getLogger(EntryPoint.class);
-
-            @Override
-            public void commence(HttpServletRequest request,
-                                 HttpServletResponse response,
-                                 AuthenticationException authException) throws IOException, ServletException {
-                log.warn(authException.getMessage(), authException);
-
-                response.sendRedirect(response.encodeRedirectURL("/login?accessDenied"));
-            }
         }
     }
 
@@ -117,9 +86,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .antMatchers(HttpMethod.DELETE).hasRole(ROLE_EDITOR)
-                .antMatchers(HttpMethod.POST).hasRole(ROLE_EDITOR)
-                .antMatchers(HttpMethod.PUT).hasRole(ROLE_EDITOR)
+                .antMatchers(HttpMethod.DELETE).hasRole(EDITOR)
+                .antMatchers(HttpMethod.POST).hasRole(EDITOR)
+                .antMatchers(HttpMethod.PUT).hasRole(EDITOR)
                 .anyRequest().authenticated()
                 .and()
                 .httpBasic()
@@ -138,52 +107,11 @@ public class SecurityConfiguration {
                 .antMatchers("/", "/health", "/info", "/v2/api-docs").permitAll()
                 .anyRequest().authenticated()
                 .and()
-                .formLogin().successHandler(new SuccessHandler()).permitAll()
+                .formLogin().successHandler(new LoginSuccessHandler()).permitAll()
                 .and()
                 .logout().logoutSuccessUrl("/?logout").permitAll()
                 .and()
                 .csrf().disable();
         }
-
-        private static class SuccessHandler implements AuthenticationSuccessHandler {
-
-            @Override
-            public void onAuthenticationSuccess(HttpServletRequest request,
-                                                HttpServletResponse response,
-                                                Authentication authentication) throws IOException, ServletException {
-                boolean isAdmin = authentication.getAuthorities().stream().anyMatch(authority ->
-                    // since roles are created with automatic prefix of `ROLE_` - authorities come in raw
-                    // need to strip the prefix to match successfully
-                    authority.getAuthority().replaceFirst("ROLE_", "").equals(ROLE_ADMIN)
-                );
-                String targetUrl = isAdmin ? "/ff4j-web-console/home" : "/?login";
-
-                response.sendRedirect(response.encodeRedirectURL(targetUrl));
-            }
-        }
-    }
-
-    private void configureUsers(
-        List<Ff4jUsersConfig.UserDetails> userDetails,
-        UserDetailsManagerConfigurer<?, ?> configurer,
-        String... roles
-    ) {
-        userDetails.stream()
-            .forEach(user -> {
-                final String username = user.getUsername();
-                final String password = user.getPassword();
-
-                UserDetailsManager userDetailsService = configurer.getUserDetailsService();
-
-                if (userDetailsService.userExists(username)) {
-                    //This will delete authorities and then user
-                    userDetailsService.deleteUser(username);
-                }
-
-                configurer
-                    .withUser(username)
-                    .password(passwordEncoder.encode(password))
-                    .roles(roles);
-            });
     }
 }
