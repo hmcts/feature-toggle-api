@@ -50,5 +50,5 @@ variable "capacity" {
 }
 
 variable "external_host_name" {
-  default = "www.featuretoggle.sandbox.platform.hmcts.net"
+  default = "www.featuretoggle.sprod.platform.hmcts.net"
 }
