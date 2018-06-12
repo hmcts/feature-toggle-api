@@ -15,7 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @AutoConfigureBefore({SecurityConfiguration.class})
-public class AuthenticationProviderConfig {
+public class AuthenticationProviderConfiguration {
 
     @Autowired
     private DataSource dataSource;
