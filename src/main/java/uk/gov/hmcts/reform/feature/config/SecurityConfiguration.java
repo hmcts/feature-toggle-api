@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
+import uk.gov.hmcts.reform.feature.security.CustomAccessDeniedHandler;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
@@ -69,7 +70,9 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                 .anyRequest().hasRole(ADMIN)
                 .and()
-                .exceptionHandling().authenticationEntryPoint(new AuthExceptionEntryPoint())
+                .exceptionHandling()
+                .authenticationEntryPoint(new AuthExceptionEntryPoint())
+                .accessDeniedHandler(new CustomAccessDeniedHandler())
                 .and()
                 .csrf().disable();
         }
