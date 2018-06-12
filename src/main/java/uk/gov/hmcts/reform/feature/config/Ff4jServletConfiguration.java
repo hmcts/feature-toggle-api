@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConditionalOnClass({ConsoleServlet.class, FF4jDispatcherServlet.class})
 @AutoConfigureAfter(FF4JConfiguration.class)
-public class FF4jServletConfig extends SpringBootServletInitializer {
+public class Ff4jServletConfiguration extends SpringBootServletInitializer {
 
     @Bean
     public ServletRegistrationBean ff4jDispatcherServletRegistrationBean(FF4jDispatcherServlet ff4jDispatcherServlet) {
