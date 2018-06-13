@@ -10,6 +10,8 @@
 
 ![Sequence diagram with authorization](/doc/arch/ft-api-with-authorization-sequence-diag.png)
 
+[Read more about FF4J usage](/doc/README.md)
+
 ## Configuring Users for feature toggle
 
 ### Users and Roles
