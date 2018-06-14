@@ -65,6 +65,7 @@ module "feature-toggle-api" {
     FLYWAY_URL                  = "jdbc:postgresql://${module.feature-toggle-db.host_name}:${module.feature-toggle-db.postgresql_listen_port}/${module.feature-toggle-db.postgresql_database}${local.db_connection_options}"
     FLYWAY_USER                 = "${module.feature-toggle-db.user_name}"
     FLYWAY_PASSWORD             = "${module.feature-toggle-db.postgresql_password}"
+    IDAM_URL                    = "${var.idam_api_url}"
     TEST_ADMIN_USERNAME         = "${local.test_admin_user}"
     TEST_ADMIN_PASSWORD         = "${local.test_admin_password}"
     TEST_EDITOR_USERNAME        = "${local.test_editor_user}"

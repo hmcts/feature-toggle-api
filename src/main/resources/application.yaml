@@ -9,6 +9,9 @@ management:
     web:
       base-path: /
 
+idam:
+  url: ${IDAM_URL}
+
 info:
    app:
       name: Feature Toggle API

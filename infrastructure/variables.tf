@@ -52,3 +52,11 @@ variable "capacity" {
 variable "external_host_name" {
   default = "www.featuretoggle.sprod.platform.hmcts.net"
 }
+
+variable "idam_api_url" {
+  default = "http://idam-api-idam-saat.service.core-compute-saat.internal"
+}
+
+variable "use_idam_testing_support" {
+  default = "true"
+}

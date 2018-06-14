@@ -1,3 +1,5 @@
 vault_section = "prod"
 capacity = "2"
 external_host_name = "www.featuretoggle.prod.platform.hmcts.net"
+idam_api_url = "https://prod-idamapi.reform.hmcts.net:3511"
+use_idam_testing_support = "false"
