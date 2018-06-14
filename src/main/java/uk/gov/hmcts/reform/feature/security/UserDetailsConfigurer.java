@@ -4,8 +4,8 @@ import org.springframework.security.config.annotation.authentication.configurers
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import rx.functions.Action3;
-import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
-import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig.UserDetails;
+import uk.gov.hmcts.reform.feature.config.UserConfigurationProperties;
+import uk.gov.hmcts.reform.feature.config.UserConfigurationProperties.UserDetails;
 
 import java.util.List;
 
@@ -27,7 +27,7 @@ public class UserDetailsConfigurer {
             .roles(roles);
     }
 
-    public void configure(Ff4jUsersConfig userConfig) {
+    public void configure(UserConfigurationProperties userConfig) {
         configureUsers(userConfig.getAdmins(), ADMIN, EDITOR);
         configureUsers(userConfig.getEditors(), EDITOR);
         configureUsers(userConfig.getReaders(), USER);

@@ -17,7 +17,6 @@ import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.security.CustomAccessDeniedHandler;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
-import uk.gov.hmcts.reform.feature.webconsole.Ff4jUsersConfig;
 
 import javax.sql.DataSource;
 
@@ -25,7 +24,7 @@ import static uk.gov.hmcts.reform.feature.security.Roles.ADMIN;
 import static uk.gov.hmcts.reform.feature.security.Roles.EDITOR;
 
 @Configuration
-@EnableConfigurationProperties(Ff4jUsersConfig.class)
+@EnableConfigurationProperties(UserConfigurationProperties.class)
 @EnableWebSecurity
 public class SecurityConfiguration {
 
@@ -33,7 +32,7 @@ public class SecurityConfiguration {
     private DataSource dataSource;
 
     @Autowired
-    private Ff4jUsersConfig userConfig;
+    private UserConfigurationProperties userConfig;
 
     @Autowired
     private UserDetailsService userDetailsService;
