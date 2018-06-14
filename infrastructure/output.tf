@@ -9,3 +9,11 @@ output "vaultName" {
 output "microserviceName" {
   value = "${var.component}"
 }
+
+output "idam_url_for_tests" {
+  value = "${var.idam_api_url}"
+}
+
+output "use_idam_testing_support" {
+  value = "${var.use_idam_testing_support}"
+}
