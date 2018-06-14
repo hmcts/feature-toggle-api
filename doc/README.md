@@ -25,6 +25,12 @@ This being said, feature toggles have more features (!):
 - roles
 - strategies
 
+The toggle evaluation is _first false - first served_ principle:
+
+- Is feature enabled at all?
+- Is feature allowed to view depending on list of roles assigned?
+- Is strategy applicable
+
 ### Feature groups
 
 Any number of features can be grouped together and toggled at once via menu item `Toggle group`.
