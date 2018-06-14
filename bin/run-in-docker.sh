@@ -17,6 +17,7 @@ print_help() {
   Available parameters:
     APPINSIGHTS                   Defaults to '00000000-0000-0000-0000-000000000000'
     DB_PASSWORD                   Defaults to 'password'
+    IDAM_URL                      Defaults to 'false' - use stub
   "
 }
 
@@ -28,6 +29,7 @@ FLYWAY_ENABLED=false
 # environment variables
 APPINSIGHTS="00000000-0000-0000-0000-000000000000"
 DB_PASSWORD="password"
+IDAM_URL="false"
 
 execute_script() {
   cd $(dirname "$0")/..
@@ -48,6 +50,7 @@ execute_script() {
 
   export APPINSIGHTS_INSTRUMENTATIONKEY=${APPINSIGHTS}
   export FEATURES_DB_PASSWORD=${DB_PASSWORD}
+  export IDAM_URL=${IDAM_URL}
 
   echo "Bringing up docker containers.."
 
@@ -69,6 +72,7 @@ while true ; do
       case "$2" in
         APPINSIGHTS=*) APPINSIGHTS="${2#*=}" ; shift 2 ;;
         DB_PASSWORD=*) DB_PASSWORD="${2#*=}" ; shift 2 ;;
+        IDAM_URL=*) IDAM_URL="${2#*=}" ; shift 2 ;;
         *) shift 2 ;;
       esac ;;
     *) execute_script ; break ;;
