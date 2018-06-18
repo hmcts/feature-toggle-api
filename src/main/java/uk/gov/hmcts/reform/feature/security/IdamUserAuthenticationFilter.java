@@ -45,13 +45,13 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
     }
 
     private Authentication parseUserTokenDetails(String key, UserTokenDetails userTokenDetails) {
-        UserDetails details = User.withUsername("idam-user-" + userTokenDetails.id)
+        UserDetails details = User.withUsername("idam-user-" + userTokenDetails.getId())
             .password("")
             .roles(Roles.USER) // default built-in role for any user
             // spring security clashes all roles and authorities into one
             // `userTokenDetails.roles` come back from idam and can be in any `authority` format
             // hence assigning as authorities for spring security to understand access levels correctly
-            .authorities(userTokenDetails.roles)
+            .authorities(userTokenDetails.getRoles())
             .build();
 
         return new RunAsUserToken(

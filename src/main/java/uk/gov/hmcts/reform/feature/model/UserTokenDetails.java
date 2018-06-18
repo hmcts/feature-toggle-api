@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 
 public class UserTokenDetails {
 
-    public final String id;
+    private final String id;
 
-    public final List<? extends GrantedAuthority> roles;
+    private final List<? extends GrantedAuthority> roles;
 
     public UserTokenDetails(String id, List<String> roles) {
         this.id = id;
@@ -18,5 +18,13 @@ public class UserTokenDetails {
             .stream()
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public List<? extends GrantedAuthority> getRoles() {
+        return roles;
     }
 }
