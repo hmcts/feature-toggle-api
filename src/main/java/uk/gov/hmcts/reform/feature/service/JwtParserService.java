@@ -16,11 +16,16 @@ public class JwtParserService {
     }
 
     public UserTokenDetails parse(String jwtToken) {
-        Claims claims = parser.parseClaimsJws(jwtToken).getBody();
+        try {
+            Claims claims = parser.parseClaimsJws(jwtToken).getBody();
 
-        String id = claims.get("id").toString();
-        List<String> roles = Arrays.asList(claims.get("data").toString().split(","));
+            String id = claims.get("id").toString();
+            List<String> roles = Arrays.asList(claims.get("data").toString().split(","));
 
-        return new UserTokenDetails(id, roles);
+            return new UserTokenDetails(id, roles);
+        } catch (Exception exception) {
+            // voiding any exception
+            return null;
+        }
     }
 }
