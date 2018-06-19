@@ -25,10 +25,12 @@ import static org.springframework.http.HttpMethod.GET;
 
 public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private JwtParser parser;
+    private final JwtParser parser;
 
-    public IdamUserAuthenticationFilter(String pattern) {
+    public IdamUserAuthenticationFilter(String pattern, JwtParser parser) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
+
+        this.parser = parser;
     }
 
     @Override

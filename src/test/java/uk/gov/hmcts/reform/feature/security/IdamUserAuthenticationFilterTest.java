@@ -13,12 +13,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.util.ReflectionUtils;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
 import uk.gov.hmcts.reform.feature.service.JwtParser;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,10 +40,7 @@ public class IdamUserAuthenticationFilterTest {
 
     @Before
     public void setUp() {
-        filter = new IdamUserAuthenticationFilter("/**");
-        Field field = ReflectionUtils.findField(filter.getClass(), "parser");
-        ReflectionUtils.makeAccessible(field);
-        ReflectionUtils.setField(field, filter, parser);
+        filter = new IdamUserAuthenticationFilter("/**", parser);
     }
 
     @Test
