@@ -10,7 +10,7 @@ public class UserTokenDetails {
 
     private final String id;
 
-    private final List<? extends GrantedAuthority> roles;
+    private final List<GrantedAuthority> roles;
 
     public UserTokenDetails(String id, List<String> roles) {
         this.id = id;
@@ -24,7 +24,7 @@ public class UserTokenDetails {
         return id;
     }
 
-    public List<? extends GrantedAuthority> getRoles() {
+    public List<GrantedAuthority> getRoles() {
         return roles;
     }
 }

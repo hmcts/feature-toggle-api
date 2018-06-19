@@ -5,14 +5,18 @@ import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
+import uk.gov.hmcts.reform.feature.service.JwtParser;
 
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +24,8 @@ import javax.servlet.http.HttpServletResponse;
 import static org.springframework.http.HttpMethod.GET;
 
 public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+
+    private JwtParser parser;
 
     public IdamUserAuthenticationFilter(String pattern) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
@@ -33,7 +39,7 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
         if (authorisationHeader != null) {
-            UserTokenDetails userTokenDetails = null;// todo parse jwt
+            UserTokenDetails userTokenDetails = parser.parse(authorisationHeader);
 
             if (userTokenDetails != null) {
                 return parseUserTokenDetails(authorisationHeader, userTokenDetails);
@@ -45,13 +51,15 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
     }
 
     private Authentication parseUserTokenDetails(String key, UserTokenDetails userTokenDetails) {
+        // use of combination of `.roles` and `.authorities` overrides each other
+        // everything gets converted to authorities
+        // roles are prefixed
+        List<GrantedAuthority> authorities = userTokenDetails.getRoles();
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
+
         UserDetails details = User.withUsername("idam-user-" + userTokenDetails.getId())
             .password("")
-            .roles(Roles.USER) // default built-in role for any user
-            // spring security clashes all roles and authorities into one
-            // `userTokenDetails.roles` come back from idam and can be in any `authority` format
-            // hence assigning as authorities for spring security to understand access levels correctly
-            .authorities(userTokenDetails.getRoles())
+            .authorities(authorities)
             .build();
 
         return new RunAsUserToken(
