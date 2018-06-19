@@ -39,20 +39,23 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         HttpServletResponse response
     ) throws AuthenticationException, IOException, ServletException {
         String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
         if (authorisationHeader != null) {
             UserTokenDetails userTokenDetails = parser.parse(authorisationHeader);
 
             if (userTokenDetails != null) {
-                return parseUserTokenDetails(authorisationHeader, userTokenDetails);
+                return parseUserTokenDetails(authorisationHeader, userTokenDetails, originalAuth);
             }
         }
 
         // passing current auth in case some other authentication happened
-        return SecurityContextHolder.getContext().getAuthentication();
+        return originalAuth;
     }
 
-    private Authentication parseUserTokenDetails(String key, UserTokenDetails userTokenDetails) {
+    private Authentication parseUserTokenDetails(String key,
+                                                 UserTokenDetails userTokenDetails,
+                                                 Authentication originalAuth) {
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
@@ -69,7 +72,7 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
             details,
             details.getPassword(),
             details.getAuthorities(),
-            AnonymousAuthenticationToken.class
+            originalAuth == null ? AnonymousAuthenticationToken.class : originalAuth.getClass()
         );
     }
 }
