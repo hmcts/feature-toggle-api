@@ -14,7 +14,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
-import uk.gov.hmcts.reform.feature.service.JwtParser;
+import uk.gov.hmcts.reform.feature.service.JwtParserService;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 public class IdamUserAuthenticationFilterTest {
 
     @Mock
-    private JwtParser parser;
+    private JwtParserService parser;
 
     @Mock
     private HttpServletResponse response;

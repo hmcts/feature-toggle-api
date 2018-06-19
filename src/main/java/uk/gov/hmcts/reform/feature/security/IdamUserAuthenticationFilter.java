@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
-import uk.gov.hmcts.reform.feature.service.JwtParser;
+import uk.gov.hmcts.reform.feature.service.JwtParserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,9 +25,9 @@ import static org.springframework.http.HttpMethod.GET;
 
 public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final JwtParser parser;
+    private final JwtParserService parser;
 
-    public IdamUserAuthenticationFilter(String pattern, JwtParser parser) {
+    public IdamUserAuthenticationFilter(String pattern, JwtParserService parser) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
 
         this.parser = parser;
