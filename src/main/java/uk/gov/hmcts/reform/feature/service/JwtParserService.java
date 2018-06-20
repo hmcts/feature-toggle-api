@@ -21,7 +21,10 @@ public class JwtParserService {
 
     public UserTokenDetails parse(String jwtToken) {
         try {
-            Claims claims = parser.parseClaimsJws(jwtToken).getBody();
+            int lastDot = jwtToken.lastIndexOf(".");
+            String withoutSignature = jwtToken.substring(0, lastDot + 1);
+            System.out.println(withoutSignature);
+            Claims claims = (Claims) parser.parse(withoutSignature).getBody();
 
             String id = claims.get("id").toString();
             List<String> roles = Arrays.asList(claims.get("data").toString().split(","));

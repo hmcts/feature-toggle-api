@@ -13,7 +13,7 @@ public class JwtParserServiceTest {
 
     private static final String SIGNING_KEY = "signing";
 
-    private final JwtParserService service = new JwtParserService(Jwts.parser().setSigningKey(SIGNING_KEY));
+    private final JwtParserService service = new JwtParserService(Jwts.parser());
 
     @Test
     public void should_parse_valid_jwt_token_and_get_user_details() {
@@ -30,7 +30,7 @@ public class JwtParserServiceTest {
     }
 
     @Test
-    public void should_fail_to_parse_jwt_token_when_wrong_signing_key_passed_and_return_null() {
+    public void should_parse_jwt_token_when_different_signing_key_is_used() {
         // given
         String jwtToken = Jwts.builder()
             .signWith(SignatureAlgorithm.HS256, SIGNING_KEY + "key")
@@ -38,7 +38,9 @@ public class JwtParserServiceTest {
             .compact();
 
         // then
-        assertThat(service.parse(jwtToken)).isNull();
+        assertThat(service.parse(jwtToken)).isEqualToComparingFieldByFieldRecursively(
+            new UserTokenDetails("1234", ImmutableList.of("beta", "test"))
+        );
     }
 
     @Test
