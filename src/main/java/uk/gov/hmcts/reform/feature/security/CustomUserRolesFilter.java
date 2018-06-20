@@ -22,13 +22,13 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpMethod.GET;
 
-public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilter {
 
     static final String USER_ID_HEADER = "X-USER-ID";
 
     static final String USER_ROLES_HEADER = "X-USER-ROLES";
 
-    public IdamUserAuthenticationFilter(String pattern) {
+    public CustomUserRolesFilter(String pattern) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
     }
 

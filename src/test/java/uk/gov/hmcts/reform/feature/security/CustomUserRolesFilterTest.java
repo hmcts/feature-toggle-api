@@ -22,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class IdamUserAuthenticationFilterTest {
+public class CustomUserRolesFilterTest {
 
     @Mock
     private HttpServletResponse response;
@@ -30,11 +30,11 @@ public class IdamUserAuthenticationFilterTest {
     @Mock
     private HttpServletRequest request;
 
-    private IdamUserAuthenticationFilter filter;
+    private CustomUserRolesFilter filter;
 
     @Before
     public void setUp() {
-        filter = new IdamUserAuthenticationFilter("/**");
+        filter = new CustomUserRolesFilter("/**");
     }
 
     @Test
@@ -59,8 +59,8 @@ public class IdamUserAuthenticationFilterTest {
         SecurityContextHolder.getContext().setAuthentication(anonymous);
 
         // and
-        given(request.getHeader(IdamUserAuthenticationFilter.USER_ID_HEADER)).willReturn("");
-        given(request.getHeader(IdamUserAuthenticationFilter.USER_ROLES_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("");
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
@@ -72,8 +72,8 @@ public class IdamUserAuthenticationFilterTest {
     @Test
     public void should_return_run_as_user_token_when_headers_are_provided() throws IOException, ServletException {
         // given
-        given(request.getHeader(IdamUserAuthenticationFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(IdamUserAuthenticationFilter.USER_ROLES_HEADER)).willReturn("some,role");
+        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("some,role");
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
