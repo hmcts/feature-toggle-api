@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.feature.security;
 
-import org.springframework.http.HttpHeaders;
+import com.google.common.base.Strings;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,6 +24,10 @@ import static org.springframework.http.HttpMethod.GET;
 
 public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
+    static final String USER_ID_HEADER = "X-USER-ID";
+
+    static final String USER_ROLES_HEADER = "X-USER-ROLES";
+
     public IdamUserAuthenticationFilter(String pattern) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
     }
@@ -33,19 +37,25 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         HttpServletRequest request,
         HttpServletResponse response
     ) throws AuthenticationException, IOException, ServletException {
-        String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userIdHeader = request.getHeader(USER_ID_HEADER);
+        String userRolesHeader = request.getHeader(USER_ROLES_HEADER);
         Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authorisationHeader != null) {
-            UserTokenDetails userTokenDetails = null;
+        if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {
+            UserTokenDetails userTokenDetails = new UserTokenDetails(
+                userIdHeader,
+                userRolesHeader.split(",")
+            );
 
-            if (userTokenDetails != null) {
-                return parseUserTokenDetails(authorisationHeader, userTokenDetails, originalAuth);
-            }
+            return parseUserTokenDetails(userRolesHeader, userTokenDetails, originalAuth);
         }
 
         // passing current auth in case some other authentication happened
         return originalAuth;
+    }
+
+    private boolean checkHeadersAreValid(String userIdHeader, String userRolesHeader) {
+        return !Strings.isNullOrEmpty(userIdHeader) && ! Strings.isNullOrEmpty(userRolesHeader);
     }
 
     private Authentication parseUserTokenDetails(String key,
@@ -57,7 +67,7 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         List<GrantedAuthority> authorities = userTokenDetails.getRoles();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
 
-        UserDetails details = User.withUsername("idam-user-" + userTokenDetails.getId())
+        UserDetails details = User.withUsername("user:" + userTokenDetails.getId())
             .password("")
             .authorities(authorities)
             .build();

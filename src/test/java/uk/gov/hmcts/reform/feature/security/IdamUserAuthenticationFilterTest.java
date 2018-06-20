@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +38,8 @@ public class IdamUserAuthenticationFilterTest {
     }
 
     @Test
-    public void should_return_authorisation_from_context_when_no_header_passed() throws IOException, ServletException {
+    public void should_return_authorisation_from_context_when_no_headers_passed()
+        throws IOException, ServletException {
         // given
         Authentication anonymous = getAnonymous();
         SecurityContextHolder.getContext().setAuthentication(anonymous);
@@ -59,7 +59,8 @@ public class IdamUserAuthenticationFilterTest {
         SecurityContextHolder.getContext().setAuthentication(anonymous);
 
         // and
-        given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("value");
+        given(request.getHeader(IdamUserAuthenticationFilter.USER_ID_HEADER)).willReturn("");
+        given(request.getHeader(IdamUserAuthenticationFilter.USER_ROLES_HEADER)).willReturn("");
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
@@ -69,10 +70,10 @@ public class IdamUserAuthenticationFilterTest {
     }
 
     @Test
-    public void should_return_run_as_user_token_when_header_value_is_provided()
-        throws IOException, ServletException {
+    public void should_return_run_as_user_token_when_headers_are_provided() throws IOException, ServletException {
         // given
-        given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("some_value");
+        given(request.getHeader(IdamUserAuthenticationFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(IdamUserAuthenticationFilter.USER_ROLES_HEADER)).willReturn("some,role");
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
@@ -81,7 +82,7 @@ public class IdamUserAuthenticationFilterTest {
         assertThat(filteredAuth).isInstanceOf(RunAsUserToken.class);
         assertThat(filteredAuth.getAuthorities())
             .extracting("authority")
-            .hasSameElementsAs(ImmutableList.of("test", "ROLE_" + Roles.USER));
+            .hasSameElementsAs(ImmutableList.of("some", "role", "ROLE_" + Roles.USER));
     }
 
     private Authentication getAnonymous() {
