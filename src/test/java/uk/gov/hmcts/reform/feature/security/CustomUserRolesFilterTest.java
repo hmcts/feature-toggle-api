@@ -73,7 +73,7 @@ public class CustomUserRolesFilterTest {
     public void should_return_run_as_user_token_when_headers_are_provided() throws IOException, ServletException {
         // given
         given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test,beta");
+        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test, beta");
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);

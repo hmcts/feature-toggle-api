@@ -16,6 +16,7 @@ public class UserRoles {
     public UserRoles(String id, String[] roles) {
         this.id = id;
         this.authorities = Arrays.stream(roles)
+            .map(String::trim)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
