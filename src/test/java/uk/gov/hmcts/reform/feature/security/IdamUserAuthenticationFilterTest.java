@@ -13,8 +13,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
-import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
-import uk.gov.hmcts.reform.feature.service.JwtParser;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -28,9 +26,6 @@ import static org.mockito.BDDMockito.given;
 public class IdamUserAuthenticationFilterTest {
 
     @Mock
-    private JwtParser parser;
-
-    @Mock
     private HttpServletResponse response;
 
     @Mock
@@ -40,7 +35,7 @@ public class IdamUserAuthenticationFilterTest {
 
     @Before
     public void setUp() {
-        filter = new IdamUserAuthenticationFilter("/**", parser);
+        filter = new IdamUserAuthenticationFilter("/**");
     }
 
     @Test
@@ -57,7 +52,7 @@ public class IdamUserAuthenticationFilterTest {
     }
 
     @Test
-    public void should_return_authorisation_from_context_when_jwt_parser_returns_null()
+    public void should_return_authorisation_from_context_when_header_value_is_empty()
         throws IOException, ServletException {
         // given
         Authentication anonymous = getAnonymous();
@@ -74,11 +69,10 @@ public class IdamUserAuthenticationFilterTest {
     }
 
     @Test
-    public void should_return_run_as_user_token_when_jwt_parser_returns_user_details()
+    public void should_return_run_as_user_token_when_header_value_is_provided()
         throws IOException, ServletException {
         // given
         given(request.getHeader(HttpHeaders.AUTHORIZATION)).willReturn("some_value");
-        given(parser.parse("some_value")).willReturn(new UserTokenDetails("id", ImmutableList.of("test")));
 
         // when
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
