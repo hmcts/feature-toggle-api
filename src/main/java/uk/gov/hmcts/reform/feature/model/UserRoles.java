@@ -7,13 +7,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserTokenDetails {
+public class UserRoles {
 
     private final String id;
 
     private final List<GrantedAuthority> roles;
 
-    public UserTokenDetails(String id, String[] roles) {
+    public UserRoles(String id, String[] roles) {
         this.id = id;
         this.roles = Arrays.stream(roles)
             .map(SimpleGrantedAuthority::new)

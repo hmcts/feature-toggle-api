@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
+import uk.gov.hmcts.reform.feature.model.UserRoles;
 
 import java.io.IOException;
 import java.util.List;
@@ -42,12 +42,12 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
         if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {
-            UserTokenDetails userTokenDetails = new UserTokenDetails(
+            UserRoles userRoles = new UserRoles(
                 userIdHeader,
                 userRolesHeader.split(",")
             );
 
-            return parseUserTokenDetails(userRolesHeader, userTokenDetails, originalAuth);
+            return parseUserTokenDetails(userRolesHeader, userRoles, originalAuth);
         }
 
         // passing current auth in case some other authentication happened
@@ -59,15 +59,15 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
     }
 
     private Authentication parseUserTokenDetails(String key,
-                                                 UserTokenDetails userTokenDetails,
+                                                 UserRoles userRoles,
                                                  Authentication originalAuth) {
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
-        List<GrantedAuthority> authorities = userTokenDetails.getRoles();
+        List<GrantedAuthority> authorities = userRoles.getRoles();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
 
-        UserDetails details = User.withUsername("user:" + userTokenDetails.getId())
+        UserDetails details = User.withUsername("user:" + userRoles.getId())
             .password("")
             .authorities(authorities)
             .build();
