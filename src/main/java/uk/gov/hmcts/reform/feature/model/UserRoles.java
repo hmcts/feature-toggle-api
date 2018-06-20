@@ -3,19 +3,20 @@ package uk.gov.hmcts.reform.feature.model;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UserTokenDetails {
+public class UserRoles {
 
     private final String id;
 
-    private final List<GrantedAuthority> roles;
+    private final List<GrantedAuthority> authorities;
 
-    public UserTokenDetails(String id, List<String> roles) {
+    public UserRoles(String id, String[] roles) {
         this.id = id;
-        this.roles = roles
-            .stream()
+        this.authorities = Arrays.stream(roles)
+            .map(String::trim)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
@@ -24,7 +25,7 @@ public class UserTokenDetails {
         return id;
     }
 
-    public List<GrantedAuthority> getRoles() {
-        return roles;
+    public List<GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 }

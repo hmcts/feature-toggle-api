@@ -1,6 +1,6 @@
 package uk.gov.hmcts.reform.feature.security;
 
-import org.springframework.http.HttpHeaders;
+import com.google.common.base.Strings;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,8 +12,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
-import uk.gov.hmcts.reform.feature.service.JwtParser;
+import uk.gov.hmcts.reform.feature.model.UserRoles;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,14 +22,14 @@ import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpMethod.GET;
 
-public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final JwtParser parser;
+    static final String USER_ID_HEADER = "X-USER-ID";
 
-    public IdamUserAuthenticationFilter(String pattern, JwtParser parser) {
+    static final String USER_ROLES_HEADER = "X-USER-ROLES";
+
+    public CustomUserRolesFilter(String pattern) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
-
-        this.parser = parser;
     }
 
     @Override
@@ -38,38 +37,47 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         HttpServletRequest request,
         HttpServletResponse response
     ) throws AuthenticationException, IOException, ServletException {
-        String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String userIdHeader = request.getHeader(USER_ID_HEADER);
+        String userRolesHeader = request.getHeader(USER_ROLES_HEADER);
+        Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authorisationHeader != null) {
-            UserTokenDetails userTokenDetails = parser.parse(authorisationHeader);
+        if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {
+            UserRoles userRoles = new UserRoles(
+                userIdHeader,
+                userRolesHeader.split(",")
+            );
 
-            if (userTokenDetails != null) {
-                return parseUserTokenDetails(authorisationHeader, userTokenDetails);
-            }
+            return parseUserRoles(userRoles, originalAuth);
         }
 
         // passing current auth in case some other authentication happened
-        return SecurityContextHolder.getContext().getAuthentication();
+        return originalAuth;
     }
 
-    private Authentication parseUserTokenDetails(String key, UserTokenDetails userTokenDetails) {
+    private boolean checkHeadersAreValid(String userIdHeader, String userRolesHeader) {
+        return !Strings.isNullOrEmpty(userIdHeader) && ! Strings.isNullOrEmpty(userRolesHeader);
+    }
+
+    private Authentication parseUserRoles(UserRoles userRoles, Authentication originalAuth) {
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
-        List<GrantedAuthority> authorities = userTokenDetails.getRoles();
+        List<GrantedAuthority> authorities = userRoles.getAuthorities();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
 
-        UserDetails details = User.withUsername("idam-user-" + userTokenDetails.getId())
+        // prefixing external users to separate out from integrated ones.
+        // usernames are used in ff4j monitoring tool
+        UserDetails details = User.withUsername("external:" + userRoles.getId())
             .password("")
             .authorities(authorities)
             .build();
 
         return new RunAsUserToken(
-            key,
+            userRoles.getId(),
             details,
             details.getPassword(),
             details.getAuthorities(),
-            AnonymousAuthenticationToken.class
+            originalAuth == null ? AnonymousAuthenticationToken.class : originalAuth.getClass()
         );
     }
 }
