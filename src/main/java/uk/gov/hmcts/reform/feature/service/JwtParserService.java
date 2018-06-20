@@ -2,12 +2,16 @@ package uk.gov.hmcts.reform.feature.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
 
 import java.util.Arrays;
 import java.util.List;
 
 public class JwtParserService {
+
+    private static final Logger log = LoggerFactory.getLogger(JwtParserService.class);
 
     private final JwtParser parser;
 
@@ -24,7 +28,8 @@ public class JwtParserService {
 
             return new UserTokenDetails(id, roles);
         } catch (Exception exception) {
-            // voiding any exception
+            log.warn(exception.getMessage(), exception);
+
             return null;
         }
     }
