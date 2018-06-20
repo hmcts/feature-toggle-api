@@ -65,7 +65,9 @@ public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilte
         List<GrantedAuthority> authorities = userRoles.getAuthorities();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
 
-        UserDetails details = User.withUsername("user:" + userRoles.getId())
+        // prefixing external users to separate out from integrated ones.
+        // usernames are used in ff4j monitoring tool
+        UserDetails details = User.withUsername("external:" + userRoles.getId())
             .password("")
             .authorities(authorities)
             .build();
