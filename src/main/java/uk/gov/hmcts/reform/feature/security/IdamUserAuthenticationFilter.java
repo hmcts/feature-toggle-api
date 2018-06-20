@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import uk.gov.hmcts.reform.feature.model.UserTokenDetails;
-import uk.gov.hmcts.reform.feature.service.JwtParser;
+import uk.gov.hmcts.reform.feature.service.JwtParserService;
 
 import java.io.IOException;
 import java.util.List;
@@ -25,9 +25,9 @@ import static org.springframework.http.HttpMethod.GET;
 
 public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    private final JwtParser parser;
+    private final JwtParserService parser;
 
-    public IdamUserAuthenticationFilter(String pattern, JwtParser parser) {
+    public IdamUserAuthenticationFilter(String pattern, JwtParserService parser) {
         super(new AntPathRequestMatcher(pattern, GET.name()));
 
         this.parser = parser;
@@ -39,20 +39,23 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         HttpServletResponse response
     ) throws AuthenticationException, IOException, ServletException {
         String authorisationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
         if (authorisationHeader != null) {
             UserTokenDetails userTokenDetails = parser.parse(authorisationHeader);
 
             if (userTokenDetails != null) {
-                return parseUserTokenDetails(authorisationHeader, userTokenDetails);
+                return parseUserTokenDetails(authorisationHeader, userTokenDetails, originalAuth);
             }
         }
 
         // passing current auth in case some other authentication happened
-        return SecurityContextHolder.getContext().getAuthentication();
+        return originalAuth;
     }
 
-    private Authentication parseUserTokenDetails(String key, UserTokenDetails userTokenDetails) {
+    private Authentication parseUserTokenDetails(String key,
+                                                 UserTokenDetails userTokenDetails,
+                                                 Authentication originalAuth) {
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
@@ -69,7 +72,7 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
             details,
             details.getPassword(),
             details.getAuthorities(),
-            AnonymousAuthenticationToken.class
+            originalAuth == null ? AnonymousAuthenticationToken.class : originalAuth.getClass()
         );
     }
 }
