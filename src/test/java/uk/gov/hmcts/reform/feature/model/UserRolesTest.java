@@ -18,7 +18,7 @@ public class UserRolesTest {
         UserRoles userRoles = new UserRoles("ID", roles);
 
         // then
-        assertThat(userRoles.getRoles()).hasOnlyElementsOfType(GrantedAuthority.class);
-        assertThat(userRoles.getRoles()).extracting("authority").hasSameElementsAs(Arrays.asList(roles));
+        assertThat(userRoles.getAuthorities()).hasOnlyElementsOfType(GrantedAuthority.class);
+        assertThat(userRoles.getAuthorities()).extracting("authority").hasSameElementsAs(Arrays.asList(roles));
     }
 }

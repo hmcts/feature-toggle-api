@@ -11,11 +11,11 @@ public class UserRoles {
 
     private final String id;
 
-    private final List<GrantedAuthority> roles;
+    private final List<GrantedAuthority> authorities;
 
     public UserRoles(String id, String[] roles) {
         this.id = id;
-        this.roles = Arrays.stream(roles)
+        this.authorities = Arrays.stream(roles)
             .map(SimpleGrantedAuthority::new)
             .collect(Collectors.toList());
     }
@@ -24,7 +24,7 @@ public class UserRoles {
         return id;
     }
 
-    public List<GrantedAuthority> getRoles() {
-        return roles;
+    public List<GrantedAuthority> getAuthorities() {
+        return authorities;
     }
 }

@@ -64,7 +64,7 @@ public class IdamUserAuthenticationFilter extends AbstractAuthenticationProcessi
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
-        List<GrantedAuthority> authorities = userRoles.getRoles();
+        List<GrantedAuthority> authorities = userRoles.getAuthorities();
         authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
 
         UserDetails details = User.withUsername("user:" + userRoles.getId())
