@@ -66,8 +66,8 @@ public class CustomUserRolesFilterTest {
     public void should_return_authorisation_from_context_when_header_value_is_empty()
         throws IOException, ServletException {
         // given
-        Authentication testingUser = getTestingUser();
-        SecurityContextHolder.getContext().setAuthentication(testingUser);
+        Authentication testUser = getTestingUser();
+        SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
         given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("");
@@ -77,7 +77,7 @@ public class CustomUserRolesFilterTest {
         Authentication filteredAuth = filter.attemptAuthentication(request, response);
 
         // then
-        assertThat(filteredAuth).isEqualToComparingFieldByFieldRecursively(testingUser);
+        assertThat(filteredAuth).isEqualToComparingFieldByFieldRecursively(testUser);
     }
 
     @Test
@@ -102,8 +102,8 @@ public class CustomUserRolesFilterTest {
     public void should_return_run_as_user_token_with_correct_original_authentication()
         throws IOException, ServletException {
         // given
-        Authentication testingUser = getTestingUser();
-        SecurityContextHolder.getContext().setAuthentication(testingUser);
+        Authentication testUser = getTestingUser();
+        SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
         given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
@@ -114,7 +114,7 @@ public class CustomUserRolesFilterTest {
 
         // then
         assertThat(filteredAuth).isInstanceOf(RunAsUserToken.class);
-        assertThat(((RunAsUserToken) filteredAuth).getOriginalAuthentication()).isSameAs(testingUser.getClass());
+        assertThat(((RunAsUserToken) filteredAuth).getOriginalAuthentication()).isSameAs(testUser.getClass());
         assertThat(filteredAuth.getAuthorities())
             .extracting("authority")
             .hasSameElementsAs(ImmutableList.of("test", "ROLE_" + Roles.USER));
