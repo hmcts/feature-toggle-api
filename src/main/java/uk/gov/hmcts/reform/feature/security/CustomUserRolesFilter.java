@@ -47,7 +47,7 @@ public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilte
                 userRolesHeader.split(",")
             );
 
-            return parseUserTokenDetails(userRoles, originalAuth);
+            return parseUserRoles(userRoles, originalAuth);
         }
 
         // passing current auth in case some other authentication happened
@@ -58,7 +58,7 @@ public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilte
         return !Strings.isNullOrEmpty(userIdHeader) && ! Strings.isNullOrEmpty(userRolesHeader);
     }
 
-    private Authentication parseUserTokenDetails(UserRoles userRoles, Authentication originalAuth) {
+    private Authentication parseUserRoles(UserRoles userRoles, Authentication originalAuth) {
         // use of combination of `.roles` and `.authorities` overrides each other
         // everything gets converted to authorities
         // roles are prefixed
