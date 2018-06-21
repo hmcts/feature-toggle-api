@@ -23,7 +23,7 @@ import java.io.IOException;
 public abstract class BaseTest {
 
     @Value("${test-url}")
-    protected String testUrl;
+    private String testUrl;
 
     @Value("${test-admin-user}")
     protected String testAdminUser;
@@ -43,7 +43,7 @@ public abstract class BaseTest {
     @Value("${test-read-password}")
     protected String testReadPassword;
 
-    protected static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
+    private static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
 
