@@ -54,7 +54,7 @@ public abstract class BaseTest {
     }
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         RestAssured.authentication = RestAssured.preemptive().basic(testAdminUser, testAdminPassword);
     }
 
