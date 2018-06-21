@@ -4,54 +4,64 @@ import com.google.common.base.Strings;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.filter.GenericFilterBean;
 import uk.gov.hmcts.reform.feature.model.UserRoles;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import static org.springframework.http.HttpMethod.GET;
 
-public class CustomUserRolesFilter extends AbstractAuthenticationProcessingFilter {
+public class CustomUserRolesFilter extends GenericFilterBean {
 
-    static final String USER_ID_HEADER = "X-USER-ID";
+    public static final String USER_ID_HEADER = "X-USER-ID";
 
-    static final String USER_ROLES_HEADER = "X-USER-ROLES";
+    public static final String USER_ROLES_HEADER = "X-USER-ROLES";
+
+    private final RequestMatcher matcher;
 
     public CustomUserRolesFilter(String pattern) {
-        super(new AntPathRequestMatcher(pattern, GET.name()));
+        matcher = new AntPathRequestMatcher(pattern, GET.name());
     }
 
     @Override
-    public Authentication attemptAuthentication(
-        HttpServletRequest request,
-        HttpServletResponse response
-    ) throws AuthenticationException, IOException, ServletException {
-        String userIdHeader = request.getHeader(USER_ID_HEADER);
-        String userRolesHeader = request.getHeader(USER_ROLES_HEADER);
-        Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
+    public void doFilter(
+        ServletRequest request,
+        ServletResponse response,
+        FilterChain chain
+    ) throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
-        if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {
-            UserRoles userRoles = new UserRoles(
-                userIdHeader,
-                userRolesHeader.split(",")
-            );
+        if (matcher.matches(httpRequest)) {
+            String userIdHeader = httpRequest.getHeader(USER_ID_HEADER);
+            String userRolesHeader = httpRequest.getHeader(USER_ROLES_HEADER);
+            Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
-            return parseUserRoles(userRoles, originalAuth);
+            if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {
+                UserRoles userRoles = new UserRoles(
+                    userIdHeader,
+                    userRolesHeader.split(",")
+                );
+
+                Authentication runAsUser = parseUserRoles(userRoles, originalAuth);
+
+                SecurityContextHolder.getContext().setAuthentication(runAsUser);
+            }
         }
 
-        // passing current auth in case some other authentication happened
-        return originalAuth;
+        chain.doFilter(request, response);
     }
 
     private boolean checkHeadersAreValid(String userIdHeader, String userRolesHeader) {

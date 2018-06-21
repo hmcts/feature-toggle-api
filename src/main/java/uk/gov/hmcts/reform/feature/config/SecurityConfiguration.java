@@ -13,8 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.security.CustomAccessDeniedHandler;
+import uk.gov.hmcts.reform.feature.security.CustomUserRolesFilter;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 
@@ -95,6 +97,9 @@ public class SecurityConfiguration {
                 .and()
                 .httpBasic()
                 .and()
+                // https://docs.spring.io/spring-security/site/docs/current/reference/html/security-filter-chain.html#filter-ordering
+                // sticking custom filter to the end of the chain
+                .addFilterAfter(new CustomUserRolesFilter("/api/ff4j/check/**"), FilterSecurityInterceptor.class)
                 .csrf().disable();
         }
     }
