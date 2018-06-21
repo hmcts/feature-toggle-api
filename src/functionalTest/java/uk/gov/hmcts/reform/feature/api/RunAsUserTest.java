@@ -94,7 +94,7 @@ public class RunAsUserTest extends BaseTest {
 
     private RequestSpecification prepareSpecification(UserContainer user) {
         RequestSpecification specification = requestSpecification();
-System.out.println(user);
+
         if (user.isUser) {
             specification = specification.auth().preemptive().basic(user.username, user.password);
         } else {
