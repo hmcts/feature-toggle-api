@@ -1,9 +1,10 @@
-package uk.gov.hmcts.reform.feature;
+package uk.gov.hmcts.reform.feature.webconsole;
 
 import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import uk.gov.hmcts.reform.feature.BaseTest;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import static org.assertj.core.api.Assertions.assertThat;

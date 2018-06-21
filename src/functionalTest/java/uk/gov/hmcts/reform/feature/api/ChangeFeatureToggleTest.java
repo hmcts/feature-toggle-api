@@ -1,7 +1,8 @@
-package uk.gov.hmcts.reform.feature;
+package uk.gov.hmcts.reform.feature.api;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import uk.gov.hmcts.reform.feature.BaseTest;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import java.io.IOException;
