@@ -44,7 +44,7 @@ public class RunAsUserTest extends BaseTest {
 
     @Before
     @Override
-    public void setUp() throws IOException {
+    public void setUp() {
         super.setUp();
 
         users = new UserContainer[] {
@@ -55,8 +55,6 @@ public class RunAsUserTest extends BaseTest {
         };
 
         featureUuid = UUID.randomUUID().toString();
-
-        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
     }
 
     @After
@@ -65,7 +63,9 @@ public class RunAsUserTest extends BaseTest {
     }
 
     @Test
-    public void should_return_feature_as_disabled_when_no_custom_headers_present() {
+    public void should_return_feature_as_disabled_when_no_custom_headers_present() throws IOException {
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user);
             checkToggle(specification, false);
@@ -73,7 +73,9 @@ public class RunAsUserTest extends BaseTest {
     }
 
     @Test
-    public void should_return_feature_as_disabled_when_roles_do_not_match() {
+    public void should_return_feature_as_disabled_when_roles_do_not_match() throws IOException {
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user)
                 .header(CustomUserRolesFilter.USER_ID_HEADER, SOME_USER)
@@ -83,13 +85,33 @@ public class RunAsUserTest extends BaseTest {
     }
 
     @Test
-    public void should_return_feature_as_enabled_when_roles_match() {
+    public void should_return_feature_as_enabled_when_roles_match() throws IOException {
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user)
                 .header(CustomUserRolesFilter.USER_ID_HEADER, SOME_USER)
                 .header(CustomUserRolesFilter.USER_ROLES_HEADER, "beta");
             checkToggle(specification, true);
         }
+    }
+
+    @Test
+    public void should_return_feature_as_enabled_when_builtin_role_match() throws IOException {
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-builtin-roles.json"));
+
+        RequestSpecification specification = prepareSpecification(new UserContainer(testAdminUser, testAdminPassword));
+        checkToggle(specification, true);
+    }
+
+    @Test
+    public void should_return_feature_as_disabled_when_builtin_role_do_not_match() throws IOException {
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-builtin-roles.json"));
+
+        RequestSpecification specification = prepareSpecification(
+            new UserContainer(testEditorUser, testEditorPassword)
+        );
+        checkToggle(specification, false);
     }
 
     private RequestSpecification prepareSpecification(UserContainer user) {
