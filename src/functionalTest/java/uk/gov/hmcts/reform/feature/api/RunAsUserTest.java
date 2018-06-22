@@ -19,40 +19,10 @@ public class RunAsUserTest extends BaseTest {
 
     private String featureUuid;
 
-    private UserContainer[] users;
-
-    private static class UserContainer {
-
-        final String username;
-
-        final String password;
-
-        final boolean isUser;
-
-        UserContainer() {
-            username = null;
-            password = null;
-            isUser = false;
-        }
-
-        UserContainer(String username, String password) {
-            this.username = username;
-            this.password = password;
-            isUser = true;
-        }
-    }
-
     @Before
     @Override
     public void setUp() {
         super.setUp();
-
-        users = new UserContainer[] {
-            new UserContainer(),
-            new UserContainer(super.testReadUser, super.testReadPassword),
-            new UserContainer(super.testEditorUser, super.testEditorPassword),
-            new UserContainer(super.testAdminUser, super.testAdminPassword)
-        };
 
         featureUuid = UUID.randomUUID().toString();
     }
@@ -64,77 +34,187 @@ public class RunAsUserTest extends BaseTest {
 
     @Test
     public void should_return_feature_as_disabled_when_no_custom_headers_present() throws IOException {
+        // given
         createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
-        for (UserContainer user : users) {
-            RequestSpecification specification = prepareSpecification(user);
-            checkToggle(specification, false);
-        }
+        // when
+        boolean response = checkToggle(requestSpecification().auth().none());
+
+        // then
+        assertThat(response).isFalse();
+    }
+
+    @Test
+    public void should_return_feature_as_disabled_when_no_custom_headers_and_editor_session_is_present()
+        throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth()
+            .preemptive()
+            .basic(testEditorUser, testEditorPassword)
+        );
+
+        // then
+        assertThat(response).isFalse();
+    }
+
+    @Test
+    public void should_return_feature_as_disabled_when_no_custom_headers_and_admin_session_is_present()
+        throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth()
+            .preemptive()
+            .basic(testAdminUser, testAdminPassword)
+        );
+
+        // then
+        assertThat(response).isFalse();
     }
 
     @Test
     public void should_return_feature_as_disabled_when_roles_do_not_match() throws IOException {
+        // given
         createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
-        for (UserContainer user : users) {
-            RequestSpecification specification = prepareSpecification(user)
-                .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
-                .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta_tester");
-            checkToggle(specification, false);
-        }
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().none()
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta_tester")
+        );
+
+        // then
+        assertThat(response).isFalse();
+    }
+
+    @Test
+    public void should_return_feature_as_disabled_when_roles_do_not_match_and_editor_session_is_present()
+        throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().preemptive().basic(testEditorUser, testEditorPassword)
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta_tester")
+        );
+
+        // then
+        assertThat(response).isFalse();
+    }
+
+    @Test
+    public void should_return_feature_as_disabled_when_roles_do_not_match_and_admin_session_is_present()
+        throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().preemptive().basic(testAdminUser, testAdminPassword)
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta_tester")
+        );
+
+        // then
+        assertThat(response).isFalse();
     }
 
     @Test
     public void should_return_feature_as_enabled_when_roles_match() throws IOException {
+        // given
         createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
-        for (UserContainer user : users) {
-            RequestSpecification specification = prepareSpecification(user)
-                .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
-                .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta");
-            checkToggle(specification, true);
-        }
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().none()
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta")
+        );
+
+        // then
+        assertThat(response).isTrue();
+    }
+
+    @Test
+    public void should_return_feature_as_enabled_when_roles_match_and_editor_session_is_present() throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().preemptive().basic(testEditorUser, testEditorPassword)
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta")
+        );
+
+        // then
+        assertThat(response).isTrue();
+    }
+
+    @Test
+    public void should_return_feature_as_enabled_when_roles_match_and_admin_session_is_present() throws IOException {
+        // given
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
+
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth().preemptive().basic(testAdminUser, testAdminPassword)
+            .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+            .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta")
+        );
+
+        // then
+        assertThat(response).isTrue();
     }
 
     @Test
     public void should_return_feature_as_enabled_when_builtin_role_match() throws IOException {
+        // given
         createFeatureToggle(featureUuid, loadJson("feature-toggle-with-builtin-roles.json"));
 
-        RequestSpecification specification = prepareSpecification(new UserContainer(testAdminUser, testAdminPassword));
-        checkToggle(specification, true);
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth()
+            .preemptive()
+            .basic(testAdminUser, testAdminPassword)
+        );
+
+        // then
+        assertThat(response).isTrue();
     }
 
     @Test
     public void should_return_feature_as_disabled_when_builtin_role_do_not_match() throws IOException {
+        // given
         createFeatureToggle(featureUuid, loadJson("feature-toggle-with-builtin-roles.json"));
 
-        RequestSpecification specification = prepareSpecification(
-            new UserContainer(testEditorUser, testEditorPassword)
+        // when
+        boolean response = checkToggle(requestSpecification()
+            .auth()
+            .preemptive()
+            .basic(testEditorUser, testEditorPassword)
         );
-        checkToggle(specification, false);
+
+        // then
+        assertThat(response).isFalse();
     }
 
-    private RequestSpecification prepareSpecification(UserContainer user) {
-        RequestSpecification specification = requestSpecification();
-
-        if (user.isUser) {
-            specification = specification.auth().preemptive().basic(user.username, user.password);
-        } else {
-            specification = specification.auth().none();
-        }
-
-        return specification;
-    }
-
-    private void checkToggle(RequestSpecification specification, boolean isOn) {
-        String response = specification
+    private boolean checkToggle(RequestSpecification specification) {
+        return specification
             .get("api/ff4j/check/" + featureUuid)
             .then()
             .statusCode(OK.value())
             .extract()
             .body()
-            .asString();
-
-        assertThat(response).isEqualTo(String.valueOf(isOn));
+            .as(Boolean.class);
     }
 }
