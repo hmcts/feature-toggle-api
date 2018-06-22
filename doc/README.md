@@ -9,6 +9,7 @@ API specification: [hmcts.github.io/reform-api-docs](https://hmcts.github.io/ref
 - [Features](#features)
   - [Feature groups](#feature-groups)
   - [Feature roles](#feature-roles)
+    - [Custom roles](#custom-roles)
   - [Feature strategies](#feature-strategies)
 - [Bulk import](#bulk-import)
 - [Properties](#properties)
@@ -40,19 +41,30 @@ Usage example: shut down entire branch of related products or "release went wron
 
 Another built-in nice to have feature is Spring authorities.
 At the moment it is poorly implemented and lack of proper management if there is any management at all.
-There are only 3 roles present which are used for accessing API and web UI itself:
+Spring security is configured for both: API and web UI.
+In case BasicAuth is provided when **GET**ting feature check it'll take into account built-in roles:
 
-- `ROLE_USER` - has all restrictions to modifications. Nothing specific is assigned to it
 - `ROLE_EDITOR` - can modify features/properties via REST API
 - `ROLE_ADMIN` - can access web UI
 
-Let us say we assign `ROLE_USER` to feature `A`.
-Then try to access by default without any authorisation present then usual response with `401 Unauthorized` is returned.
-Providing correct `user:password` credentials - access will be granted and toggle returned.
+Let us say we assign `ROLE_ADMIN` to feature `A`.
+Then try to check feature on/off status by default without any authorisation present: the response will be `false`.
+Providing correct `user:password` credentials - access will be granted and toggle returned as `true`.
 
-#### Future work
+#### Custom roles
 
-Introduction of authorities for user group representation.
+Using built-in roles is not advised.
+They are created for limiting access to API and web UI.
+Introduce custom role access instead.
+
+Client is required to provide 2 custom headers:
+
+- **X-USER-ID** - any identification (e.g. email) for Spring security's UserDetails and correctness of ff4j monitoring
+- **X-USER-PERMISSIONS** - comma separated value of roles/permissions user has
+
+Once and only once those headers are present for `GET /api/ff4j/check/{feature-id}` custom roles will be picked for challenge instead.
+
+**Note.** Roles are case-sensitive.
 
 ### Feature strategies
 
