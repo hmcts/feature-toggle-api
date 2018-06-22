@@ -5,7 +5,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import uk.gov.hmcts.reform.feature.BaseTest;
-import uk.gov.hmcts.reform.feature.security.CustomUserRolesFilter;
+import uk.gov.hmcts.reform.feature.security.CustomUserPermissionsFilter;
 
 import java.io.IOException;
 import java.util.UUID;
@@ -64,7 +64,7 @@ public class RunAsUserTest extends BaseTest {
 
     @Test
     public void should_return_feature_as_disabled_when_no_custom_headers_present() throws IOException {
-        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user);
@@ -74,24 +74,24 @@ public class RunAsUserTest extends BaseTest {
 
     @Test
     public void should_return_feature_as_disabled_when_roles_do_not_match() throws IOException {
-        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user)
-                .header(CustomUserRolesFilter.USER_ID_HEADER, SOME_USER)
-                .header(CustomUserRolesFilter.USER_ROLES_HEADER, "beta_tester");
+                .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+                .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta_tester");
             checkToggle(specification, false);
         }
     }
 
     @Test
     public void should_return_feature_as_enabled_when_roles_match() throws IOException {
-        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-roles.json"));
+        createFeatureToggle(featureUuid, loadJson("feature-toggle-with-permissions.json"));
 
         for (UserContainer user : users) {
             RequestSpecification specification = prepareSpecification(user)
-                .header(CustomUserRolesFilter.USER_ID_HEADER, SOME_USER)
-                .header(CustomUserRolesFilter.USER_ROLES_HEADER, "beta");
+                .header(CustomUserPermissionsFilter.USER_ID_HEADER, SOME_USER)
+                .header(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER, "beta");
             checkToggle(specification, true);
         }
     }

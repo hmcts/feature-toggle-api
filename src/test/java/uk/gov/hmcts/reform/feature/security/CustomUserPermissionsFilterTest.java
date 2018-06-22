@@ -25,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomUserRolesFilterTest {
+public class CustomUserPermissionsFilterTest {
 
     @Mock
     private HttpServletResponse response;
@@ -36,11 +36,11 @@ public class CustomUserRolesFilterTest {
     @Mock
     private FilterChain chain;
 
-    private CustomUserRolesFilter filter;
+    private CustomUserPermissionsFilter filter;
 
     @Before
     public void setUp() {
-        filter = new CustomUserRolesFilter("/**");
+        filter = new CustomUserPermissionsFilter("/**");
     }
 
     @After
@@ -76,8 +76,8 @@ public class CustomUserRolesFilterTest {
         SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("");
 
         // when
         filter.doFilter(request, response, chain);
@@ -91,8 +91,8 @@ public class CustomUserRolesFilterTest {
     @Test
     public void should_return_run_as_user_token_when_headers_are_provided() throws IOException, ServletException {
         // given
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test, beta");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("test, beta");
 
         // when
         filter.doFilter(request, response, chain);
@@ -116,8 +116,8 @@ public class CustomUserRolesFilterTest {
         SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("test");
 
         // when
         filter.doFilter(request, response, chain);

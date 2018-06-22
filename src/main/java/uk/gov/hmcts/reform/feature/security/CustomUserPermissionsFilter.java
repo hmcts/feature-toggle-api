@@ -24,15 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import static org.springframework.http.HttpMethod.GET;
 
-public class CustomUserRolesFilter extends GenericFilterBean {
+public class CustomUserPermissionsFilter extends GenericFilterBean {
 
     public static final String USER_ID_HEADER = "X-USER-ID";
 
-    public static final String USER_ROLES_HEADER = "X-USER-ROLES";
+    public static final String USER_PERMISSIONS_HEADER = "X-USER-PERMISSIONS";
 
     private final RequestMatcher matcher;
 
-    public CustomUserRolesFilter(String pattern) {
+    public CustomUserPermissionsFilter(String pattern) {
         matcher = new AntPathRequestMatcher(pattern, GET.name());
     }
 
@@ -46,7 +46,7 @@ public class CustomUserRolesFilter extends GenericFilterBean {
 
         if (matcher.matches(httpRequest)) {
             String userIdHeader = httpRequest.getHeader(USER_ID_HEADER);
-            String userRolesHeader = httpRequest.getHeader(USER_ROLES_HEADER);
+            String userRolesHeader = httpRequest.getHeader(USER_PERMISSIONS_HEADER);
             Authentication originalAuth = SecurityContextHolder.getContext().getAuthentication();
 
             if (checkHeadersAreValid(userIdHeader, userRolesHeader)) {

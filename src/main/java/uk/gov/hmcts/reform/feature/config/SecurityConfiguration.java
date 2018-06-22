@@ -16,7 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
 import uk.gov.hmcts.reform.feature.security.CustomAccessDeniedHandler;
-import uk.gov.hmcts.reform.feature.security.CustomUserRolesFilter;
+import uk.gov.hmcts.reform.feature.security.CustomUserPermissionsFilter;
 import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
 import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 
@@ -99,7 +99,7 @@ public class SecurityConfiguration {
                 .and()
                 // https://docs.spring.io/spring-security/site/docs/current/reference/html/security-filter-chain.html#filter-ordering
                 // sticking custom filter to the end of the chain
-                .addFilterAfter(new CustomUserRolesFilter("/api/ff4j/check/**"), FilterSecurityInterceptor.class)
+                .addFilterAfter(new CustomUserPermissionsFilter("/api/ff4j/check/**"), FilterSecurityInterceptor.class)
                 .csrf().disable();
         }
     }
