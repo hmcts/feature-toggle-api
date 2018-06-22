@@ -42,7 +42,7 @@ Usage example: shut down entire branch of related products or "release went wron
 Another built-in nice to have feature is Spring authorities.
 At the moment it is poorly implemented and lack of proper management if there is any management at all.
 Spring security is configured for both: API and web UI.
-In case BasicAuth is provided when **GET**ting feature check it'll take into account built-in roles:
+In case basic authentication is provided when **GET**ting feature check it'll take into account built-in roles:
 
 - `ROLE_EDITOR` - can modify features/properties via REST API
 - `ROLE_ADMIN` - can access web UI
