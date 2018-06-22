@@ -1,0 +1,9 @@
+{
+  "description": "Feature toggle for test",
+  "enable": true,
+  "permissions": [
+    "test",
+    "beta"
+  ],
+  "uid": "{uid}"
+}

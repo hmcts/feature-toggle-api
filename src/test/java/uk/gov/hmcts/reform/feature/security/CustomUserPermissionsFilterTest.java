@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 
 import java.io.IOException;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(MockitoJUnitRunner.class)
-public class CustomUserRolesFilterTest {
+public class CustomUserPermissionsFilterTest {
 
     @Mock
     private HttpServletResponse response;
@@ -32,11 +33,14 @@ public class CustomUserRolesFilterTest {
     @Mock
     private HttpServletRequest request;
 
-    private CustomUserRolesFilter filter;
+    @Mock
+    private FilterChain chain;
+
+    private CustomUserPermissionsFilter filter;
 
     @Before
     public void setUp() {
-        filter = new CustomUserRolesFilter("/**");
+        filter = new CustomUserPermissionsFilter("/**");
     }
 
     @After
@@ -56,10 +60,12 @@ public class CustomUserRolesFilterTest {
         SecurityContextHolder.getContext().setAuthentication(anonymous);
 
         // when
-        Authentication filteredAuth = filter.attemptAuthentication(request, response);
+        filter.doFilter(request, response, chain);
 
         // then
-        assertThat(filteredAuth).isEqualToComparingFieldByFieldRecursively(anonymous);
+        Authentication updatedAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        assertThat(updatedAuth).isEqualToComparingFieldByFieldRecursively(anonymous);
     }
 
     @Test
@@ -70,30 +76,34 @@ public class CustomUserRolesFilterTest {
         SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("");
 
         // when
-        Authentication filteredAuth = filter.attemptAuthentication(request, response);
+        filter.doFilter(request, response, chain);
 
         // then
-        assertThat(filteredAuth).isEqualToComparingFieldByFieldRecursively(testUser);
+        Authentication updatedAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        assertThat(updatedAuth).isEqualToComparingFieldByFieldRecursively(testUser);
     }
 
     @Test
     public void should_return_run_as_user_token_when_headers_are_provided() throws IOException, ServletException {
         // given
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test, beta");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("test, beta");
 
         // when
-        Authentication filteredAuth = filter.attemptAuthentication(request, response);
+        filter.doFilter(request, response, chain);
 
         // then
-        assertThat(filteredAuth).isInstanceOf(RunAsUserToken.class);
-        assertThat(((RunAsUserToken) filteredAuth).getOriginalAuthentication())
+        Authentication updatedAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        assertThat(updatedAuth).isInstanceOf(RunAsUserToken.class);
+        assertThat(((RunAsUserToken) updatedAuth).getOriginalAuthentication())
             .isSameAs(AnonymousAuthenticationToken.class);
-        assertThat(filteredAuth.getAuthorities())
+        assertThat(updatedAuth.getAuthorities())
             .extracting("authority")
             .hasSameElementsAs(ImmutableList.of("test", "beta", "ROLE_" + Roles.USER));
     }
@@ -106,16 +116,18 @@ public class CustomUserRolesFilterTest {
         SecurityContextHolder.getContext().setAuthentication(testUser);
 
         // and
-        given(request.getHeader(CustomUserRolesFilter.USER_ID_HEADER)).willReturn("id");
-        given(request.getHeader(CustomUserRolesFilter.USER_ROLES_HEADER)).willReturn("test");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_ID_HEADER)).willReturn("id");
+        given(request.getHeader(CustomUserPermissionsFilter.USER_PERMISSIONS_HEADER)).willReturn("test");
 
         // when
-        Authentication filteredAuth = filter.attemptAuthentication(request, response);
+        filter.doFilter(request, response, chain);
 
         // then
-        assertThat(filteredAuth).isInstanceOf(RunAsUserToken.class);
-        assertThat(((RunAsUserToken) filteredAuth).getOriginalAuthentication()).isSameAs(testUser.getClass());
-        assertThat(filteredAuth.getAuthorities())
+        Authentication updatedAuth = SecurityContextHolder.getContext().getAuthentication();
+
+        assertThat(updatedAuth).isInstanceOf(RunAsUserToken.class);
+        assertThat(((RunAsUserToken) updatedAuth).getOriginalAuthentication()).isSameAs(testUser.getClass());
+        assertThat(updatedAuth.getAuthorities())
             .extracting("authority")
             .hasSameElementsAs(ImmutableList.of("test", "ROLE_" + Roles.USER));
     }

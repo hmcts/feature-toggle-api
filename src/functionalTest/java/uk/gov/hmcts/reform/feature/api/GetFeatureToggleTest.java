@@ -1,8 +1,9 @@
-package uk.gov.hmcts.reform.feature;
+package uk.gov.hmcts.reform.feature.api;
 
 import io.restassured.path.json.JsonPath;
 import org.hamcrest.Matchers;
 import org.junit.Test;
+import uk.gov.hmcts.reform.feature.BaseTest;
 
 import java.io.IOException;
 import java.util.UUID;
