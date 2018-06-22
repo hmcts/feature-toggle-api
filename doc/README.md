@@ -47,7 +47,7 @@ In case basic authentication is provided when **GET**ting feature check it'll ta
 - `ROLE_EDITOR` - can modify features/properties via REST API
 - `ROLE_ADMIN` - can access web UI
 
-Let us say we assign `ROLE_ADMIN` to feature `A`.
+Let us say we assign `ROLE_ADMIN` to feature `A` which is enabled (`true`).
 Then try to check feature on/off status by default without any authorisation present: the response will be `false`.
 Providing correct `user:password` credentials - access will be granted and toggle returned as `true`.
 
