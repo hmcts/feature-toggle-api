@@ -5,7 +5,6 @@ import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -35,19 +34,9 @@ public class UnauthorizedAccessTest extends BaseTest {
 
     @Category(SmokeTestCategory.class)
     @Test
-    public void should_restrict_access_for_read_only_user_to_access_write_api_endpoints() {
-        requestSpecification()
-            .auth().preemptive().basic(testReadUser, testReadPassword)
-            .delete(FF4J_STORE_FEATURES_URL + "doesnotexist")
-            .then()
-            .statusCode(FORBIDDEN.value());
-    }
-
-    @Category(SmokeTestCategory.class)
-    @Test
     public void should_restrict_access_for_user_to_access_ff4j_web_console() {
         requestSpecification()
-            .auth().preemptive().basic(testReadUser, testReadPassword)
+            .auth().preemptive().basic(testEditorUser, testEditorPassword)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())

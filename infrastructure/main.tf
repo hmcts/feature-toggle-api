@@ -28,8 +28,6 @@ locals {
   test_admin_password    = "${data.vault_generic_secret.test-admin-password.data["value"]}"
   test_editor_user       = "${data.vault_generic_secret.test-editor-user.data["value"]}"
   test_editor_password   = "${data.vault_generic_secret.test-editor-password.data["value"]}"
-  test_read_user         = "${data.vault_generic_secret.test-read-user.data["value"]}"
-  test_read_password     = "${data.vault_generic_secret.test-read-password.data["value"]}"
 }
 
 module "feature-toggle-db" {
@@ -69,8 +67,6 @@ module "feature-toggle-api" {
     TEST_ADMIN_PASSWORD         = "${local.test_admin_password}"
     TEST_EDITOR_USERNAME        = "${local.test_editor_user}"
     TEST_EDITOR_PASSWORD        = "${local.test_editor_password}"
-    TEST_READ_USERNAME          = "${local.test_read_user}"
-    TEST_READ_PASSWORD          = "${local.test_read_password}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
