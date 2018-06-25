@@ -41,10 +41,6 @@ users:
   editors:
     - username: ${TEST_EDITOR_USERNAME}
       password: ${TEST_EDITOR_PASSWORD}
-
-  readers:
-    - username: ${TEST_READ_USERNAME}
-      password: ${TEST_READ_PASSWORD}
 ```
 
 ### Steps to setup environment variable through terraform are as below

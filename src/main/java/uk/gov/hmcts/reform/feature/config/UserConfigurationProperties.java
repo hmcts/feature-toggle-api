@@ -9,7 +9,6 @@ public class UserConfigurationProperties {
 
     private List<UserDetails> admins;
     private List<UserDetails> editors;
-    private List<UserDetails> readers;
 
     public List<UserDetails> getAdmins() {
         return admins;
@@ -25,14 +24,6 @@ public class UserConfigurationProperties {
 
     public void setEditors(List<UserDetails> editors) {
         this.editors = editors;
-    }
-
-    public List<UserDetails> getReaders() {
-        return readers;
-    }
-
-    public void setReaders(List<UserDetails> readers) {
-        this.readers = readers;
     }
 
     public static class UserDetails {

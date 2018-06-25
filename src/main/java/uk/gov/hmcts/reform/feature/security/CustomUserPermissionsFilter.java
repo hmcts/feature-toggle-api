@@ -4,8 +4,6 @@ import com.google.common.base.Strings;
 import org.springframework.security.access.intercept.RunAsUserToken;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -15,7 +13,6 @@ import org.springframework.web.filter.GenericFilterBean;
 import uk.gov.hmcts.reform.feature.model.UserRoles;
 
 import java.io.IOException;
-import java.util.List;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
@@ -69,17 +66,11 @@ public class CustomUserPermissionsFilter extends GenericFilterBean {
     }
 
     private Authentication parseUserRoles(UserRoles userRoles, Authentication originalAuth) {
-        // use of combination of `.roles` and `.authorities` overrides each other
-        // everything gets converted to authorities
-        // roles are prefixed
-        List<GrantedAuthority> authorities = userRoles.getAuthorities();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + Roles.USER));
-
         // prefixing external users to separate out from integrated ones.
         // usernames are used in ff4j monitoring tool
         UserDetails details = User.withUsername("external:" + userRoles.getId())
             .password("")
-            .authorities(authorities)
+            .authorities(userRoles.getAuthorities())
             .build();
 
         return new RunAsUserToken(

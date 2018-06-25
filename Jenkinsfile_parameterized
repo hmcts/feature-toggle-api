@@ -7,9 +7,7 @@ List<LinkedHashMap<String, Object>> secrets = [
   secret('test-admin-user', 'TEST_ADMIN_USERNAME'),
   secret('test-admin-password', 'TEST_ADMIN_PASSWORD'),
   secret('test-editor-user', 'TEST_EDITOR_USERNAME'),
-  secret('test-editor-password', 'TEST_EDITOR_PASSWORD'),
-  secret('test-read-user', 'TEST_READ_USERNAME'),
-  secret('test-read-password', 'TEST_READ_PASSWORD')
+  secret('test-editor-password', 'TEST_EDITOR_PASSWORD')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

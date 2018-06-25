@@ -37,12 +37,6 @@ public abstract class BaseTest {
     @Value("${test-editor-password}")
     protected String testEditorPassword;
 
-    @Value("${test-read-user}")
-    protected String testReadUser;
-
-    @Value("${test-read-password}")
-    protected String testReadPassword;
-
     private static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";

@@ -11,7 +11,6 @@ import java.util.List;
 
 import static uk.gov.hmcts.reform.feature.security.Roles.ADMIN;
 import static uk.gov.hmcts.reform.feature.security.Roles.EDITOR;
-import static uk.gov.hmcts.reform.feature.security.Roles.USER;
 
 public class UserDetailsConfigurer {
 
@@ -30,7 +29,6 @@ public class UserDetailsConfigurer {
     public void configure(UserConfigurationProperties userConfig) {
         configureUsers(userConfig.getAdmins(), ADMIN, EDITOR);
         configureUsers(userConfig.getEditors(), EDITOR);
-        configureUsers(userConfig.getReaders(), USER);
     }
 
     private void configureUsers(List<UserDetails> userDetails, String... roles) {

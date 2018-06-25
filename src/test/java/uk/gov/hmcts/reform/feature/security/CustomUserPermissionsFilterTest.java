@@ -54,8 +54,8 @@ public class CustomUserPermissionsFilterTest {
         // given
         Authentication anonymous = new AnonymousAuthenticationToken(
             "anonymous",
-            User.withUsername("anonymous").password("").roles(Roles.USER).build(),
-            ImmutableList.of(new SimpleGrantedAuthority(Roles.USER))
+            User.withUsername("anonymous").password("").roles("ANONYMOUS").build(),
+            ImmutableList.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS"))
         );
         SecurityContextHolder.getContext().setAuthentication(anonymous);
 
@@ -105,7 +105,7 @@ public class CustomUserPermissionsFilterTest {
             .isSameAs(AnonymousAuthenticationToken.class);
         assertThat(updatedAuth.getAuthorities())
             .extracting("authority")
-            .hasSameElementsAs(ImmutableList.of("test", "beta", "ROLE_" + Roles.USER));
+            .hasSameElementsAs(ImmutableList.of("test", "beta"));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class CustomUserPermissionsFilterTest {
         assertThat(((RunAsUserToken) updatedAuth).getOriginalAuthentication()).isSameAs(testUser.getClass());
         assertThat(updatedAuth.getAuthorities())
             .extracting("authority")
-            .hasSameElementsAs(ImmutableList.of("test", "ROLE_" + Roles.USER));
+            .hasSameElementsAs(ImmutableList.of("test"));
     }
 
     private Authentication getTestingUser() {
