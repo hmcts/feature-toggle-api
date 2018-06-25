@@ -4,12 +4,6 @@
   <!-- -->
 
   <suppress>
-    <notes><![CDATA[The default settings for the CORS filter provided in Apache Tomcat are insecure and enable 'supportsCredentials' for all origins. It is expected that users of the CORS filter will have configured it appropriately for their environment rather than using it in the default configuration. Therefore, it is expected that most users will not be impacted by this issue.]]></notes>
-    <gav regex="true">^org\.apache\.tomcat\.embed:tomcat-embed-(core|websocket):8\.5\.\d+$</gav>
-    <cve>CVE-2018-8014</cve>
-  </suppress>
-
-  <suppress>
     <notes><![CDATA[postgresql before versions 10.4, 9.6.9 is vulnerable in the adminpack extension, the pg_catalog.pg_logfile_rotate() function doesn't follow the same ACLs than pg_rorate_logfile. If the adminpack is added to a database, an attacker able to connect to it could exploit this to force log rotation]]></notes>
     <gav regex="true">^org\.postgresql:postgresql:42\.2\.2$</gav>
     <cve>CVE-2018-1115</cve>
@@ -25,7 +19,7 @@
 
   <suppress>
     <notes><![CDATA[main/java/org/apache/directory/groovyldap/LDAP.java in the Groovy LDAP API allows attackers to conduct LDAP entry poisoning attacks by leveraging setting returnObjFlag to true for all search methods]]></notes>
-    <gav regex="true">^org\.codehaus\.groovy:groovy-(json|xml):2.4.13$</gav>
+    <gav regex="true">^org\.codehaus\.groovy:groovy-(json|xml):2.4.15$</gav>
     <cve>CVE-2016-6497</cve>
   </suppress>
 
