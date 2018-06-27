@@ -18,12 +18,12 @@ services:
   feature-toggle-flyway:
     build:
       context: docker/flyway
-    image: docker.artifactory.reform.hmcts.net/reform/flyway
+    image: hmcts/feature-toggle-flyway
     container_name: feature-toggle-flyway
     environment:
       - FEATURES_DB_PASSWORD
     volumes:
-      - ./feature-toggle-db/src/main/resources/db/migration:/flyway/sql
+      - ./src/main/resources/db/migration:/flyway/sql
     depends_on:
       feature-toggle-database:
         condition: service_healthy
