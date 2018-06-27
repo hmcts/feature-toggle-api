@@ -8,17 +8,23 @@ services:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-api
+    image: hmcts/feature-toggle-api
     container_name: feature-toggle-api
     environment:
       - APPINSIGHTS_INSTRUMENTATIONKEY
-      - FLYWAY_ENABLED=false
+      - FLYWAY_ENABLED=${FLYWAY_ENABLED:-false}
+      - FLYWAY_NOOP_STRATEGY
       - FEATURES_DB_HOST=feature-toggle-database
       - FEATURES_DB_PORT
       - FEATURES_DB_NAME
       - FEATURES_DB_CONN_OPTIONS
       - FEATURES_DB_USER_NAME
       - FEATURES_DB_PASSWORD
+      # test users
+      - TEST_ADMIN_USERNAME=admin@example.com
+      - TEST_ADMIN_PASSWORD=Password12
+      - TEST_EDITOR_USERNAME=editor@example.com
+      - TEST_EDITOR_PASSWORD=Password12
       # these environment variables are used by java-logging library
       - ROOT_APPENDER
       - JSON_CONSOLE_PRETTY_PRINT
@@ -36,7 +42,7 @@ services:
   database:
     build:
       context: docker/database
-    image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-database
+    image: hmcts/feature-toggle-database
     container_name: feature-toggle-database
     environment:
       - FEATURES_DB_PASSWORD
