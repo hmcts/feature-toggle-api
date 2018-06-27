@@ -12,8 +12,8 @@ services:
     container_name: feature-toggle-api
     environment:
       - APPINSIGHTS_INSTRUMENTATIONKEY
-      - FLYWAY_ENABLED=false
-      - FLYWAY_NOOP_STRATEGY=true
+      - FLYWAY_ENABLED=${FLYWAY_ENABLED:-false}
+      - FLYWAY_NOOP_STRATEGY
       - FEATURES_DB_HOST=feature-toggle-database
       - FEATURES_DB_PORT
       - FEATURES_DB_NAME
