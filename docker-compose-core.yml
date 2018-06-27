@@ -4,7 +4,6 @@ services:
   service:
     build:
       context: .
-      dockerfile: hub.Dockerfile
       args:
         - http_proxy
         - https_proxy
