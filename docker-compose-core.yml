@@ -4,11 +4,12 @@ services:
   service:
     build:
       context: .
+      dockerfile: hub.Dockerfile
       args:
         - http_proxy
         - https_proxy
         - no_proxy
-    image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-api
+    image: hmcts/feature-toggle-api
     container_name: feature-toggle-api
     environment:
       - APPINSIGHTS_INSTRUMENTATIONKEY
@@ -31,12 +32,16 @@ services:
       - LOGBACK_REQUIRE_THREAD
       - LOGBACK_REQUIRE_ALERT_LEVEL=false
       - LOGBACK_REQUIRE_ERROR_CODE=false
+      - TEST_ADMIN_USERNAME=admin@example.com
+      - TEST_ADMIN_PASSWORD=Password12
+      - TEST_EDITOR_USERNAME=editor@example.com
+      - TEST_EDITOR_PASSWORD=Password12
     ports:
       - $SERVER_PORT:$SERVER_PORT
   database:
     build:
       context: docker/database
-    image: docker.artifactory.reform.hmcts.net/reform/feature-toggle-database
+    image: hmcts/feature-toggle-database
     container_name: feature-toggle-database
     environment:
       - FEATURES_DB_PASSWORD
