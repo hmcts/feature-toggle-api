@@ -22,6 +22,10 @@ locals {
   nonPreviewVaultName    = "${var.product}-ft-api-${var.env}"
   vaultName              = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
+  cmcPreviewVaultName = "cmc-aat"
+  cmcNonPreviewVaultName = "cmc-${var.env}"
+  cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
+
   db_connection_options  = "?ssl=true"
 
   test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
@@ -67,10 +71,39 @@ module "feature-toggle-api" {
     TEST_ADMIN_PASSWORD         = "${local.test_admin_password}"
     TEST_EDITOR_USERNAME        = "${local.test_editor_user}"
     TEST_EDITOR_PASSWORD        = "${local.test_editor_password}"
+    CMC_ADMIN_USERNAME          = "${data.azurerm_key_vault_secret.cmc_admin_username.value}"
+    CMC_ADMIN_PASSWORD          = "${data.azurerm_key_vault_secret.cmc_admin_password.value}"
+    CMC_EDITOR_USERNAME         = "${data.azurerm_key_vault_secret.cmc_editor_username.value}"
+    CMC_EDITOR_PASSWORD         = "${data.azurerm_key_vault_secret.cmc_editor_password.value}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
   }
+}
+
+data "azurerm_key_vault" "cmc_key_vault" {
+  name = "${local.cmcVaultName}"
+  resource_group_name = "${local.cmcVaultName}"
+}
+
+data "azurerm_key_vault_secret" "cmc_admin_username" {
+  name = "feature-toggle-admin-username"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_admin_password" {
+  name = "feature-toggle-admin-password"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_editor_username" {
+  name = "feature-toggle-editor-username"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+}
+
+data "azurerm_key_vault_secret" "cmc_editor_password" {
+  name = "feature-toggle-editor-password"
+  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
 # region save DB details to Azure Key Vault
