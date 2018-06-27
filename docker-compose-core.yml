@@ -13,6 +13,7 @@ services:
     environment:
       - APPINSIGHTS_INSTRUMENTATIONKEY
       - FLYWAY_ENABLED=false
+      - FLYWAY_NOOP_STRATEGY=true
       - FEATURES_DB_HOST=feature-toggle-database
       - FEATURES_DB_PORT
       - FEATURES_DB_NAME
