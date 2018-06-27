@@ -24,7 +24,7 @@ locals {
 
   cmcPreviewVaultName = "cmc-aat"
   cmcNonPreviewVaultName = "cmc-${var.env}"
-  cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
+  cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
 
   db_connection_options  = "?ssl=true"
 
@@ -79,31 +79,6 @@ module "feature-toggle-api" {
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
   }
-}
-
-data "azurerm_key_vault" "cmc_key_vault" {
-  name = "${local.cmcVaultName}"
-  resource_group_name = "${local.cmcVaultName}"
-}
-
-data "azurerm_key_vault_secret" "cmc_admin_username" {
-  name = "feature-toggle-admin-username"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "cmc_admin_password" {
-  name = "feature-toggle-admin-password"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "cmc_editor_username" {
-  name = "feature-toggle-editor-username"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "cmc_editor_password" {
-  name = "feature-toggle-editor-password"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
 }
 
 # region save DB details to Azure Key Vault
