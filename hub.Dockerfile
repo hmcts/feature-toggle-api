@@ -5,6 +5,8 @@ USER root
 RUN chown -R gradle:gradle /home/gradle/src
 USER gradle
 
+ENV FLYWAY_NOOP_STRATEGY=false
+
 WORKDIR /home/gradle/src
 RUN gradle assemble
 
