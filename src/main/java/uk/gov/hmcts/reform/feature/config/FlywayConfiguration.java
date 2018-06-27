@@ -24,13 +24,13 @@ import uk.gov.hmcts.reform.feature.data.migration.FlywayNoOpStrategy;
 public class FlywayConfiguration {
 
     @Bean
-    @ConditionalOnProperty(prefix = "flyway", name = "noop.strategy", matchIfMissing = true)
+    @ConditionalOnProperty(prefix = "flyway.noop", name = "strategy", matchIfMissing = true)
     public FlywayMigrationStrategy flywayMigrationStrategy() {
         return new FlywayNoOpStrategy();
     }
 
     @Bean
-    @ConditionalOnProperty(prefix = "flyway", name = "noop.strategy", havingValue = "false")
+    @ConditionalOnProperty(prefix = "flyway.noop", name = "strategy", havingValue = "false")
     public FlywayMigrationStrategy flywayVoidMigrationStrategy() {
         return null;
     }
