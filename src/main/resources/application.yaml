@@ -9,6 +9,9 @@ management:
     web:
       base-path: /
 
+flyway:
+  schemas: public
+
 info:
    app:
       name: Feature Toggle API
