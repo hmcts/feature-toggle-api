@@ -19,6 +19,11 @@ services:
       - FEATURES_DB_CONN_OPTIONS
       - FEATURES_DB_USER_NAME
       - FEATURES_DB_PASSWORD
+      # test users
+      - TEST_ADMIN_USERNAME=admin@example.com
+      - TEST_ADMIN_PASSWORD=Password12
+      - TEST_EDITOR_USERNAME=editor@example.com
+      - TEST_EDITOR_PASSWORD=Password12
       # these environment variables are used by java-logging library
       - ROOT_APPENDER
       - JSON_CONSOLE_PRETTY_PRINT
@@ -31,10 +36,6 @@ services:
       - LOGBACK_REQUIRE_THREAD
       - LOGBACK_REQUIRE_ALERT_LEVEL=false
       - LOGBACK_REQUIRE_ERROR_CODE=false
-      - TEST_ADMIN_USERNAME=admin@example.com
-      - TEST_ADMIN_PASSWORD=Password12
-      - TEST_EDITOR_USERNAME=editor@example.com
-      - TEST_EDITOR_PASSWORD=Password12
     ports:
       - $SERVER_PORT:$SERVER_PORT
   database:
