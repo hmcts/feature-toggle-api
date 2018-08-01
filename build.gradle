@@ -28,6 +28,10 @@ def versions = [
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
 
+configurations.all {
+  exclude group: "org.webjars", module: "d3js"
+}
+
 sourceSets {
   functionalTest {
     java {
