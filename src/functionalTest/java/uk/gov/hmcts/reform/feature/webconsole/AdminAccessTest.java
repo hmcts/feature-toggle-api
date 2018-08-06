@@ -20,7 +20,7 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_not_allow_access_for_non_admin_user() {
         RequestSpecification specification = requestSpecification();
-        // Explicitly state that you don't which to use any authentication in this request.
+        // Explicitly state that you don't want to use any authentication in this request.
         specification.auth().none();
 
         Cookies cookies = specification
@@ -46,7 +46,7 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
-        // Explicitly state that you don't which to use any authentication in this request.
+        // Explicitly state that you don't want to use any authentication in this request.
         specification.auth().none();
 
         Cookies cookies = specification

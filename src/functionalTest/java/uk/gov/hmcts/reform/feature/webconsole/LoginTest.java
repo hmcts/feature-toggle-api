@@ -17,7 +17,7 @@ public class LoginTest extends BaseTest {
     @Test
     public void should_allow_user_to_login_and_redirected_to_home_page() {
         RequestSpecification specification = requestSpecification();
-        // Explicitly state that you don't which to use any authentication in this request.
+        // Explicitly state that you don't want to use any authentication in this request.
         specification.auth().none();
 
         String location = specification
