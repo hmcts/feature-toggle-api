@@ -20,10 +20,7 @@ public class RunAsUserTest extends BaseTest {
     private String featureUuid;
 
     @Before
-    @Override
     public void setUp() {
-        super.setUp();
-
         featureUuid = UUID.randomUUID().toString();
     }
 
