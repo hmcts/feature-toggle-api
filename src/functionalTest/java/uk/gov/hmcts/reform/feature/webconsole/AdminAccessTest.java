@@ -1,6 +1,7 @@
 package uk.gov.hmcts.reform.feature.webconsole;
 
 import io.restassured.http.ContentType;
+import io.restassured.http.Cookies;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
@@ -19,9 +20,10 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_not_allow_access_for_non_admin_user() {
         RequestSpecification specification = requestSpecification();
-        String sessionCookieName = "SESSION";
+        // Explicitly state that you don't which to use any authentication in this request.
+        specification.auth().none();
 
-        String sessionCookieValue = specification
+        Cookies cookies = specification
             .contentType(ContentType.URLENC)
             .formParam("username", testEditorUser)
             .formParam("password", testEditorPassword)
@@ -29,10 +31,11 @@ public class AdminAccessTest extends BaseTest {
             .then()
             .statusCode(FOUND.value())
             .extract()
-            .cookie(sessionCookieName);
+            .response()
+            .getDetailedCookies();
 
         specification
-            .cookie(sessionCookieName, sessionCookieValue)
+            .cookies(cookies)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())
@@ -43,9 +46,10 @@ public class AdminAccessTest extends BaseTest {
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();
-        String sessionCookieName = "SESSION";
+        // Explicitly state that you don't which to use any authentication in this request.
+        specification.auth().none();
 
-        String sessionCookieValue = specification
+        Cookies cookies = specification
             .contentType(ContentType.URLENC)
             .formParam("username", testAdminUser)
             .formParam("password", testAdminPassword)
@@ -53,23 +57,24 @@ public class AdminAccessTest extends BaseTest {
             .then()
             .statusCode(FOUND.value())
             .extract()
-            .cookie(sessionCookieName);
+            .response()
+            .getDetailedCookies();
 
         specification
-            .cookie(sessionCookieName, sessionCookieValue)
+            .cookies(cookies)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())
             .body("html.head.title", equalTo("FF4J - Home"));
 
         specification
-            .cookie(sessionCookieName, sessionCookieValue)
+            .cookies(cookies)
             .get("/logout")
             .then()
             .statusCode(OK.value());
 
         specification
-            .cookie(sessionCookieName, sessionCookieValue)
+            .cookies(cookies)
             .get(FF4J_WEB_CONSOLE_URL)
             .then()
             .statusCode(OK.value())
