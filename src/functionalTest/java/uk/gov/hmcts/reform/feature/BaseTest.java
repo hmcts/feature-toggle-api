@@ -4,7 +4,6 @@ import com.google.common.io.Resources;
 import io.restassured.RestAssured;
 import io.restassured.specification.RequestSpecification;
 import org.apache.commons.io.Charsets;
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -47,14 +46,10 @@ public abstract class BaseTest {
         return Resources.toString(Resources.getResource(fileName), Charsets.UTF_8);
     }
 
-    @Before
-    public void setUp() {
-        RestAssured.authentication = RestAssured.preemptive().basic(testAdminUser, testAdminPassword);
-    }
-
     protected RequestSpecification requestSpecification() {
         return RestAssured
             .given()
+            .auth().preemptive().basic(testAdminUser, testAdminPassword)
             .relaxedHTTPSValidation()
             .baseUri(this.testUrl)
             .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)

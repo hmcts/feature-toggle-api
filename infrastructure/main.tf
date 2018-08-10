@@ -35,7 +35,7 @@ locals {
 }
 
 module "feature-toggle-db" {
-  source              = "git@github.com:hmcts/moj-module-postgres?ref=cnp-449-tactical"
+  source              = "git@github.com:hmcts/moj-module-postgres?ref=master"
   product             = "${var.product}-${var.component}-db"
   location            = "${var.location_db}"
   env                 = "${var.env}"
@@ -43,6 +43,7 @@ module "feature-toggle-db" {
   postgresql_user     = "feature_toggler"
   sku_name            = "GP_Gen5_2"
   sku_tier            = "GeneralPurpose"
+  common_tags         = "${var.common_tags}"
 }
 
 module "feature-toggle-api" {
@@ -56,6 +57,7 @@ module "feature-toggle-api" {
   capacity             = "${var.capacity}"
   additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
   is_frontend          = "${var.env != "preview" ? 1: 0}"
+  common_tags          = "${var.common_tags}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"

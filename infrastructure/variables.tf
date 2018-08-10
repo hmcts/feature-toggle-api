@@ -52,3 +52,7 @@ variable "capacity" {
 variable "external_host_name" {
   default = "www.featuretoggle.sprod.platform.hmcts.net"
 }
+
+variable "common_tags" {
+  type = "map"
+}
