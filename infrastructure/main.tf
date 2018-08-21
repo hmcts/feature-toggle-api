@@ -26,6 +26,10 @@ locals {
   cmcNonPreviewVaultName = "cmc-${var.env}"
   cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
 
+  divorcePreviewVaultName = "divorce-aat"
+  divorceNonPreviewVaultName = "divorce-${var.env}"
+  divorceVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.divorcePreviewVaultName : local.divorceNonPreviewVaultName}"
+
   db_connection_options  = "?ssl=true"
 
   test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
