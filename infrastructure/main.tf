@@ -81,6 +81,10 @@ module "feature-toggle-api" {
     CMC_ADMIN_PASSWORD          = "${data.azurerm_key_vault_secret.cmc_admin_password.value}"
     CMC_EDITOR_USERNAME         = "${data.azurerm_key_vault_secret.cmc_editor_username.value}"
     CMC_EDITOR_PASSWORD         = "${data.azurerm_key_vault_secret.cmc_editor_password.value}"
+    DIVORCE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.divorce_admin_username.value}"
+    DIVORCE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.divorce_admin_password.value}"
+    DIVORCE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.divorce_editor_username.value}"
+    DIVORCE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.divorce_editor_password.value}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
