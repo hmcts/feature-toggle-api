@@ -26,7 +26,7 @@ public class FeatureStoreTest extends BaseTest {
         //There might be other features in feature store but there should be at least 2 as we are creating it
         assertThat(jsonPath.getInt("numberOfFeatures")).isGreaterThanOrEqualTo(2);
         assertThat(jsonPath.getString("cache")).isNull();
-        assertThat(jsonPath.getList("features")).containsExactly(featureUuid1, featureUuid2);
+        assertThat(jsonPath.getList("features")).contains(featureUuid1, featureUuid2);
 
         requestSpecification()
             .delete(FF4J_STORE_FEATURES_URL + featureUuid1);
