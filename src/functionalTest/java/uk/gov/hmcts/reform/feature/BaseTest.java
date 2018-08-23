@@ -66,9 +66,4 @@ public abstract class BaseTest {
             .then()
             .statusCode(201);
     }
-
-    protected void deleteAllFeatures() {
-        requestSpecification()
-            .delete("/api/ff4j/store/clear");
-    }
 }
