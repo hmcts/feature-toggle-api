@@ -26,6 +26,10 @@ locals {
   cmcNonPreviewVaultName = "cmc-${var.env}"
   cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
 
+  probatePreviewVaultName = "probate-aat"
+  probateNonPreviewVaultName = "probate-${var.env}"
+  probateVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.probatePreviewVaultName : local.probateNonPreviewVaultName}"
+
   db_connection_options  = "?ssl=true"
 
   test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
@@ -77,6 +81,10 @@ module "feature-toggle-api" {
     CMC_ADMIN_PASSWORD          = "${data.azurerm_key_vault_secret.cmc_admin_password.value}"
     CMC_EDITOR_USERNAME         = "${data.azurerm_key_vault_secret.cmc_editor_username.value}"
     CMC_EDITOR_PASSWORD         = "${data.azurerm_key_vault_secret.cmc_editor_password.value}"
+    PROBATE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.probate_admin_username.value}"
+    PROBATE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.probate_admin_password.value}"
+    PROBATE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.probate_editor_username.value}"
+    PROBATE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.probate_editor_password.value}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
