@@ -17,7 +17,7 @@ public class RetrieveFeatureToggleSmokeTest extends BaseTest {
 
     @Category(SmokeTestCategory.class)
     @Test
-    public void should_return_all_feature_toggles_from_feature_store() {
+    public void should_return_200_status_code_when_all_feature_toggles_are_retrieved_from_feature_store() {
         Response response = RestAssured
             .given()
             .baseUri(this.testUrl)
