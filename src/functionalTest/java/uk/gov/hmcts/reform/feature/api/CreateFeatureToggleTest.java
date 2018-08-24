@@ -1,16 +1,13 @@
 package uk.gov.hmcts.reform.feature.api;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.BaseTest;
-import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import java.io.IOException;
 import java.util.UUID;
 
 public class CreateFeatureToggleTest extends BaseTest {
 
-    @Category(SmokeTestCategory.class)
     @Test
     public void should_successfully_create_feature_toggle_in_feature_store() throws IOException {
         //Feature name should be unique in the feature store

@@ -4,9 +4,7 @@ import io.restassured.http.ContentType;
 import io.restassured.http.Cookies;
 import io.restassured.specification.RequestSpecification;
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.BaseTest;
-import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -16,7 +14,6 @@ import static org.springframework.http.HttpStatus.OK;
 
 public class AdminAccessTest extends BaseTest {
 
-    @Category(SmokeTestCategory.class)
     @Test
     public void should_not_allow_access_for_non_admin_user() {
         RequestSpecification specification = requestSpecification();
@@ -42,7 +39,6 @@ public class AdminAccessTest extends BaseTest {
             .body("html.head.title", equalTo("Error"));
     }
 
-    @Category(SmokeTestCategory.class)
     @Test
     public void should_verify_login_logout_journey() {
         RequestSpecification specification = requestSpecification();

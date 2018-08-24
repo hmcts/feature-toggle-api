@@ -1,16 +1,13 @@
 package uk.gov.hmcts.reform.feature.api;
 
 import org.junit.Test;
-import org.junit.experimental.categories.Category;
 import uk.gov.hmcts.reform.feature.BaseTest;
-import uk.gov.hmcts.reform.feature.categories.SmokeTestCategory;
 
 import java.io.IOException;
 import java.util.UUID;
 
 public class ChangeFeatureToggleTest extends BaseTest {
 
-    @Category(SmokeTestCategory.class)
     @Test
     public void should_successfully_enable_feature_toggle_in_feature_store() throws IOException {
         //Feature name should be unique in the feature store
@@ -32,7 +29,6 @@ public class ChangeFeatureToggleTest extends BaseTest {
             .delete(FF4J_STORE_FEATURES_URL + featureUuid);
     }
 
-    @Category(SmokeTestCategory.class)
     @Test
     public void should_successfully_disable_feature_toggle_in_feature_store() throws IOException {
         //Feature name should be unique in the feature store
