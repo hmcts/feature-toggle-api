@@ -11,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
-import uk.gov.hmcts.reform.logging.appinsights.SyntheticHeaders;
 
 import java.io.IOException;
 
@@ -22,7 +21,7 @@ import java.io.IOException;
 public abstract class BaseTest {
 
     @Value("${test-url}")
-    private String testUrl;
+    protected String testUrl;
 
     @Value("${test-admin-user}")
     protected String testAdminUser;
@@ -35,8 +34,6 @@ public abstract class BaseTest {
 
     @Value("${test-editor-password}")
     protected String testEditorPassword;
-
-    private static final String SYNTHETIC_SOURCE_HEADER_VALUE = "Feature Toggle Smoke Test";
 
     protected static final String FF4J_STORE_FEATURES_URL = "api/ff4j/store/features/";
 
@@ -52,8 +49,7 @@ public abstract class BaseTest {
             .auth().preemptive().basic(testAdminUser, testAdminPassword)
             .relaxedHTTPSValidation()
             .baseUri(this.testUrl)
-            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-            .header(SyntheticHeaders.SYNTHETIC_TEST_SOURCE, SYNTHETIC_SOURCE_HEADER_VALUE);
+            .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
     }
 
     protected void createFeatureToggle(String featureUuid, String createRequestBody) {
@@ -65,10 +61,5 @@ public abstract class BaseTest {
             .put(FF4J_STORE_FEATURES_URL + featureUuid)
             .then()
             .statusCode(201);
-    }
-
-    protected void deleteAllFeatures() {
-        requestSpecification()
-            .delete("/api/ff4j/store/clear");
     }
 }
