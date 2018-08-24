@@ -26,6 +26,10 @@ locals {
   cmcNonPreviewVaultName = "cmc-${var.env}"
   cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
 
+  divorcePreviewVaultName = "divorce-aat"
+  divorceNonPreviewVaultName = "divorce-${var.env}"
+  divorceVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.divorcePreviewVaultName : local.divorceNonPreviewVaultName}"
+
   db_connection_options  = "?ssl=true"
 
   test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
@@ -77,6 +81,10 @@ module "feature-toggle-api" {
     CMC_ADMIN_PASSWORD          = "${data.azurerm_key_vault_secret.cmc_admin_password.value}"
     CMC_EDITOR_USERNAME         = "${data.azurerm_key_vault_secret.cmc_editor_username.value}"
     CMC_EDITOR_PASSWORD         = "${data.azurerm_key_vault_secret.cmc_editor_password.value}"
+    DIVORCE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.divorce_admin_username.value}"
+    DIVORCE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.divorce_admin_password.value}"
+    DIVORCE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.divorce_editor_username.value}"
+    DIVORCE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.divorce_editor_password.value}"
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false
     LOGBACK_REQUIRE_ERROR_CODE  = false
