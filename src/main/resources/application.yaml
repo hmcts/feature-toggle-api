@@ -43,13 +43,24 @@ users:
       password: ${TEST_ADMIN_PASSWORD}
     - username: ${CMC_ADMIN_USERNAME}
       password: ${CMC_ADMIN_PASSWORD}
+
     - username: ${DIVORCE_ADMIN_USERNAME}
       password: ${DIVORCE_ADMIN_PASSWORD}
+      
+    - username: ${PROBATE_ADMIN_USERNAME}
+      password: ${PROBATE_ADMIN_PASSWORD}
+
 
   editors:
     - username: ${TEST_EDITOR_USERNAME}
       password: ${TEST_EDITOR_PASSWORD}
+      
     - username: ${CMC_EDITOR_USERNAME}
       password: ${CMC_EDITOR_PASSWORD}
+
     - username: ${DIVORCE_EDITOR_USERNAME}
       password: ${DIVORCE_EDITOR_PASSWORD}
+
+    - username: ${PROBATE_EDITOR_USERNAME}
+      password: ${PROBATE_EDITOR_PASSWORD}
+
