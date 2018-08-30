@@ -27,8 +27,8 @@ locals {
   cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
 
 
-  divorcePreviewVaultName = "divorce-aat"
-  divorceNonPreviewVaultName = "divorce-${var.env}"
+  divorcePreviewVaultName = "div-aat"
+  divorceNonPreviewVaultName = "div-${var.env}"
   divorceVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.divorcePreviewVaultName : local.divorceNonPreviewVaultName}"
   
   probatePreviewVaultName = "probate-aat"
