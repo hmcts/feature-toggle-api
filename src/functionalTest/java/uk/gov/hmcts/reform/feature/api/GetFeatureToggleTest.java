@@ -1,7 +1,6 @@
 package uk.gov.hmcts.reform.feature.api;
 
 import io.restassured.path.json.JsonPath;
-import org.hamcrest.Matchers;
 import org.junit.Test;
 import uk.gov.hmcts.reform.feature.BaseTest;
 
@@ -41,18 +40,5 @@ public class GetFeatureToggleTest extends BaseTest {
         assertThat(jsonPath.getInt("status")).isEqualTo(404);
         assertThat(jsonPath.getString("error")).isEqualTo("Not Found");
         assertThat(jsonPath.getString("exception")).contains("FeatureNotFoundException");
-    }
-
-    @Test
-    public void should_throw_feature_id_blank_exception_when_feature_id_is_blank() {
-
-        //Delete all features in the feature store else the last one is returned by default
-        //Functional tests are not executed on prod slot so should be safe to do this.
-        deleteAllFeatures();
-
-        requestSpecification()
-            .get(FF4J_STORE_FEATURES_URL)
-            .then()
-            .body("$", Matchers.empty());
     }
 }

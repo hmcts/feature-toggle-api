@@ -13,10 +13,6 @@ public class FeatureStoreTest extends BaseTest {
 
     @Test
     public void should_return_feature_store_details() throws IOException {
-        //Delete all features in the feature store else the last one is returned by default
-        //Functional tests are not executed on prod slot so should be safe to do this.
-        deleteAllFeatures();
-
         String featureUuid1 = UUID.randomUUID().toString();
         String featureUuid2 = UUID.randomUUID().toString();
 
@@ -27,9 +23,10 @@ public class FeatureStoreTest extends BaseTest {
             .get("/api/ff4j/store").jsonPath();
 
         assertThat(jsonPath.getString("type")).isEqualTo("org.ff4j.audit.proxy.FeatureStoreAuditProxy");
-        assertThat(jsonPath.getInt("numberOfFeatures")).isEqualTo(2);
+        //There might be other features in feature store but there should be at least 2 as we are creating it
+        assertThat(jsonPath.getInt("numberOfFeatures")).isGreaterThanOrEqualTo(2);
         assertThat(jsonPath.getString("cache")).isNull();
-        assertThat(jsonPath.getList("features")).containsExactly(featureUuid1, featureUuid2);
+        assertThat(jsonPath.getList("features")).contains(featureUuid1, featureUuid2);
 
         requestSpecification()
             .delete(FF4J_STORE_FEATURES_URL + featureUuid1);
