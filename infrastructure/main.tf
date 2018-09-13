@@ -37,6 +37,8 @@ locals {
   test_admin_password    = "${data.vault_generic_secret.test-admin-password.data["value"]}"
   test_editor_user       = "${data.vault_generic_secret.test-editor-user.data["value"]}"
   test_editor_password   = "${data.vault_generic_secret.test-editor-password.data["value"]}"
+
+  sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
 }
 
 module "feature-toggle-db" {
@@ -63,6 +65,9 @@ module "feature-toggle-api" {
   additional_host_name = "${var.env != "preview" ? var.external_host_name : "null"}"
   is_frontend          = "${var.env != "preview" ? 1: 0}"
   common_tags          = "${var.common_tags}"
+  asp_name             = "${var.product}-${var.component}-${var.env}"
+  asp_rg               = "${var.product}-${var.component}-${var.env}"
+  instance_size        = "${local.sku_size}"
 
   app_settings = {
     FEATURES_DB_HOST            = "${module.feature-toggle-db.host_name}"
