@@ -1,9 +1,5 @@
 provider "azurerm" {}
 
-provider "vault" {
-  address = "https://vault.reform.hmcts.net:6200"
-}
-
 # Make sure the resource group exists
 resource "azurerm_resource_group" "rg" {
   name     = "${var.product}-${var.component}-${var.env}"
