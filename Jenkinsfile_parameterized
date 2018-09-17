@@ -4,10 +4,10 @@
 def channel = '#rpe-build-notices'
 
 List<LinkedHashMap<String, Object>> secrets = [
-  secret('test-admin-user', 'TEST_ADMIN_USERNAME'),
-  secret('test-admin-password', 'TEST_ADMIN_PASSWORD'),
-  secret('test-editor-user', 'TEST_EDITOR_USERNAME'),
-  secret('test-editor-password', 'TEST_EDITOR_PASSWORD')
+  secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
+  secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
+  secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
+  secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {

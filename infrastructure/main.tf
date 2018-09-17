@@ -87,20 +87,20 @@ module "feature-toggle-api" {
     TEST_ADMIN_PASSWORD         = "${local.test_admin_password}"
     TEST_EDITOR_USERNAME        = "${local.test_editor_user}"
     TEST_EDITOR_PASSWORD        = "${local.test_editor_password}"
-    CMC_ADMIN_USERNAME          = "${data.azurerm_key_vault_secret.cmc_admin_username.value}"
-    CMC_ADMIN_PASSWORD          = "${data.azurerm_key_vault_secret.cmc_admin_password.value}"
-    CMC_EDITOR_USERNAME         = "${data.azurerm_key_vault_secret.cmc_editor_username.value}"
-    CMC_EDITOR_PASSWORD         = "${data.azurerm_key_vault_secret.cmc_editor_password.value}"
+    ADMIN_USERNAME_CMC          = "${data.azurerm_key_vault_secret.admin_username_cmc.value}"
+    ADMIN_PASSWORD_CMC          = "${data.azurerm_key_vault_secret.admin_password_cmc.value}"
+    EDITOR_USERNAME_CMC         = "${data.azurerm_key_vault_secret.editor_username_cmc.value}"
+    EDITOR_PASSWORD_CMC         = "${data.azurerm_key_vault_secret.editor_password_cmc.value}"
 
-    DIVORCE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.divorce_admin_username.value}"
-    DIVORCE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.divorce_admin_password.value}"
-    DIVORCE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.divorce_editor_username.value}"
-    DIVORCE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.divorce_editor_password.value}"
+    ADMIN_USERNAME_DIVORCE      = "${data.azurerm_key_vault_secret.admin_username_divorce.value}"
+    ADMIN_PASSWORD_DIVORCE      = "${data.azurerm_key_vault_secret.admin_password_divorce.value}"
+    EDITOR_USERNAME_DIVORCE     = "${data.azurerm_key_vault_secret.editor_username_divorce.value}"
+    EDITOR_PASSWORD_DIVORCE     = "${data.azurerm_key_vault_secret.editor_password_divorce.value}"
 
-    PROBATE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.probate_admin_username.value}"
-    PROBATE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.probate_admin_password.value}"
-    PROBATE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.probate_editor_username.value}"
-    PROBATE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.probate_editor_password.value}"
+    ADMIN_USERNAME_PROBATE      = "${data.azurerm_key_vault_secret.admin_username_probate.value}"
+    ADMIN_PASSWORD_PROBATE      = "${data.azurerm_key_vault_secret.admin_password_probate.value}"
+    EDITOR_USERNAME_PROBATE     = "${data.azurerm_key_vault_secret.editor_username_probate.value}"
+    EDITOR_PASSWORD_PROBATE     = "${data.azurerm_key_vault_secret.editor_password_probate.value}"
 
     // silence the "bad implementation" logs
     LOGBACK_REQUIRE_ALERT_LEVEL = false

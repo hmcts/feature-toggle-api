@@ -1,24 +1,19 @@
-data "azurerm_key_vault" "divorce_key_vault" {
-  name = "${local.divorceVaultName}"
-  resource_group_name = "${local.divorceVaultName}"
+data "azurerm_key_vault_secret" "admin_username_divorce" {
+  name = "admin-username-divorce"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "divorce_admin_username" {
-  name = "feature-toggle-admin-username"
-  vault_uri = "${data.azurerm_key_vault.divorce_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "admin_password_divorce" {
+  name = "admin-password-divorce"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "divorce_admin_password" {
-  name = "feature-toggle-admin-password"
-  vault_uri = "${data.azurerm_key_vault.divorce_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "editor_username_divorce" {
+  name = "editor-username-divorce"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "divorce_editor_username" {
-  name = "feature-toggle-editor-username"
-  vault_uri = "${data.azurerm_key_vault.divorce_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "divorce_editor_password" {
-  name = "feature-toggle-editor-password"
-  vault_uri = "${data.azurerm_key_vault.divorce_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "editor_password_divorce" {
+  name = "editor-password-divorce"
+  vault_uri = "${local.permanent_vault_uri}"
 }

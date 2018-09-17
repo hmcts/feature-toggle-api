@@ -39,28 +39,28 @@ spring:
 
 users:
   admins:
-    - username: ${TEST_ADMIN_USERNAME}
-      password: ${TEST_ADMIN_PASSWORD}
-    - username: ${CMC_ADMIN_USERNAME}
-      password: ${CMC_ADMIN_PASSWORD}
+    - username: ${ADMIN_USERNAME_TEST}
+      password: ${ADMIN_PASSWORD_TEST}
 
-    - username: ${DIVORCE_ADMIN_USERNAME}
-      password: ${DIVORCE_ADMIN_PASSWORD}
-      
-    - username: ${PROBATE_ADMIN_USERNAME}
-      password: ${PROBATE_ADMIN_PASSWORD}
+    - username: ${ADMIN_USERNAME_CMC}
+      password: ${ADMIN_PASSWORD_CMC}
+
+    - username: ${ADMIN_USERNAME_DIVORCE}
+      password: ${ADMIN_PASSWORD_DIVORCE}
+
+    - username: ${ADMIN_USERNAME_PROBATE}
+      password: ${ADMIN_PASSWORD_PROBATE}
 
 
   editors:
-    - username: ${TEST_EDITOR_USERNAME}
-      password: ${TEST_EDITOR_PASSWORD}
-      
-    - username: ${CMC_EDITOR_USERNAME}
-      password: ${CMC_EDITOR_PASSWORD}
+    - username: ${EDITOR_USERNAME_TEST}
+      password: ${EDITOR_PASSWORD_TEST}
 
-    - username: ${DIVORCE_EDITOR_USERNAME}
-      password: ${DIVORCE_EDITOR_PASSWORD}
+    - username: ${EDITOR_USERNAME_CMC}
+      password: ${EDITOR_PASSWORD_CMC}
 
-    - username: ${PROBATE_EDITOR_USERNAME}
-      password: ${PROBATE_EDITOR_PASSWORD}
+    - username: ${EDITOR_USERNAME_DIVORCE}
+      password: ${EDITOR_PASSWORD_DIVORCE}
 
+    - username: ${EDITOR_USERNAME_PROBATE}
+      password: ${EDITOR_PASSWORD_PROBATE}
