@@ -22,6 +22,10 @@ locals {
   nonPreviewVaultName    = "${var.product}-ft-api-${var.env}"
   vaultName              = "${(var.env == "preview" || var.env == "spreview") ? local.previewVaultName : local.nonPreviewVaultName}"
 
+  # URI of vault that stores long-term secrets. It's the app's own Key Vault, except for (s)preview,
+  # where vaults are short-lived and can only store secrets generated during deployment
+  permanent_vault_uri    = "https://${var.raw_product}-ft-api-${local.local_env}.vault.azure.net/"
+
   cmcPreviewVaultName = "cmc-aat"
   cmcNonPreviewVaultName = "cmc-${var.env}"
   cmcVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.cmcPreviewVaultName : local.cmcNonPreviewVaultName}"
@@ -30,17 +34,17 @@ locals {
   divorcePreviewVaultName = "div-aat"
   divorceNonPreviewVaultName = "div-${var.env}"
   divorceVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.divorcePreviewVaultName : local.divorceNonPreviewVaultName}"
-  
+
   probatePreviewVaultName = "probate-aat"
   probateNonPreviewVaultName = "probate-${var.env}"
   probateVaultName = "${(var.env == "preview" || var.env == "spreview") ? local.probatePreviewVaultName : local.probateNonPreviewVaultName}"
 
   db_connection_options  = "?ssl=true"
 
-  test_admin_user        = "${data.vault_generic_secret.test-admin-user.data["value"]}"
-  test_admin_password    = "${data.vault_generic_secret.test-admin-password.data["value"]}"
-  test_editor_user       = "${data.vault_generic_secret.test-editor-user.data["value"]}"
-  test_editor_password   = "${data.vault_generic_secret.test-editor-password.data["value"]}"
+  test_admin_user        = "${data.azurerm_key_vault_secret.source-test-admin-user.value}"
+  test_admin_password    = "${data.azurerm_key_vault_secret.source-test-admin-password.value}"
+  test_editor_user       = "${data.azurerm_key_vault_secret.source-test-editor-user.value}"
+  test_editor_password   = "${data.azurerm_key_vault_secret.source-test-editor-password.value}"
 
   sku_size = "${var.env == "prod" || var.env == "sprod" || var.env == "aat" ? "I2" : "I1"}"
 }
@@ -96,7 +100,7 @@ module "feature-toggle-api" {
     DIVORCE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.divorce_admin_password.value}"
     DIVORCE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.divorce_editor_username.value}"
     DIVORCE_EDITOR_PASSWORD     = "${data.azurerm_key_vault_secret.divorce_editor_password.value}"
-    
+
     PROBATE_ADMIN_USERNAME      = "${data.azurerm_key_vault_secret.probate_admin_username.value}"
     PROBATE_ADMIN_PASSWORD      = "${data.azurerm_key_vault_secret.probate_admin_password.value}"
     PROBATE_EDITOR_USERNAME     = "${data.azurerm_key_vault_secret.probate_editor_username.value}"

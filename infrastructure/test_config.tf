@@ -1,17 +1,25 @@
-data "vault_generic_secret" "test-admin-user" {
-  path = "secret/${var.vault_section}/cc/ff4j/webconsole/test-admin-user"
+# Secrets for tests are stored in permanent (long-lived) Azure Key Vault instances.
+# With the exception of (s)preview all Vault instances are long-lived. For preview, however,
+# test secrets (not created during deployment) need to be copied over from a permanent vault -
+# that's what the code below does.
+data "azurerm_key_vault_secret" "source-test-admin-user" {
+  name = "test-admin-user"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "vault_generic_secret" "test-admin-password" {
-  path = "secret/${var.vault_section}/cc/ff4j/webconsole/test-admin-password"
+data "azurerm_key_vault_secret" "source-test-admin-password" {
+  name = "test-admin-password"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "vault_generic_secret" "test-editor-user" {
-  path = "secret/${var.vault_section}/cc/ff4j/webconsole/test-editor-user"
+data "azurerm_key_vault_secret" "source-test-editor-user" {
+  name = "test-editor-user"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "vault_generic_secret" "test-editor-password" {
-  path = "secret/${var.vault_section}/cc/ff4j/webconsole/test-editor-password"
+data "azurerm_key_vault_secret" "source-test-editor-password" {
+  name = "test-editor-password"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
 resource "azurerm_key_vault_secret" "test-admin-user" {

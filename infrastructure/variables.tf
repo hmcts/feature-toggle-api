@@ -2,6 +2,10 @@ variable "product" {
   type    = "string"
 }
 
+variable "raw_product" {
+  default = "rpe"
+}
+
 variable "component" {
   type = "string"
 }
