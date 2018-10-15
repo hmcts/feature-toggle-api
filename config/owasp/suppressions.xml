@@ -7,6 +7,7 @@
     <notes><![CDATA[postgresql before versions 10.4, 9.6.9 is vulnerable in the adminpack extension, the pg_catalog.pg_logfile_rotate() function doesn't follow the same ACLs than pg_rorate_logfile. If the adminpack is added to a database, an attacker able to connect to it could exploit this to force log rotation]]></notes>
     <gav regex="true">^org\.postgresql:postgresql:42\.2\.2$</gav>
     <cve>CVE-2018-1115</cve>
+    <cve>CVE-2016-7048</cve>
   </suppress>
 
   <!-- not used by server -->
@@ -15,6 +16,12 @@
     <notes><![CDATA[Used only for testing not used in prod]]></notes>
     <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
     <cpe>cpe:/a:postgresql:postgresql</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[ Used by testcontainers (suppressed above) ]]></notes>
+    <gav regex="true">^org\.jetbrains:annotations:.*$</gav>
+    <cve>CVE-2017-8316</cve>
   </suppress>
 
   <suppress>
