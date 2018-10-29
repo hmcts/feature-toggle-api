@@ -25,6 +25,8 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
   ]
 }
 
+GradleBuilder builder = new GradleBuilder(this, product)
+
 withPipeline(type , product, component) {
    after('test') {
      builder.gradle('integration')
