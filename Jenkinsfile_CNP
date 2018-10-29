@@ -1,6 +1,7 @@
 #!groovy
 
 @Library("Infrastructure")
+import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
 def product = "rpe"
@@ -26,7 +27,7 @@ static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
 
 withPipeline(type , product, component) {
    after('test') {
-        sh './gradlew integration'
+     builder.gradle('integration')
    }
 
   enableDbMigration()
