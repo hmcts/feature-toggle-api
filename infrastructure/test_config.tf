@@ -5,21 +5,25 @@
 data "azurerm_key_vault_secret" "source-test-admin-user" {
   name = "admin-username-test"
   vault_uri = "${local.permanent_vault_uri}"
+  depends_on = ["module.feature-toggle-key-vault"]
 }
 
 data "azurerm_key_vault_secret" "source-test-admin-password" {
   name = "admin-password-test"
   vault_uri = "${local.permanent_vault_uri}"
+  depends_on = ["module.feature-toggle-key-vault"]
 }
 
 data "azurerm_key_vault_secret" "source-test-editor-user" {
   name = "editor-username-test"
   vault_uri = "${local.permanent_vault_uri}"
+  depends_on = ["module.feature-toggle-key-vault"]
 }
 
 data "azurerm_key_vault_secret" "source-test-editor-password" {
   name = "editor-password-test"
   vault_uri = "${local.permanent_vault_uri}"
+  depends_on = ["module.feature-toggle-key-vault"]
 }
 
 resource "azurerm_key_vault_secret" "test-admin-user" {
