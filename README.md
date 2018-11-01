@@ -45,7 +45,12 @@ users:
 
 ### Steps to setup environment variable through terraform are as below
 
- - Create secrets in Hashicorp vault at a path similar to `"secret/${var.vault_section}/cc/ff4j/webconsole/servicename-admin-user"` for both username and passwords.
+ - Create following secrets in Azure Key Vault named `rpe-ft-api-{environment}`:
+    * `admin-username-{servicename}`
+    * `admin-password-{servicename}`
+    * `editor-username-{servicename}`
+    * `editor-password-{servicename}`
+
  Passwords needs to be in plain text in the vault and they will be hashed(BCrypt Password encryption) before saving it in database.
  
  :bulb: *Recommendation is to configure username using pattern servicename-admin@hmcts.net and a strong secured password.
@@ -54,28 +59,39 @@ users:
  - Add below code in [main.tf](infrastructure/main.tf)
   
     ```
-    data "vault_generic_secret" "servicename-admin-user" {
-       path = "secret/${var.vault_section}/cc/ff4j/webconsole/servicename-admin-user"
+    data "azurerm_key_vault_secret" "admin_username_{servicename}" {
+       name       = "admin-username-{servicename}"
+       vault_uri  = "${local.permanent_vault_uri}"
     }
     ```
-    
+
      ```
-     data "vault_generic_secret" "servicename-editor-password" {
-       path = "secret/${var.vault_section}/cc/ff4j/webconsole/servicename-admin-password"
+     data "azurerm_key_vault_secret" "admin_password_{servicename}" {
+       name       = "admin-password-{servicename}"
+       vault_uri  = "${local.permanent_vault_uri}"
      }
     ```
-    
+
     ```
-     locals {
-        servicename_admin_user   = "${data.vault_generic_secret.servicename-admin-user.data["value"]}"
-        servicename_admin_password   = "${data.vault_generic_secret.servicename-admin-password.data["value"]}"
-      }
+    data "azurerm_key_vault_secret" "editor_username_{servicename}" {
+       name       = "editor-username-{servicename}"
+       vault_uri  = "${local.permanent_vault_uri}"
+    }
     ```
-    
+
+     ```
+     data "azurerm_key_vault_secret" "editor_password_{servicename}" {
+       name       = "editor-password-{servicename}"
+       vault_uri  = "${local.permanent_vault_uri}"
+     }
+    ```
+
     ```
       app_settings = {
-       SERVICENAME_ADMIN_USERNAME          = "${local.servicename_admin_user}"
-       SERVICENAME_ADMIN_PASSWORD          = "${local.servicename_admin_password}"
+        ADMIN_USERNAME_{SERVICENAME}  = "${data.azurerm_key_vault_secret.admin_username_{servicename}.value}"
+        ADMIN_PASSWORD_{SERVICENAME}  = "${data.azurerm_key_vault_secret.admin-password_{servicename}.value}"
+        EDITOR_USERNAME_{SERVICENAME} = "${data.azurerm_key_vault_secret.editor-username_{servicename}.value}"
+        EDITOR_PASSWORD_{SERVICENAME} = "${data.azurerm_key_vault_secret.editor-password_{servicename}.value}"
       }  
      ```
 

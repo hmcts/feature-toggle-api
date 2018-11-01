@@ -1,24 +1,19 @@
-data "azurerm_key_vault" "cmc_key_vault" {
-  name = "${local.cmcVaultName}"
-  resource_group_name = "${local.cmcVaultName}"
+data "azurerm_key_vault_secret" "admin_username_cmc" {
+  name = "admin-username-cmc"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "cmc_admin_username" {
-  name = "feature-toggle-admin-username"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "admin_password_cmc" {
+  name = "admin-password-cmc"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "cmc_admin_password" {
-  name = "feature-toggle-admin-password"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "editor_username_cmc" {
+  name = "editor-username-cmc"
+  vault_uri = "${local.permanent_vault_uri}"
 }
 
-data "azurerm_key_vault_secret" "cmc_editor_username" {
-  name = "feature-toggle-editor-username"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
-}
-
-data "azurerm_key_vault_secret" "cmc_editor_password" {
-  name = "feature-toggle-editor-password"
-  vault_uri = "${data.azurerm_key_vault.cmc_key_vault.vault_uri}"
+data "azurerm_key_vault_secret" "editor_password_cmc" {
+  name = "editor-password-cmc"
+  vault_uri = "${local.permanent_vault_uri}"
 }
