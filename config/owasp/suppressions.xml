@@ -10,6 +10,17 @@
     <cve>CVE-2016-7048</cve>
   </suppress>
 
+  <suppress>
+    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
+    <cpe>cpe:/a:google:guava</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[ pulled by hystrix ]]></notes>
+    <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+    <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
+  </suppress>
+
   <!-- not used by server -->
 
   <suppress>
