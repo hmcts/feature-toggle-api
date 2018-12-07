@@ -46,7 +46,7 @@ locals {
 }
 
 module "feature-toggle-db" {
-  source              = "git@github.com:hmcts/moj-module-postgres?ref=master"
+  source              = "git@github.com:hmcts/cnp-module-postgres?ref=feature/restrict-access-to-dbs"
   product             = "${var.product}-${var.component}-db"
   location            = "${var.location_db}"
   env                 = "${var.env}"
