@@ -1,4 +1,4 @@
-name: chart-java pipeline
+name: chart-feature-toggle-api pipeline
 trigger:
   branches:
     include:
@@ -22,7 +22,7 @@ jobs:
   - template: steps/charts/validate.yaml@cnp-library
     parameters:
       chartName: java
-      chartReleaseName: chart-java-ci-test
+      chartReleaseName: chart-feature-toggle-api-ci-test
       chartNamespace: chart-tests
 
 - job: Release
@@ -38,6 +38,6 @@ jobs:
   steps:
   - template: steps/charts/release.yaml@cnp-library
     parameters:
-      chartName: java
-      chartReleaseName: chart-java
+      chartName: feature-toggle-api
+      chartReleaseName: chart-feature-toggle-api
       chartNamespace: chart-tests
