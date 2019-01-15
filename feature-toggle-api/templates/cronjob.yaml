@@ -26,7 +26,7 @@ spec:
             command: ['sh', '-c', 'for i in $(seq 1 300); do nc -zvw1 {{ template "hmcts.releaseName" . }} 80 && exit 0 || sleep 3; done; exit 1']
           containers:
           - image: {{ .Values.cron.image }}
-            name: {{ template "hmcts.releaseName" . }}
+            name: {{ template "hmcts.releaseName" . }}-cron
             imagePullPolicy: {{ .Values.cron.imagePullPolicy }}
           env:
             - name: WAIT_HOSTS

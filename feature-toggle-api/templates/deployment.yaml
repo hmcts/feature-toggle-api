@@ -23,7 +23,7 @@ spec:
         name: {{ template "hmcts.releaseName" . }} 
         env:
         - name: FEATURES_DB_HOST
-          value: "{{ template "hmcts.releaseName" . }}-{{ .Values.postgresql.nameOverride }}"
+          value: "{{ .Release.Name }}-{{ .Values.postgresql.nameOverride }}"
         {{- if .Values.environment }}
           {{- range $key, $val := .Values.environment }}
         - name: {{ $key }}

@@ -1,13 +1,15 @@
 .DEFAULT_GOAL := all
-CHART := java
+CHART := feature-toggle-api
 RELEASE := chart-${CHART}-release
 NAMESPACE := chart-tests
 TEST := ${RELEASE}-test-service
 ACR := hmctssandbox
 AKS_RESOURCE_GROUP := cnp-aks-sandbox-rg
 AKS_CLUSTER := cnp-aks-sandbox-cluster
+AKS_SUBSCRIPTION := DCD-CFT-Sandbox
 
 setup:
+	az account set --subscription ${AKS_SUBSCRIPTION}
 	az configure --defaults acr=${ACR}
 	az acr helm repo add
 	az aks get-credentials --resource-group ${AKS_RESOURCE_GROUP} --name ${AKS_CLUSTER}
@@ -20,7 +22,7 @@ lint:
 	helm lint ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} -f ci-values.yaml --wait --timeout 60
+	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} --wait --timeout 60
 
 test:
 	helm test ${RELEASE}
