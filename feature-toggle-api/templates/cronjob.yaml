@@ -1,0 +1,39 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: {{ template "hmcts.releaseName" . }}
+  labels:
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ template "hmcts.releaseName" . }}
+spec:
+  schedule: {{ .Values.cron.schedule | quote }}
+  concurrencyPolicy: {{ .Values.cron.concurrencyPolicy }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+  jobTemplate:
+    spec:
+      template:
+        metadata:
+          labels:
+            app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+        spec:
+          initContainers:
+          - name: {{ template "hmcts.releaseName" . }}-init
+            image: busybox
+            command: ['sh', '-c', 'for i in $(seq 1 300); do nc -zvw1 {{ template "hmcts.releaseName" . }} 80 && exit 0 || sleep 3; done; exit 1']
+          containers:
+          - image: {{ .Values.cron.image }}
+            name: {{ template "hmcts.releaseName" . }}
+            imagePullPolicy: {{ .Values.cron.imagePullPolicy }}
+          env:
+            - name: WAIT_HOSTS
+              value: '{{ template "hmcts.releaseName" . }}'
+            - name: VERBOSE
+              value: 'true'
+            - name: WAIT_HOSTS_TIMEOUT
+              value: '300'
+          restartPolicy: Never
+      backoffLimit: 4

@@ -1,0 +1,7 @@
+apiVersion: v1
+description: A Helm chart for the feature-toggle-api (https://github.com/hmcts/feature-toggle-api)
+name: feature-toggle-api
+version: 0.0.1
+icon: https://github.com/hmcts/chart-feature-toggle-api/raw/master/images/icons8-java-50.png
+keywords:
+  - feature-toggle-api
