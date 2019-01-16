@@ -18,10 +18,6 @@ spec:
       labels:
         app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
     spec:
-      initContainers:
-      - name: {{ template "hmcts.releaseName" . }}-init
-        image: busybox
-        command: ['sh', '-c', 'for i in $(seq 1 300); do nc -zvw1 {{ .Release.Name }}-{{ .Values.postgresql.nameOverride }} 5432 && exit 0 || sleep 3; done; exit 1']
       containers:
       - image: {{ .Values.image }}
         name: {{ template "hmcts.releaseName" . }} 

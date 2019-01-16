@@ -37,6 +37,14 @@ importer:
 
 postgresql:
   nameOverride: postgres
+  postgresqlUsername: hmcts
+  postgresqlPassword: hmcts
+  livenessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
+  readinessProbe:
+    initialDelaySeconds: 10
+    periodSeconds: 10
   initdbScripts:
     init.sql: |-
       CREATE USER features WITH PASSWORD 'features';

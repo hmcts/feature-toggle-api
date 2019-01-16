@@ -22,7 +22,7 @@ lint:
 	helm lint ${CHART}
 
 deploy:
-	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} --wait --timeout 60
+	helm install ${CHART} --name ${RELEASE} --namespace ${NAMESPACE} --wait --timeout 180
 
 test:
 	helm test ${RELEASE}
