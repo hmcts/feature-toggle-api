@@ -21,7 +21,7 @@ jobs:
   steps:
   - template: steps/charts/validate.yaml@cnp-library
     parameters:
-      chartName: java
+      chartName: chart-feature-toggle-api
       chartReleaseName: chart-feature-toggle-api-ci-test
       chartNamespace: chart-tests
 
