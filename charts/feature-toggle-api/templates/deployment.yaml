@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name:  {{ template "hmcts.releaseName" . }}
+  labels:
+    app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+    helm.sh/chart: {{ .Chart.Name }}-{{ .Chart.Version }}
+    app.kubernetes.io/managed-by: {{ .Release.Service }}
+    app.kubernetes.io/instance: {{ template "hmcts.releaseName" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}
+    spec:
+      initContainers:
+      - name: {{ template "hmcts.releaseName" . }}-init
+        image: busybox
+        command: ['sh', '-c', 'for i in $(seq 1 300); do nc -zvw1 {{ .Release.Name }}-{{ .Values.postgresql.nameOverride }} 5432 && exit 0 || sleep 3; done; exit 1']
+      containers:
+      - image: {{ .Values.image }}
+        name: {{ template "hmcts.releaseName" . }} 
+        env:
+        - name: FEATURES_DB_HOST
+          value: "{{ .Release.Name }}-{{ .Values.postgresql.nameOverride }}"
+        {{- if .Values.environment }}
+          {{- range $key, $val := .Values.environment }}
+        - name: {{ $key }}
+          value: {{ $val | quote }}
+          {{- end}}
+        {{- end }}
+        resources:
+          requests:
+            memory: {{ .Values.memoryRequests }}
+            cpu: {{ .Values.cpuRequests }}
+          limits:
+            memory: {{ .Values.memoryLimits }}
+            cpu: {{ .Values.cpuLimits }}
+        ports:
+        - containerPort: {{ .Values.applicationPort }}
+          name: http
+        livenessProbe:
+          httpGet:
+            path: {{ .Values.livenessPath }}
+            port: {{ .Values.applicationPort }}
+          initialDelaySeconds: {{ .Values.livenessDelay }}
+          timeoutSeconds: {{ .Values.livenessTimeout }}
+          periodSeconds: {{ .Values.livenessPeriod }}
+          failureThreshold: {{ .Values.livenessFailureThreshold }}
+        readinessProbe:
+          httpGet:
+            path: {{ .Values.readinessPath }}
+            port: {{ .Values.applicationPort }}
+          initialDelaySeconds: {{ .Values.readinessDelay }}
+          timeoutSeconds: {{ .Values.readinessTimeout }}
+          periodSeconds: {{ .Values.readinessPeriod }}
+        imagePullPolicy: IfNotPresent
