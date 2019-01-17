@@ -21,7 +21,7 @@ jobs:
   steps:
   - template: steps/charts/validate.yaml@cnp-library
     parameters:
-      chartName: chart-feature-toggle-api
+      chartName: charts/feature-toggle-api
       chartReleaseName: chart-feature-toggle-api-ci-test
       chartNamespace: chart-tests
 
@@ -38,6 +38,6 @@ jobs:
   steps:
   - template: steps/charts/release.yaml@cnp-library
     parameters:
-      chartName: feature-toggle-api
+      chartName: charts/feature-toggle-api
       chartReleaseName: chart-feature-toggle-api
       chartNamespace: chart-tests
