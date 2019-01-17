@@ -9,3 +9,5 @@ build/
 *.ipr
 
 .DS_store
+
+**/charts/*.tgz
