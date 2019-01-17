@@ -1,4 +1,4 @@
-{{- if .Values.ingressHost }}
+{{- if .Values.registerDns }}
 ---
 apiVersion: batch/v1
 kind: Job
@@ -33,7 +33,7 @@ spec:
               mountPath: /container.init
           command: [ "/bin/sh" ]
           args:
-            - /container.init/ccd-dns
+            - /container.init/feature-toggle-dns
             - feature-toggle-api-{{ template "hmcts.releaseName" . }}
           resources:
             requests:

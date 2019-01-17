@@ -1,4 +1,5 @@
 image: hmcts/feature-toggle-api
+registerDns: false
 applicationPort: 8580
 memoryRequests: '512Mi'
 cpuRequests: '100m'
