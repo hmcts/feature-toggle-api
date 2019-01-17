@@ -11,6 +11,7 @@ resources:
   repositories:
   - repository: cnp-library
     type: github
+    ref: helm-publish-step-for-preferred-dir-layout
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'HMCTS Github'
 
@@ -38,6 +39,7 @@ jobs:
   steps:
   - template: steps/charts/release.yaml@cnp-library
     parameters:
+      packageName: feature-toggle-api
       chartName: charts/feature-toggle-api
       chartReleaseName: chart-feature-toggle-api
       chartNamespace: chart-tests
