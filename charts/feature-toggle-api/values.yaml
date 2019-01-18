@@ -29,12 +29,18 @@ environment:
   LOGBACK_REQUIRE_ALERT_LEVEL: false
   LOGBACK_REQUIRE_ERROR_CODE: false
 importer:
-  enabled: false
-  image: hmcts/feature-toggle-importer
-  command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
-  imagePullPolicy: Always
-  schedule: '*/5 * * * *'
-  concurrencyPolicy: Forbid
+  cron:
+    enabled: false
+    schedule: '*/5 * * * *'
+    concurrencyPolicy: Forbid
+    image: hmcts/feature-toggle-importer
+    command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
+    imagePullPolicy: Always
+  oneoff:
+    enabled: true
+    image: hmcts/feature-toggle-importer
+    command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
+    imagePullPolicy: Always
 
 postgresql:
   nameOverride: postgres
