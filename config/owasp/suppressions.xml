@@ -51,4 +51,16 @@
     <notes><![CDATA[ slf4j only has a beta version released with the 'fix', looks like lots of changes in it... ]]></notes>
     <cve>CVE-2018-8088</cve>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[ suppressing until we port over ff4j to spring 5 and port over to spring security 5  ]]></notes>
+    <cve>CVE-2018-14718</cve>
+    <cve>CVE-2018-14719</cve>
+    <cve>CVE-2018-14720</cve>
+    <cve>CVE-2018-14721</cve>
+    <cve>CVE-2018-1000873</cve>
+    <cve>CVE-2018-19360</cve>
+    <cve>CVE-2018-19361</cve>
+    <cve>CVE-2018-19362</cve>
+  </suppress>
 </suppressions>
