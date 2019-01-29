@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure")
+@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline")
 import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
@@ -9,11 +9,12 @@ def component = "feature-toggle-api"
 
 def channel = '#rpe-build-notices'
 
-List<LinkedHashMap<String, Object>> secrets = [
+def secrets = [ 'rpe-ft-api-${env}' [
   secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
   secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
   secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
   secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
+  ]
 ]
 
 static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
@@ -35,4 +36,5 @@ withPipeline(type , product, component) {
   enableDbMigration()
   enableSlackNotifications(channel)
   loadVaultSecrets(secrets)
+  installCharts()
 }
