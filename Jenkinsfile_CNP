@@ -9,7 +9,7 @@ def component = "feature-toggle-api"
 
 def channel = '#rpe-build-notices'
 
-def secrets = [ 'rpe-ft-api-${env}' [
+def secrets = [ 'rpe-ft-api-${env}' : [
   secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
   secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
   secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
