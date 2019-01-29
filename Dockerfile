@@ -1,11 +1,13 @@
-FROM openjdk:8-jre
+FROM hmcts/cnp-java-base:openjdk-8u181-jre-alpine3.8-1.0
 
-COPY build/install/feature-toggle-api /opt/app/
+# Mandatory!
+ENV APP feature-toggle-api.jar
+ENV APPLICATION_TOTAL_MEMORY 1024M
+ENV APPLICATION_SIZE_ON_DISK_IN_MB 59
 
-WORKDIR /opt/app
+COPY build/libs/$APP /opt/app/
 
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" curl --silent --fail http://localhost:8580/health
+HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q --spider http://localhost:8580/health || exit 1
 
 EXPOSE 8580
 
-ENTRYPOINT ["/opt/app/bin/feature-toggle-api"]
