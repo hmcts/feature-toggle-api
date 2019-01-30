@@ -1,0 +1,4 @@
+java:
+  releaseNameOverride: ${SERVICE_NAME}-ft-api
+  environment:
+    FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
