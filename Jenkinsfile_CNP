@@ -1,6 +1,6 @@
 #!groovy
 
-@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline")
+@Library("Infrastructure")
 import uk.gov.hmcts.contino.GradleBuilder
 
 def type = "java"
