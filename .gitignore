@@ -10,4 +10,4 @@ build/
 
 .DS_store
 
-**/charts/*.tgz
+*.tgz
