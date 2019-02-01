@@ -34,7 +34,7 @@ spec:
           command: [ "/bin/sh" ]
           args:
             - /container.init/feature-toggle-dns
-            - feature-toggle-api-{{ template "hmcts.releaseName" . }}
+            - feature-toggle-api-{{ .Release.Name }}
           resources:
             requests:
               memory: {{ .Values.memoryRequests }}
