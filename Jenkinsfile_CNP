@@ -13,6 +13,8 @@ String component = "feature-toggle-api"
 
 node {
   stage('Publish Helm chart') {
+    checkout scm
+
     withAksClient(subscription.nonProdName) {
       Kubectl kubectl = new Kubectl(this, subscription.nonProdName, null)
       kubectl.login()
