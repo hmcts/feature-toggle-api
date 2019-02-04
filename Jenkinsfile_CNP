@@ -2,9 +2,11 @@
 
 import uk.gov.hmcts.contino.Helm
 import uk.gov.hmcts.contino.Kubectl
+import uk.gov.hmcts.contino.Subscription
 
 
-@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2") _
+@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2")
+Subscription subscription = new Subscription(env)
 
 node {
   stage('Publish Helm chart') {
