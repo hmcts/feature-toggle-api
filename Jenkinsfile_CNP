@@ -1,14 +1,22 @@
 #!groovy
 
 import uk.gov.hmcts.contino.Helm
+import uk.gov.hmcts.contino.Kubectl
 
 
-@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2")
-
-Helm helm = new Helm(this, "rpe-feature-toggle-api")
+@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2") _
 
 node {
-  stage('Publish chart') {
-    helm.publishIfNotExists()
+  stage('Publish Helm chart') {
+    withAksClient(subscription.nonProdName) {
+      Kubectl kubectl = new Kubectl(this, subscription.nonProdName, null)
+      kubectl.login()
+
+      String chartName = "${product}-${component}"
+
+      Helm helm = new Helm(this, chartName)
+      helm.init()
+      helm.publishIfNotExists()
+    }
   }
 }
