@@ -1,6 +1,5 @@
-image: hmcts/feature-toggle-api
 registerDns: false
-applicationPort: 8580
+
 memoryRequests: '512Mi'
 cpuRequests: '100m'
 memoryLimits: '1024Mi'
@@ -14,20 +13,7 @@ livenessDelay: 30
 livenessTimeout: 3
 livenessPeriod: 15
 livenessFailureThreshold: 3
-environment:
-  JAVA_OPTS: -Xms8m -Xmx256m -Djava.security.egd=file:/dev/./urandom -XX:MaxMetaspaceSize=128m
-  APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
-  FLYWAY_ENABLED: true
-  FLYWAY_NOOP_STRATEGY: false
-  FEATURES_DB_USER_NAME: features
-  FEATURES_DB_PASSWORD: features
-  ADMIN_USERNAME_TEST: admin@example.com
-  ADMIN_PASSWORD_TEST: Password12
-  EDITOR_USERNAME_TEST: editor@example.com
-  EDITOR_PASSWORD_TEST: Password12
-  LOGBACK_REQUIRE_THREAD: false
-  LOGBACK_REQUIRE_ALERT_LEVEL: false
-  LOGBACK_REQUIRE_ERROR_CODE: false
+
 importer:
   enabled: false
   image: hmcts/feature-toggle-importer
@@ -36,8 +22,28 @@ importer:
   schedule: '*/5 * * * *'
   concurrencyPolicy: Forbid
 
+java:
+  image: hmcts/feature-toggle-api
+  ingressHost: ${SERVICE_FQDN}
+  releaseNameOverride: ${SERVICE_NAME}-ft-api
+  applicationPort: 8580
+  environment:
+    APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
+    FLYWAY_ENABLED: true
+    FLYWAY_NOOP_STRATEGY: false
+    FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
+    FEATURES_DB_USER_NAME: features
+    FEATURES_DB_PASSWORD: features
+    ADMIN_USERNAME_TEST: ${ADMIN_USERNAME_TEST}
+    ADMIN_PASSWORD_TEST: ${ADMIN_PASSWORD_TEST}
+    EDITOR_USERNAME_TEST: ${EDITOR_USERNAME_TEST}
+    EDITOR_PASSWORD_TEST: ${EDITOR_PASSWORD_TEST}
+    LOGBACK_REQUIRE_THREAD: false
+    LOGBACK_REQUIRE_ALERT_LEVEL: false
+    LOGBACK_REQUIRE_ERROR_CODE: false
+
 postgresql:
-  nameOverride: postgres
+  nameOverride: ft-db
   postgresqlUsername: hmcts
   postgresqlPassword: hmcts
   livenessProbe:
