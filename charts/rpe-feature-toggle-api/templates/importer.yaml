@@ -1,4 +1,3 @@
-
 {{- if .Values.importer.oneoff.enabled }}
 ---
 apiVersion: batch/v1
