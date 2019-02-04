@@ -1,41 +1,14 @@
 #!groovy
 
-@Library("Infrastructure")
-import uk.gov.hmcts.contino.GradleBuilder
+import uk.gov.hmcts.contino.Helm
 
-def type = "java"
-def product = "rpe"
-def component = "feature-toggle-api"
 
-def channel = '#rpe-build-notices'
+@Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2")
 
-def secrets = [ 'rpe-ft-api-${env}' : [
-  secret('admin-username-test', 'ADMIN_USERNAME_TEST'),
-  secret('admin-password-test', 'ADMIN_PASSWORD_TEST'),
-  secret('editor-username-test', 'EDITOR_USERNAME_TEST'),
-  secret('editor-password-test', 'EDITOR_PASSWORD_TEST')
-  ]
-]
+Helm helm = new Helm(this, "rpe-feature-toggle-api")
 
-static LinkedHashMap<String, Object> secret(String secretName, String envVar) {
-  [ $class: 'AzureKeyVaultSecret',
-    secretType: 'Secret',
-    name: secretName,
-    version: '',
-    envVariable: envVar
-  ]
-}
-
-GradleBuilder builder = new GradleBuilder(this, product)
-
-withPipeline(type , product, component) {
-   after('test') {
-     builder.gradle('integration')
-   }
-
-  enableDbMigration()
-  enableSlackNotifications(channel)
-  loadVaultSecrets(secrets)
-  enableDockerBuild()
-  installCharts()
+node {
+  stage('Publish chart') {
+    helm.publishIfNotExists()
+  }
 }
