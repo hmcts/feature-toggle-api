@@ -15,12 +15,18 @@ livenessPeriod: 15
 livenessFailureThreshold: 3
 
 importer:
-  enabled: false
-  image: hmcts/feature-toggle-importer
-  command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
-  imagePullPolicy: Always
-  schedule: '*/5 * * * *'
-  concurrencyPolicy: Forbid
+  cron:
+    enabled: false
+    schedule: '*/5 * * * *'
+    concurrencyPolicy: Forbid
+    image: hmcts/feature-toggle-importer
+    command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
+    imagePullPolicy: Always
+  oneoff:
+    enabled: true
+    image: hmcts/feature-toggle-importer
+    command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
+    imagePullPolicy: Always
 
 java:
   image: hmcts/feature-toggle-api

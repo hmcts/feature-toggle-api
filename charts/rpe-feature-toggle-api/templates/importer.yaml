@@ -1,4 +1,43 @@
-{{- if .Values.importer.enabled }}
+
+{{- if .Values.importer.oneoff.enabled }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ template "hmcts.releaseName" . }}-importer
+  labels:
+    app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
+    app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+    app.kubernetes.io/instance: {{ .Release.Name | quote }}
+    helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-weight: "5"
+    helm.sh/hook-delete-policy: before-hook-creation  # Move to hook-succeeded after first charts are done 
+spec:
+  template:
+    metadata:
+      name: {{ template "hmcts.releaseName" . }}-importer
+      labels:
+        app.kubernetes.io/managed-by: {{ .Release.Service | quote }}
+        app.kubernetes.io/instance: {{ .Release.Name | quote }}
+        helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    spec:
+      containers:
+        - name: {{ template "hmcts.releaseName" . }}-importer
+          image: {{ .Values.importer.oneoff.image }} 
+          imagePullPolicy: {{ .Values.importer.oneoff.imagePullPolicy }}
+          command: ["sh", "-c", "{{ .Values.importer.oneoff.command }}"]
+          env:
+          - name: FEATURE_TOGGLE_API_URL
+            value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
+          - name: PERMISSIONS
+            value: "{{ .Values.importer.oneoff.permissions }}"
+          - name: VERBOSE
+            value: "true"
+      restartPolicy: Never   # Move to "OnFailure" after first charts are done 
+{{- end }}
+{{- if .Values.importer.cron.enabled }}
 ---
 apiVersion: batch/v1beta1
 kind: CronJob
@@ -10,8 +49,8 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ template "hmcts.releaseName" . }}
 spec:
-  schedule: {{ .Values.importer.schedule | quote }}
-  concurrencyPolicy: {{ .Values.importer.concurrencyPolicy }}
+  schedule: {{ .Values.importer.cron.schedule | quote }}
+  concurrencyPolicy: {{ .Values.importer.cron.concurrencyPolicy }}
   selector:
     matchLabels:
       app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
@@ -23,15 +62,15 @@ spec:
             app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
         spec:
           containers:
-          - image: {{ .Values.importer.image }}
+          - image: {{ .Values.importer.cron.image }}
             name: {{ template "hmcts.releaseName" . }}-importer
-            imagePullPolicy: {{ .Values.importer.imagePullPolicy }}
-            command: ["sh", "-c", "{{ .Values.importer.command }}"]
+            imagePullPolicy: {{ .Values.importer.cron.imagePullPolicy }}
+            command: ["sh", "-c", "{{ .Values.importer.cron.command }}"]
             env:
               - name: FEATURE_TOGGLE_API_URL
                 value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
               - name: PERMISSIONS
-                value: "{{ .Values.importer.permissions }}"
+                value: "{{ .Values.importer.cron.permissions }}"
               - name: VERBOSE
                 value: "true"
           restartPolicy: Never
