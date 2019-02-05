@@ -1,11 +1,11 @@
 #!groovy
 
-import uk.gov.hmcts.contino.Helm
-import uk.gov.hmcts.contino.Kubectl
+import uk.gov.hmcts.contino.Environment
 import uk.gov.hmcts.contino.Subscription
 
 
 @Library("Infrastructure@feature/RPE-835-publish-microservice-chart-in-pipeline-2")
+Environment environment = new Environment(env)
 Subscription subscription = new Subscription(env)
 
 
@@ -16,15 +16,11 @@ node {
   stage('Publish Helm chart') {
     checkout scm
 
-    withAksClient(subscription.nonProdName) {
-      Kubectl kubectl = new Kubectl(this, subscription.nonProdName, null)
-      kubectl.login()
-
-      String chartName = "${product}-${component}"
-
-      Helm helm = new Helm(this, chartName)
-      helm.init()
-      helm.publishIfNotExists()
-    }
+    helmPublish(
+      subscriptionName: subscription.nonProdName,
+      environmentName: environment.nonProdName,
+      product: product,
+      component: component
+    )
   }
 }
