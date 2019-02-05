@@ -50,6 +50,7 @@ java:
 
 postgresql:
   nameOverride: ft-db
+  postgresqlDatabase: hmcts
   postgresqlUsername: hmcts
   postgresqlPassword: hmcts
   livenessProbe:
