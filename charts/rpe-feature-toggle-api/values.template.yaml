@@ -1,5 +1,3 @@
-registerDns: false
-
 memoryRequests: '512Mi'
 cpuRequests: '100m'
 memoryLimits: '1024Mi'
@@ -33,6 +31,10 @@ java:
   ingressHost: ${SERVICE_FQDN}
   releaseNameOverride: ${SERVICE_NAME}-ft-api
   applicationPort: 8580
+  registerAdditionalDns:
+    enabled: false
+    primaryIngressHost: ${SERVICE_FQDN}
+    prefix: www
   environment:
     APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
     FLYWAY_ENABLED: true
