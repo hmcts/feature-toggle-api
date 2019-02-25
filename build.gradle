@@ -19,7 +19,7 @@ version = '0.0.1'
 def versions = [
   ff4j            : '1.7.1',
   logback         : '1.2.3',
-  reformLogging   : '2.2.1',
+  reformLogging   : '5.0.1',
   springBoot      : springBoot.class.package.implementationVersion,
   springHystrix   : '1.4.6.RELEASE',
   springfoxSwagger: '2.9.2'
@@ -168,6 +168,7 @@ dependencies {
 
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
   compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'health-spring-boot-starter', version: '0.0.3'
 
   compile group: 'ch.qos.logback', name: 'logback-classic', version: versions.logback
   compile group: 'ch.qos.logback', name: 'logback-core', version: versions.logback
