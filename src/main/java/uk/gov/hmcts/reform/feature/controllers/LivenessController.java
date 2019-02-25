@@ -3,6 +3,7 @@ package uk.gov.hmcts.reform.feature.controllers;
 import org.springframework.boot.actuate.health.Health;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,9 +20,8 @@ public class LivenessController {
      *
      * @return health with UP status always.
      */
-    @RequestMapping(path = "/health/liveness", method = RequestMethod.GET, produces = {
-        MediaType.APPLICATION_JSON_VALUE })
-    public ResponseEntity<Health> getLiveness() throws IOException {
+    @GetMapping(path = "/health/liveness", produces =  MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Health> getLiveness() {
         Health.Builder builder = new Health.Builder();
         Health health = builder.up().build();
         return ok(health);
