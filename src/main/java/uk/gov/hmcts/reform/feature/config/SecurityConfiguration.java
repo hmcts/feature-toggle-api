@@ -111,7 +111,7 @@ public class SecurityConfiguration {
         protected void configure(HttpSecurity http) throws Exception {
             http
                 .authorizeRequests()
-                .antMatchers("/", "/health", "/info", "/v2/api-docs").permitAll()
+                .antMatchers("/", "/health", "/info", "/v2/api-docs", "/health/liveness").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin().successHandler(new LoginSuccessHandler()).permitAll()
