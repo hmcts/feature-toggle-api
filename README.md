@@ -95,6 +95,25 @@ users:
       }  
      ```
 
+ - To make it work on AKS , Add the Azure Key Vault secret created in the previous steps along with the environment used to add users  in [bootstrap.yaml](src/main/resources/bootstrap.yaml) . 
+    ```
+       spring:
+       cloud:
+         propertiesvolume:
+           aliases:
+             rpe-ft-api.admin-username-{serviceName}: ADMIN_USERNAME_{SERVICENAME}
+             rpe-ft-api.admin-password-{serviceName}: ADMIN_PASSWORD_{SERVICENAME}
+             rpe-ft-api.editor-username-{serviceName}: EDITOR_USERNAME_{SERVICENAME}
+             rpe-ft-api.editor-password-{serviceName}: EDITOR_PASSWORD_{SERVICENAME}
+    ```
+ - Also, Add secret key to [values.template.yaml](charts/rpe-feature-toggle-api/values.template.yaml)
+    ```
+         java:
+           keyVaults:
+             "s2s":
+               secrets:
+                 - microservicekey-test-service
+    ```
 ## Access to API and Web Console
 
 API and Web Console is restricted to certain user roles discussed above.
