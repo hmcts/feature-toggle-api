@@ -14,7 +14,11 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import uk.gov.hmcts.reform.feature.security.*;
+import uk.gov.hmcts.reform.feature.security.AuthExceptionEntryPoint;
+import uk.gov.hmcts.reform.feature.security.CustomAccessDeniedHandler;
+import uk.gov.hmcts.reform.feature.security.CustomUserPermissionsFilter;
+import uk.gov.hmcts.reform.feature.security.LoginSuccessHandler;
+import uk.gov.hmcts.reform.feature.security.UserDetailsConfigurer;
 
 import javax.sql.DataSource;
 
