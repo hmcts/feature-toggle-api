@@ -101,10 +101,10 @@ users:
        cloud:
          propertiesvolume:
            aliases:
-             rpe-ft-api.admin-username-{serviceName}: ADMIN_USERNAME_{SERVICENAME}
-             rpe-ft-api.admin-password-{serviceName}: ADMIN_PASSWORD_{SERVICENAME}
-             rpe-ft-api.editor-username-{serviceName}: EDITOR_USERNAME_{SERVICENAME}
-             rpe-ft-api.editor-password-{serviceName}: EDITOR_PASSWORD_{SERVICENAME}
+             admin-username-{serviceName}: ADMIN_USERNAME_{SERVICENAME}
+             admin-password-{serviceName}: ADMIN_PASSWORD_{SERVICENAME}
+             editor-username-{serviceName}: EDITOR_USERNAME_{SERVICENAME}
+             editor-password-{serviceName}: EDITOR_PASSWORD_{SERVICENAME}
     ```
  - Also, Add secret key to [values.template.yaml](charts/rpe-feature-toggle-api/values.template.yaml)
     ```
