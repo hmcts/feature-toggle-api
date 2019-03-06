@@ -121,10 +121,5 @@ public class SecurityConfiguration {
                 .and()
                 .csrf().disable();
         }
-
-        @Override
-        public void configure(WebSecurity web) throws Exception {
-            web.ignoring().antMatchers("/health/liveness");
-        }
     }
 }
