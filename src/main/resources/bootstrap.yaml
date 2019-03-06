@@ -1,22 +1,23 @@
 spring:
   cloud:
     propertiesvolume:
+      prefixed: false
       paths: /mnt/secrets/rpe-ft-api
       aliases:
-        rpe-ft-api.admin-username-cmc: ADMIN_USERNAME_CMC
-        rpe-ft-api.admin-password-cmc: ADMIN_PASSWORD_CMC
-        rpe-ft-api.editor-username-cmc: EDITOR_USERNAME_CMC
-        rpe-ft-api.editor-password-cmc: EDITOR_PASSWORD_CMC
-        rpe-ft-api.admin-username-divorce: ADMIN_USERNAME_DIVORCE
-        rpe-ft-api.admin-password-divorce: ADMIN_PASSWORD_DIVORCE
-        rpe-ft-api.editor-password-divorce: EDITOR_PASSWORD_DIVORCE
-        rpe-ft-api.editor-username-divorce: EDITOR_USERNAME_DIVORCE
-        rpe-ft-api.admin-password-probate: ADMIN_PASSWORD_PROBATE
-        rpe-ft-api.admin-username-probate: ADMIN_USERNAME_PROBATE
-        rpe-ft-api.editor-password-probate: EDITOR_USERNAME_PROBATE
-        rpe-ft-api.editor-username-probate: EDITOR_PASSWORD_PROBATE
-        rpe-ft-api.admin-password-test: ADMIN_PASSWORD_TEST
-        rpe-ft-api.admin-username-test: ADMIN_USERNAME_TEST
-        rpe-ft-api.editor-password-test: EDITOR_PASSWORD_TEST
-        rpe-ft-api.editor-username-test: EDITOR_USERNAME_TEST
-        rpe-ft-api.rpe-ft-feature-toggle-api-POSTGRES-PASS: FEATURES_DB_PASSWORD
+        admin-username-cmc: ADMIN_USERNAME_CMC
+        admin-password-cmc: ADMIN_PASSWORD_CMC
+        editor-username-cmc: EDITOR_USERNAME_CMC
+        editor-password-cmc: EDITOR_PASSWORD_CMC
+        admin-username-divorce: ADMIN_USERNAME_DIVORCE
+        admin-password-divorce: ADMIN_PASSWORD_DIVORCE
+        editor-password-divorce: EDITOR_PASSWORD_DIVORCE
+        editor-username-divorce: EDITOR_USERNAME_DIVORCE
+        admin-password-probate: ADMIN_PASSWORD_PROBATE
+        admin-username-probate: ADMIN_USERNAME_PROBATE
+        editor-password-probate: EDITOR_USERNAME_PROBATE
+        editor-username-probate: EDITOR_PASSWORD_PROBATE
+        admin-password-test: ADMIN_PASSWORD_TEST
+        admin-username-test: ADMIN_USERNAME_TEST
+        editor-password-test: EDITOR_PASSWORD_TEST
+        editor-username-test: EDITOR_USERNAME_TEST
+        rpe-ft-feature-toggle-api-POSTGRES-PASS: FEATURES_DB_PASSWORD
