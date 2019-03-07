@@ -20,4 +20,4 @@ spring:
         admin-username-test: ADMIN_USERNAME_TEST
         editor-password-test: EDITOR_PASSWORD_TEST
         editor-username-test: EDITOR_USERNAME_TEST
-        rpe-ft-feature-toggle-api-POSTGRES-PASS: FEATURES_DB_PASSWORD
+        feature-toggle-api-POSTGRES-PASS: FEATURES_DB_PASSWORD
