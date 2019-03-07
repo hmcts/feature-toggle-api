@@ -11,7 +11,7 @@ management:
 
 flyway:
   schemas: public
-
+  password: ${FEATURES_DB_PASSWORD}
 info:
    app:
       name: Feature Toggle API
