@@ -27,7 +27,7 @@ importer:
     imagePullPolicy: Always
 
 java:
-  image: hmcts/feature-toggle-api
+  image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   releaseNameOverride: ${SERVICE_NAME}-ft-api
   applicationPort: 8580
@@ -36,20 +36,34 @@ java:
     primaryIngressHost: ${SERVICE_FQDN}
     prefix: www
   environment:
-    APPINSIGHTS_INSTRUMENTATIONKEY: fake-key
     FLYWAY_ENABLED: true
     FLYWAY_NOOP_STRATEGY: false
     FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
     FEATURES_DB_USER_NAME: features
     FEATURES_DB_PASSWORD: features
-    ADMIN_USERNAME_TEST: ${ADMIN_USERNAME_TEST}
-    ADMIN_PASSWORD_TEST: ${ADMIN_PASSWORD_TEST}
-    EDITOR_USERNAME_TEST: ${EDITOR_USERNAME_TEST}
-    EDITOR_PASSWORD_TEST: ${EDITOR_PASSWORD_TEST}
     LOGBACK_REQUIRE_THREAD: false
     LOGBACK_REQUIRE_ALERT_LEVEL: false
     LOGBACK_REQUIRE_ERROR_CODE: false
-
+  keyVaults:
+    "rpe-ft-api":
+      resourceGroup: rpe-feature-toggle-api
+      secrets:
+        - admin-username-cmc
+        - admin-password-cmc
+        - editor-username-cmc
+        - editor-password-cmc
+        - admin-username-divorce
+        - admin-password-divorce
+        - editor-password-divorce
+        - editor-username-divorce
+        - admin-password-probate
+        - admin-username-probate
+        - editor-password-probate
+        - editor-username-probate
+        - admin-password-test
+        - admin-username-test
+        - editor-password-test
+        - editor-username-test
 postgresql:
   nameOverride: ft-db
   postgresqlDatabase: hmcts
@@ -67,3 +81,5 @@ postgresql:
       CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   persistence:
     enabled: false
+tags:
+  postgresql-pod: true
