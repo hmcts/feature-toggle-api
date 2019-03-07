@@ -29,7 +29,6 @@ importer:
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
-  releaseNameOverride: ${SERVICE_NAME}-ft-api
   applicationPort: 8580
   registerAdditionalDns:
     enabled: false
