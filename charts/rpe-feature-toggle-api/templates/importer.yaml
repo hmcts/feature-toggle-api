@@ -14,20 +14,6 @@ metadata:
     helm.sh/hook-weight: "5"
     helm.sh/hook-delete-policy: before-hook-creation  # Move to hook-succeeded after first charts are done 
 spec:
-  volumes:
-    - name: kvcreds
-      flexVolume:
-        driver: "azure/kv"
-        secretRef:
-          name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
-        options:
-          usepodidentity: "false"
-          subscriptionid: {{ .Values.global.subscriptionId }}
-          tenantid: {{ .Values.global.tenantId }}
-          keyvaultname: {{ include "importer.vault" . | quote }}
-          resourcegroup: {{ include "importer.resourcegroup" . | quote }}
-          keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
-          keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
   template:
     metadata:
       name: {{ template "hmcts.releaseName" . }}-importer
@@ -36,6 +22,20 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
+      volumes:
+        - name: kvcreds
+          flexVolume:
+            driver: "azure/kv"
+            secretRef:
+              name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
+            options:
+              usepodidentity: "false"
+              subscriptionid: {{ .Values.global.subscriptionId }}
+              tenantid: {{ .Values.global.tenantId }}
+              keyvaultname: {{ include "importer.vault" . | quote }}
+              resourcegroup: {{ include "importer.resourcegroup" . | quote }}
+              keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
+              keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
       containers:
         - name: {{ template "hmcts.releaseName" . }}-importer
           image: {{ .Values.importer.oneoff.image }} 
@@ -68,20 +68,6 @@ metadata:
     app.kubernetes.io/managed-by: {{ .Release.Service }}
     app.kubernetes.io/instance: {{ template "hmcts.releaseName" . }}
 spec:
-  volumes:
-    - name: kvcreds
-      flexVolume:
-        driver: "azure/kv"
-        secretRef:
-          name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
-        options:
-          usepodidentity: "false"
-          subscriptionid: {{ .Values.global.subscriptionId }}
-          tenantid: {{ .Values.global.tenantId }}
-          keyvaultname: {{ include "importer.vault" . | quote }}
-          resourcegroup: {{ include "importer.resourcegroup" . | quote }}
-          keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
-          keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
   schedule: {{ .Values.importer.cron.schedule | quote }}
   concurrencyPolicy: {{ .Values.importer.cron.concurrencyPolicy }}
   selector:
@@ -94,6 +80,20 @@ spec:
           labels:
             app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
         spec:
+          volumes:
+            - name: kvcreds
+              flexVolume:
+                driver: "azure/kv"
+                secretRef:
+                  name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
+                options:
+                  usepodidentity: "false"
+                  subscriptionid: {{ .Values.global.subscriptionId }}
+                  tenantid: {{ .Values.global.tenantId }}
+                  keyvaultname: {{ include "importer.vault" . | quote }}
+                  resourcegroup: {{ include "importer.resourcegroup" . | quote }}
+                  keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
+                  keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
           containers:
           - image: {{ .Values.importer.cron.image }}
             name: {{ template "hmcts.releaseName" . }}-importer
