@@ -13,6 +13,7 @@ livenessPeriod: 15
 livenessFailureThreshold: 3
 
 importer:
+  kvSecretRef: kvcreds
   cron:
     enabled: false
     schedule: '*/5 * * * *'
