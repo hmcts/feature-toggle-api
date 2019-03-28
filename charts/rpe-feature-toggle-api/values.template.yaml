@@ -22,7 +22,7 @@ importer:
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
     imagePullPolicy: Always
   oneoff:
-    enabled: true
+    enabled: false
     image: hmcts.azurecr.io/hmcts/feature-toggle-importer:db1fs8  # pin to specific tag
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
     imagePullPolicy: Always
