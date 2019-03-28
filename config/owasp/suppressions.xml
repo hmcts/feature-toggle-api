@@ -72,4 +72,41 @@
     <cve>CVE-2014-3488</cve>
     <cve>CVE-2015-2156</cve>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    file name: spring-security-web-4.2.9.RELEASE.jar
+    ]]></notes>
+    <filePath regex="true">.*spring-security-web-4.2.9.RELEASE.jar</filePath>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: spring-security-config-4.2.9.RELEASE.jar
+    ]]></notes>
+    <filePath regex="true">.*spring-security-config-4.2.9.RELEASE.jar</filePath>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: spring-security-core-4.2.9.RELEASE.jar
+    ]]></notes>
+    <filePath regex="true">.*spring-security-core-4.2.9.RELEASE.jar</filePath>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: spring-security-crypto-4.2.9.RELEASE.jar
+    ]]></notes>
+    <filePath regex="true">.*spring-security-crypto-4.2.9.RELEASE.jar</filePath>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+  <suppress>
+    <notes><![CDATA[
+    file name: spring-security-test-4.2.7.RELEASE.jar
+    ]]></notes>
+    <filePath regex="true">.*spring-security-test-4.2.7.RELEASE.jar</filePath>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+
 </suppressions>

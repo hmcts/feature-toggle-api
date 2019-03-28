@@ -22,12 +22,32 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
+      volumes:
+        - name: kvcreds
+          flexVolume:
+            driver: "azure/kv"
+            secretRef:
+              name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
+            options:
+              usepodidentity: "false"
+              subscriptionid: {{ .Values.global.subscriptionId }}
+              tenantid: {{ .Values.global.tenantId }}
+              keyvaultname: {{ include "importer.vault" . | quote }}
+              resourcegroup: {{ include "importer.resourcegroup" . | quote }}
+              keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
+              keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
       containers:
         - name: {{ template "hmcts.releaseName" . }}-importer
           image: {{ .Values.importer.oneoff.image }} 
           imagePullPolicy: {{ .Values.importer.oneoff.imagePullPolicy }}
           command: ["sh", "-c", "{{ .Values.importer.oneoff.command }}"]
+          volumeMounts:
+          - name: kvcreds
+            mountPath: /kvmnt
+            readOnly: true
           env:
+          - name: IMPORTER_CREDS_MOUNT
+            value: "/kvmnt"
           - name: FEATURE_TOGGLE_API_URL
             value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
           - name: PERMISSIONS
@@ -60,12 +80,32 @@ spec:
           labels:
             app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
         spec:
+          volumes:
+            - name: kvcreds
+              flexVolume:
+                driver: "azure/kv"
+                secretRef:
+                  name: {{ default "kvcreds" .Values.importer.kvSecretRef }} 
+                options:
+                  usepodidentity: "false"
+                  subscriptionid: {{ .Values.global.subscriptionId }}
+                  tenantid: {{ .Values.global.tenantId }}
+                  keyvaultname: {{ include "importer.vault" . | quote }}
+                  resourcegroup: {{ include "importer.resourcegroup" . | quote }}
+                  keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
+                  keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
           containers:
           - image: {{ .Values.importer.cron.image }}
             name: {{ template "hmcts.releaseName" . }}-importer
             imagePullPolicy: {{ .Values.importer.cron.imagePullPolicy }}
             command: ["sh", "-c", "{{ .Values.importer.cron.command }}"]
+            volumeMounts:
+            - name: kvcreds
+              mountPath: /kvmnt
+              readOnly: true
             env:
+              - name: IMPORTER_CREDS_MOUNT
+                value: "/kvmnt"
               - name: FEATURE_TOGGLE_API_URL
                 value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
               - name: PERMISSIONS
