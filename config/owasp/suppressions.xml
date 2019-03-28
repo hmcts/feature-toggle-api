@@ -73,39 +73,51 @@
     <cve>CVE-2015-2156</cve>
   </suppress>
 
+spring-security-web-4.2.9.RELEASE.jar: ids:(cpe:/a:pivotal_software:spring_security:4.2.9, org.springframework.security:spring-security-web:4.2.9.RELEASE) : CVE-2018-1258
+
+spring-security-config-4.2.9.RELEASE.jar: ids:(org.springframework.security:spring-security-config:4.2.9.RELEASE, cpe:/a:pivotal_software:spring_security:4.2.9) : CVE-2018-1258
+
+spring-security-core-4.2.9.RELEASE.jar: ids:(org.springframework.security:spring-security-core:4.2.9.RELEASE, cpe:/a:pivotal_software:spring_security:4.2.9) : CVE-2018-1258
+
+spring-security-crypto-4.2.9.RELEASE.jar: ids:(cpe:/a:pivotal_software:spring_security:4.2.9, org.springframework.security:spring-security-crypto:4.2.9.RELEASE) : CVE-2018-1258
+
+spring-security-test-4.2.7.RELEASE.jar: ids:(cpe:/a:pivotal_software:spring_security:4.2.7, org.springframework.security:spring-security-test:4.2.7.RELEASE) : CVE-2018-1258
+
+
+
   <suppress>
     <notes><![CDATA[
     file name: spring-security-web-4.2.9.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">spring-security-web-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-web-4.2.9.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
     file name: spring-security-config-4.2.9.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">spring-security-config-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-config-4.2.9.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
     file name: spring-security-core-4.2.9.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">spring-security-core-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-core-4.2.9.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
     file name: spring-security-crypto-4.2.9.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">spring-security-crypto-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-crypto-4.2.9.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
     file name: spring-security-test-4.2.7.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">spring-security-test-4.2.7.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-test-4.2.7.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
 
