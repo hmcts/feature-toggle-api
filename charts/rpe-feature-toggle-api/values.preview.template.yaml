@@ -1,0 +1,7 @@
+java:
+  image: ${IMAGE_NAME}
+  ingressHost: ${SERVICE_FQDN}
+  registerAdditionalDns:
+    primaryIngressHost: ${SERVICE_FQDN}
+postgresql:
+  enabled: true
