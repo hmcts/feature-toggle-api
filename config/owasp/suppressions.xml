@@ -75,38 +75,44 @@
 
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-web-4.2.9.RELEASE.jar
+    file name: spring-security-web-4.2.12.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">.*spring-security-web-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-web-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-config-4.2.9.RELEASE.jar
+    file name: spring-security-config-4.2.12.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">.*spring-security-config-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-config-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
     file name: spring-security-core-4.2.9.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">.*spring-security-core-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-core-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-crypto-4.2.9.RELEASE.jar
+    file name: spring-security-crypto-4.2.12.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">.*spring-security-crypto-4.2.9.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-crypto-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-test-4.2.7.RELEASE.jar
+    file name: spring-security-test-4.2.12.RELEASE.jar
     ]]></notes>
-    <filePath regex="true">.*spring-security-test-4.2.7.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-test-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
-
+  <suppress>
+    <notes><![CDATA[
+    More information can be found on https://github.com/jeremylong/DependencyCheck/issues/1004
+    ]]></notes>
+    <cpe>cpe:/a:apache:groovy:2.4.16</cpe>
+    <cve>CVE-2016-6497</cve>
+  </suppress>
 </suppressions>
