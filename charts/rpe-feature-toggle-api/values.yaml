@@ -13,9 +13,6 @@ importer:
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
     imagePullPolicy: Always
 
-postgresql:
-  enabled: true
-
 java:
   image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
   applicationPort: 8580

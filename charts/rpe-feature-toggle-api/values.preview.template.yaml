@@ -1,3 +1,6 @@
+postgresql:
+  enabled: true
+  
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
