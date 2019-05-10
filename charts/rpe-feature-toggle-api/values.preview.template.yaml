@@ -5,5 +5,3 @@ java:
     enabled: false
     primaryIngressHost: ${SERVICE_FQDN}
     prefix: www
-  environment:
-    FEATURES_DB_HOST: ${SERVICE_NAME}-ft-db
