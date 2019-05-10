@@ -64,7 +64,9 @@ java:
         - admin-username-test
         - editor-password-test
         - editor-username-test
+
 postgresql:
+  enabled: true
   nameOverride: ft-db
   postgresqlDatabase: hmcts
   postgresqlUsername: hmcts
@@ -81,5 +83,3 @@ postgresql:
       CREATE DATABASE features WITH OWNER = features ENCODING = 'UTF-8' CONNECTION LIMIT = -1;
   persistence:
     enabled: false
-tags:
-  postgresql-pod: true

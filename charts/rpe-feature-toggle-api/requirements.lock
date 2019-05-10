@@ -1,9 +1,6 @@
 dependencies:
 - name: java
   repository: https://hmcts.azurecr.io/helm/v1/repo
-  version: 1.1.2
-- name: postgresql
-  repository: https://kubernetes-charts.storage.googleapis.com
-  version: 3.1.4
-digest: sha256:51ee861a2f467ccbfa562c1358a92498d60e2551dd9482e1bf88fa92307844c0
-generated: 2019-03-28T13:17:23.784412Z
+  version: 2.0.5
+digest: sha256:954e5efe4fdd92dc2cc7015d54723902d2a892ce83043dde67045d6cd135a714
+generated: 2019-05-10T09:20:45.765299+01:00
