@@ -1,7 +1,10 @@
+postgresql:
+  enabled: true
+  
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}
   registerAdditionalDns:
+    enabled: false
     primaryIngressHost: ${SERVICE_FQDN}
-postgresql:
-  enabled: true
+    prefix: www
