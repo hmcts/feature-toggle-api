@@ -27,15 +27,15 @@ java:
     readinessProbe:
       initialDelaySeconds: 10
   environment:
-    FLYWAY_ENABLED: true
-    FLYWAY_NOOP_STRATEGY: false
-    FEATURES_DB_HOST: "{{ .Release.Name }}-postgresql"
-    FEATURES_DB_NAME: "{{ .Values.postgresql.postgresqlDatabase}}"
-    FEATURES_DB_USER_NAME: "{{ .Values.postgresql.postgresqlUsername}}"
-    FEATURES_DB_PASSWORD: "{{ .Values.postgresql.postgresqlPassword}}"
-    LOGBACK_REQUIRE_THREAD: false
-    LOGBACK_REQUIRE_ALERT_LEVEL: false
-    LOGBACK_REQUIRE_ERROR_CODE: false
+    FLYWAY_ENABLED: 'true'
+    FLYWAY_NOOP_STRATEGY: 'false'
+    FEATURES_DB_HOST: '{{ .Release.Name }}-postgresql'
+    FEATURES_DB_NAME: '{{ .Values.postgresql.postgresqlDatabase}}'
+    FEATURES_DB_USER_NAME: '{{ .Values.postgresql.postgresqlUsername}}'
+    FEATURES_DB_PASSWORD: '{{ .Values.postgresql.postgresqlPassword}}'
+    LOGBACK_REQUIRE_THREAD: 'false'
+    LOGBACK_REQUIRE_ALERT_LEVEL: 'false'
+    LOGBACK_REQUIRE_ERROR_CODE: 'false'
   keyVaults:
     "rpe-ft-api":
       resourceGroup: rpe-feature-toggle-api
