@@ -53,6 +53,11 @@ spec:
           {{- if .Values.importer.kvSecretRef }}
           - name: IMPORTER_CREDS_MOUNT
             value: "/kvmnt"
+          {{- else }}
+          - name: ADMIN_USERNAME
+            value: "{{ .Values.importer.adminUsername }}"
+          - name: ADMIN_PASSWORD
+            value: "{{ .Values.importer.adminPassword }}"
           {{- end }}
           - name: FEATURE_TOGGLE_API_URL
             value: "{{ .Values.importer.apiUrl }}"
@@ -60,10 +65,6 @@ spec:
             value: "{{ .Values.importer.oneoff.permissions }}"
           - name: VERBOSE
             value: "true"
-          - name: ADMIN_USERNAME
-            value: "{{ .Values.importer.adminUsername }}"  # kvcreds takes priority
-          - name: ADMIN_PASSWORD
-            value: "{{ .Values.importer.adminPassword }}"  # kvcreds takes priority
       restartPolicy: Never   # Move to "OnFailure" after first charts are done 
 {{- end }}
 {{- if .Values.importer.cron.enabled }}
