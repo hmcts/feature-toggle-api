@@ -1,17 +1,17 @@
 importer:
-  kvSecretRef: kvcreds
+  apiUrl: http://rpe-feature-toggle-api/api/ff4j/store/features/
   cron:
     enabled: false
     schedule: '*/5 * * * *'
     concurrencyPolicy: Forbid
     image: hmcts.azurecr.io/hmcts/feature-toggle-importer:db1fs8  # pin to specific tag
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
   oneoff:
     enabled: false
     image: hmcts.azurecr.io/hmcts/feature-toggle-importer:db1fs8  # pin to specific tag
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
-    imagePullPolicy: Always
+    imagePullPolicy: IfNotPresent
 
 java:
   image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest

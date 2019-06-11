@@ -1,6 +1,9 @@
 postgresql:
   enabled: true
   
+importer:
+  kvSecretRef: kvcreds
+  
 java:
   image: ${IMAGE_NAME}
   ingressHost: ${SERVICE_FQDN}

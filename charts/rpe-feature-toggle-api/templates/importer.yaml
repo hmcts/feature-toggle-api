@@ -22,6 +22,7 @@ spec:
         app.kubernetes.io/instance: {{ .Release.Name | quote }}
         helm.sh/chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     spec:
+      {{- if .Values.importer.kvSecretRef }}
       volumes:
         - name: kvcreds
           flexVolume:
@@ -36,24 +37,33 @@ spec:
               resourcegroup: {{ include "importer.resourcegroup" . | quote }}
               keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
               keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
+      {{- end }}
       containers:
         - name: {{ template "hmcts.releaseName" . }}-importer
           image: {{ .Values.importer.oneoff.image }} 
           imagePullPolicy: {{ .Values.importer.oneoff.imagePullPolicy }}
           command: ["sh", "-c", "{{ .Values.importer.oneoff.command }}"]
+          {{- if .Values.importer.kvSecretRef }}
           volumeMounts:
           - name: kvcreds
             mountPath: /kvmnt
             readOnly: true
+          {{- end }}
           env:
+          {{- if .Values.importer.kvSecretRef }}
           - name: IMPORTER_CREDS_MOUNT
             value: "/kvmnt"
+          {{- end }}
           - name: FEATURE_TOGGLE_API_URL
-            value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
+            value: "{{ .Values.importer.apiUrl }}"
           - name: PERMISSIONS
             value: "{{ .Values.importer.oneoff.permissions }}"
           - name: VERBOSE
             value: "true"
+          - name: ADMIN_USERNAME
+            value: "{{ .Values.importer.adminUsername }}"  # kvcreds takes priority
+          - name: ADMIN_PASSWORD
+            value: "{{ .Values.importer.adminPassword }}"  # kvcreds takes priority
       restartPolicy: Never   # Move to "OnFailure" after first charts are done 
 {{- end }}
 {{- if .Values.importer.cron.enabled }}
@@ -80,6 +90,7 @@ spec:
           labels:
             app.kubernetes.io/name: {{ template "hmcts.releaseName" . }}-importer
         spec:
+          {{- if .Values.importer.kvSecretRef }}
           volumes:
             - name: kvcreds
               flexVolume:
@@ -94,24 +105,33 @@ spec:
                   resourcegroup: {{ include "importer.resourcegroup" . | quote }}
                   keyvaultobjectnames: "admin-username-cmc;admin-password-cmc"
                   keyvaultobjecttypes: "secret;secret" # OPTIONS: secret, key, cert
+          {{- end }}
           containers:
           - image: {{ .Values.importer.cron.image }}
             name: {{ template "hmcts.releaseName" . }}-importer
             imagePullPolicy: {{ .Values.importer.cron.imagePullPolicy }}
             command: ["sh", "-c", "{{ .Values.importer.cron.command }}"]
+            {{- if .Values.importer.kvSecretRef }}
             volumeMounts:
             - name: kvcreds
               mountPath: /kvmnt
               readOnly: true
+            {{- end }}
             env:
+              {{- if .Values.importer.kvSecretRef }}
               - name: IMPORTER_CREDS_MOUNT
                 value: "/kvmnt"
+              {{- end }}
               - name: FEATURE_TOGGLE_API_URL
                 value: "http://{{ template "hmcts.releaseName" . }}/api/ff4j/store/features/"
               - name: PERMISSIONS
                 value: "{{ .Values.importer.cron.permissions }}"
               - name: VERBOSE
                 value: "true"
+              - name: ADMIN_USERNAME
+                value: "{{ .Values.importer.adminUsername }}"  # kvcreds takes priority
+              - name: ADMIN_PASSWORD
+                value: "{{ .Values.importer.adminPassword }}"  # kvcreds takes priority
           restartPolicy: Never
       backoffLimit: 4
 {{- end }}
