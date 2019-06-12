@@ -26,6 +26,9 @@ java:
       initialDelaySeconds: 10
     readinessProbe:
       initialDelaySeconds: 10
+    extraEnv:
+    - name: POSTGRESQL_DATABASE
+      value: hmcts
   environment:
     FLYWAY_ENABLED: 'true'
     FLYWAY_NOOP_STRATEGY: 'false'
