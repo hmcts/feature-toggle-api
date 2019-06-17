@@ -1,5 +1,5 @@
 variable "product" {
-  type    = "string"
+  type = "string"
 }
 
 variable "raw_product" {
@@ -25,9 +25,9 @@ variable "env" {
 }
 
 variable "vault_section" {
-  type = "string"
+  type        = "string"
   description = "Name of the environment-specific section in Vault key path, i.e. secret/{vault_section}/..."
-  default = "test"
+  default     = "test"
 }
 
 variable "ilbIp" {}

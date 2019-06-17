@@ -1,2 +1,2 @@
-vault_section = "preprod"
+vault_section      = "preprod"
 external_host_name = "www.featuretoggle.demo.platform.hmcts.net"
