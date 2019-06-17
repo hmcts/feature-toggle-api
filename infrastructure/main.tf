@@ -31,6 +31,7 @@ module "feature-toggle-db" {
   sku_name        = "GP_Gen5_2"
   sku_tier        = "GeneralPurpose"
   common_tags     = "${var.common_tags}"
+  subscription    = "${var.subscription}"
 }
 
 module "feature-toggle-api" {
