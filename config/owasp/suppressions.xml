@@ -4,18 +4,6 @@
   <!-- -->
 
   <suppress>
-    <notes><![CDATA[postgresql before versions 10.4, 9.6.9 is vulnerable in the adminpack extension, the pg_catalog.pg_logfile_rotate() function doesn't follow the same ACLs than pg_rorate_logfile. If the adminpack is added to a database, an attacker able to connect to it could exploit this to force log rotation]]></notes>
-    <gav regex="true">^org\.postgresql:postgresql:42\.2\.2$</gav>
-    <cve>CVE-2018-1115</cve>
-    <cve>CVE-2016-7048</cve>
-  </suppress>
-
-  <suppress>
-    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-    <cpe>cpe:/a:google:guava</cpe>
-  </suppress>
-
-  <suppress>
     <notes><![CDATA[ pulled by hystrix ]]></notes>
     <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
     <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
