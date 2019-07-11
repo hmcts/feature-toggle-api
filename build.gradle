@@ -17,7 +17,7 @@ version = '0.0.1'
 // it is important to specify logback classic and core packages explicitly as libraries like spring boot
 // enforces it's own (older) version which is not recommended.
 def versions = [
-  ff4j            : '1.7.1',
+  ff4j            : '1.7.3',
   logback         : '1.2.3',
   reformLogging   : '5.0.1',
   springBoot      : springBoot.class.package.implementationVersion,
@@ -221,7 +221,7 @@ dependencies {
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
   integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.8.0'
-  integrationTestCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.12.RELEASE'
+  integrationTestCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.13.RELEASE'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
   functionalTestCompile group: 'io.rest-assured', name: 'rest-assured', version: '3.1.0'
