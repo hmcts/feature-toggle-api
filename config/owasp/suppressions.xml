@@ -68,9 +68,9 @@
 
   <suppress>
     <notes><![CDATA[
-   file name: spring-security-*-4.2.1[23].RELEASE.jar
+   file name: spring-security-.*-4.2.12.RELEASE.jar
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-.*@.*$</packageUrl>
+    <filePath regex="true">.*spring-security-.*-4.2.12.RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
 
