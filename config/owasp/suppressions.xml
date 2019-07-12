@@ -5,7 +5,7 @@
 
   <suppress>
     <notes><![CDATA[ pulled by hystrix ]]></notes>
-    <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+    <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>     org.bouncycastle/bcprov-jdk15on@1.55
     <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
   </suppress>
 
@@ -63,10 +63,38 @@
 
   <suppress>
     <notes><![CDATA[
-    spring-security 4.2.12 and 4.2.13
-    ]]></notes>
-    <filePath regex="true">.*spring-security-*-4.2.1[23].RELEASE.jar</filePath>
+   file name: spring-security-*-4.2.1[23].RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-*@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: bcprov-jdk15on-1.55.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
+    <vulnerabilityName>CVE-2016-1000338</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000339</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000340</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000341</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000342</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000343</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000344</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000345</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000346</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000352</vulnerabilityName>
+    <vulnerabilityName>CVE-2017-13098</vulnerabilityName>
+    <vulnerabilityName>CVE-2018-1000180</vulnerabilityName>
+    <vulnerabilityName>CVE-2018-1000613</vulnerabilityName>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: commons-compress-1.16.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons-compress@.*$</packageUrl>
+    <cve>CVE-2018-11771</cve>
   </suppress>
 
   <suppress>
