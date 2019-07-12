@@ -5,8 +5,7 @@
 
   <suppress>
     <notes><![CDATA[
-    pulled by hystrix
-    file name: bcprov-jdk15on-1.55.jar
+   file name: bcprov-jdk15on-1.55.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
     <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
@@ -35,11 +34,13 @@
   </suppress>
 
   <suppress>
-    <notes><![CDATA[Allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attacks]]></notes>
-    <gav regex="true">^javax\.servlet:jstl:1\.2$</gav>
+    <notes><![CDATA[
+   file name: jstl-1.2.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/javax\.servlet/jstl@.*$</packageUrl>
     <cve>CVE-2015-0254</cve>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[ slf4j only has a beta version released with the 'fix', looks like lots of changes in it... ]]></notes>
     <cve>CVE-2018-8088</cve>
@@ -68,9 +69,41 @@
 
   <suppress>
     <notes><![CDATA[
-   spring security 4 is used by ff4j
+   file name: spring-security-web-4.2.12.RELEASE.jar
    ]]></notes>
-    <gav regex="true">org\.springframework\.security:spring.*</gav>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-web@.*$</packageUrl>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-config-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-config@.*$</packageUrl>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-core-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-core@.*$</packageUrl>
+    <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-crypto-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-crypto@.*$</packageUrl>
+    <cve>CVE-2018-1258</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-test-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-test@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
 
@@ -79,6 +112,7 @@
    file name: commons-compress-1.16.1.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons-compress@.*$</packageUrl>
+    <cpe>cpe:/a:apache:commons-compress</cpe>
   </suppress>
 
   <suppress>
@@ -86,7 +120,15 @@
    file name: groovy-xml-2.4.17.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-xml@.*$</packageUrl>
-    <cve>CVE-2016-6497</cve>
+    <cpe>cpe:/a:apache:groovy</cpe>
   </suppress>
 
+  <suppress>
+    <notes><![CDATA[
+   file name: groovy-json-2.4.17.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-json@.*$</packageUrl>
+    <cpe>cpe:/a:apache:groovy</cpe>
+  </suppress>
+  
 </suppressions>
