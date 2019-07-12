@@ -4,8 +4,11 @@
   <!-- -->
 
   <suppress>
-    <notes><![CDATA[ pulled by hystrix ]]></notes>
-    <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>     org.bouncycastle/bcprov-jdk15on@1.55
+    <notes><![CDATA[
+    pulled by hystrix
+    file name: bcprov-jdk15on-1.55.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
     <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
   </suppress>
 
@@ -16,6 +19,7 @@
    file name: postgresql-1.8.0.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.testcontainers/postgresql@.*$</packageUrl>
+    <cpe>cpe:/a:postgresql:postgresql</cpe>
   </suppress>
 
   <suppress>
@@ -68,13 +72,6 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-.*@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[
-   file name: bcprov-jdk15on-1.55.jar
-   ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
   </suppress>
 
   <suppress>
