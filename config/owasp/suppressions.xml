@@ -1,31 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.1.xsd">
+<suppressions xmlns="https://jeremylong.github.io/DependencyCheck/dependency-suppression.1.3.xsd">
 
   <!-- -->
 
   <suppress>
-    <notes><![CDATA[postgresql before versions 10.4, 9.6.9 is vulnerable in the adminpack extension, the pg_catalog.pg_logfile_rotate() function doesn't follow the same ACLs than pg_rorate_logfile. If the adminpack is added to a database, an attacker able to connect to it could exploit this to force log rotation]]></notes>
-    <gav regex="true">^org\.postgresql:postgresql:42\.2\.2$</gav>
-    <cve>CVE-2018-1115</cve>
-    <cve>CVE-2016-7048</cve>
-  </suppress>
-
-  <suppress>
-    <gav regex="true">^com\.google\.guava:guava:.*$</gav>
-    <cpe>cpe:/a:google:guava</cpe>
-  </suppress>
-
-  <suppress>
-    <notes><![CDATA[ pulled by hystrix ]]></notes>
-    <gav regex="true">^org\.bouncycastle:bcprov-jdk15on:.*$</gav>
+    <notes><![CDATA[
+   file name: bcprov-jdk15on-1.55.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
     <cpe>cpe:/a:bouncycastle:legion-of-the-bouncy-castle-java-crytography-api</cpe>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: bcprov-jdk15on-1.55.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
+    <vulnerabilityName>CVE-2016-1000338</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000339</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000340</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000341</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000342</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000343</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000344</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000345</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000346</vulnerabilityName>
+    <vulnerabilityName>CVE-2016-1000352</vulnerabilityName>
+    <vulnerabilityName>CVE-2017-13098</vulnerabilityName>
+    <vulnerabilityName>CVE-2018-1000180</vulnerabilityName>
+    <vulnerabilityName>CVE-2018-1000613</vulnerabilityName>
+  </suppress>
+
 
   <!-- not used by server -->
 
   <suppress>
-    <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
+    <notes><![CDATA[
+   file name: postgresql-1.8.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.testcontainers/postgresql@.*$</packageUrl>
     <cpe>cpe:/a:postgresql:postgresql</cpe>
   </suppress>
 
@@ -42,11 +55,13 @@
   </suppress>
 
   <suppress>
-    <notes><![CDATA[Allows remote attackers to execute arbitrary code or conduct external XML entity (XXE) attacks]]></notes>
-    <gav regex="true">^javax\.servlet:jstl:1\.2$</gav>
+    <notes><![CDATA[
+   file name: jstl-1.2.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/javax\.servlet/jstl@.*$</packageUrl>
     <cve>CVE-2015-0254</cve>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[ slf4j only has a beta version released with the 'fix', looks like lots of changes in it... ]]></notes>
     <cve>CVE-2018-8088</cve>
@@ -75,44 +90,82 @@
 
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-web-4.2.12.RELEASE.jar
-    ]]></notes>
-    <filePath regex="true">.*spring-security-web-4.2.12.RELEASE.jar</filePath>
+   file name: spring-security-web-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-web@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
+
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-config-4.2.12.RELEASE.jar
-    ]]></notes>
-    <filePath regex="true">.*spring-security-config-4.2.12.RELEASE.jar</filePath>
+   file name: spring-security-config-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-config@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
+
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-core-4.2.9.RELEASE.jar
-    ]]></notes>
-    <filePath regex="true">.*spring-security-core-4.2.12.RELEASE.jar</filePath>
+   file name: spring-security-core-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-core@.*$</packageUrl>
+    <cpe>cpe:/a:pivotal_software:spring_security</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-core-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-core@.*$</packageUrl>
+    <vulnerabilityName>BREACH attack possible in CSRF tokens</vulnerabilityName>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: spring-security-crypto-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-crypto@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
+
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-crypto-4.2.12.RELEASE.jar
-    ]]></notes>
-    <filePath regex="true">.*spring-security-crypto-4.2.12.RELEASE.jar</filePath>
+   file name: spring-security-test-4.2.12.RELEASE.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-test@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
+
   <suppress>
     <notes><![CDATA[
-    file name: spring-security-test-4.2.12.RELEASE.jar
-    ]]></notes>
-    <filePath regex="true">.*spring-security-test-4.2.12.RELEASE.jar</filePath>
-    <cve>CVE-2018-1258</cve>
+   file name: commons-compress-1.16.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons-compress@.*$</packageUrl>
+    <cpe>cpe:/a:apache:commons-compress</cpe>
   </suppress>
+
   <suppress>
     <notes><![CDATA[
-    More information can be found on https://github.com/jeremylong/DependencyCheck/issues/1004
-    ]]></notes>
-    <cpe>cpe:/a:apache:groovy:2.4.16</cpe>
-    <cve>CVE-2016-6497</cve>
+   file name: commons-compress-1.16.1.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons-compress@.*$</packageUrl>
+    <vulnerabilityName>CVE-2018-11771</vulnerabilityName>
   </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: groovy-xml-2.4.17.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-xml@.*$</packageUrl>
+    <cpe>cpe:/a:apache:groovy</cpe>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+   file name: groovy-json-2.4.17.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-json@.*$</packageUrl>
+    <cpe>cpe:/a:apache:groovy</cpe>
+  </suppress>
+  
 </suppressions>

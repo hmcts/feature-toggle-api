@@ -13,7 +13,7 @@ locals {
   s2s_url   = "http://rpe-service-auth-provider-${var.env}.service.${local.ase_name}.internal"
   vaultName = "${var.product}-ft-api-${var.env}"
 
-  db_connection_options = "?ssl=true"
+  db_connection_options = "?sslmode=require"
 
   test_admin_user      = "${data.azurerm_key_vault_secret.source-test-admin-user.value}"
   test_admin_password  = "${data.azurerm_key_vault_secret.source-test-admin-password.value}"
