@@ -63,9 +63,9 @@
 
   <suppress>
     <notes><![CDATA[
-    spring-security 4.2.13
+    spring-security 4.2.12 and 4.2.13
     ]]></notes>
-    <filePath regex="true">.*spring-security-*-4.2.13.RELEASE.jar</filePath>
+    <filePath regex="true">.*spring-security-*-4.2.1[23].RELEASE.jar</filePath>
     <cve>CVE-2018-1258</cve>
   </suppress>
 
