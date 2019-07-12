@@ -12,9 +12,10 @@
   <!-- not used by server -->
 
   <suppress>
-    <notes><![CDATA[Used only for testing not used in prod]]></notes>
-    <gav regex="true">^org\.testcontainers:postgresql:.*$</gav>
-    <cpe>cpe:/a:postgresql:postgresql</cpe>
+    <notes><![CDATA[
+   file name: postgresql-1.8.0.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.testcontainers/postgresql@.*$</packageUrl>
   </suppress>
 
   <suppress>
@@ -65,7 +66,7 @@
     <notes><![CDATA[
    file name: spring-security-*-4.2.1[23].RELEASE.jar
    ]]></notes>
-    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-*@.*$</packageUrl>
+    <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-.*@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
   </suppress>
 
@@ -74,19 +75,6 @@
    file name: bcprov-jdk15on-1.55.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.bouncycastle/bcprov-jdk15on@.*$</packageUrl>
-    <vulnerabilityName>CVE-2016-1000338</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000339</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000340</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000341</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000342</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000343</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000344</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000345</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000346</vulnerabilityName>
-    <vulnerabilityName>CVE-2016-1000352</vulnerabilityName>
-    <vulnerabilityName>CVE-2017-13098</vulnerabilityName>
-    <vulnerabilityName>CVE-2018-1000180</vulnerabilityName>
-    <vulnerabilityName>CVE-2018-1000613</vulnerabilityName>
   </suppress>
 
   <suppress>
@@ -94,14 +82,14 @@
    file name: commons-compress-1.16.1.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.apache\.commons/commons-compress@.*$</packageUrl>
-    <cve>CVE-2018-11771</cve>
   </suppress>
 
   <suppress>
     <notes><![CDATA[
-    More information can be found on https://github.com/jeremylong/DependencyCheck/issues/1004
-    ]]></notes>
-    <cpe>cpe:/a:apache:groovy:2.4.16</cpe>
+   file name: groovy-xml-2.4.17.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-xml@.*$</packageUrl>
     <cve>CVE-2016-6497</cve>
   </suppress>
+
 </suppressions>
