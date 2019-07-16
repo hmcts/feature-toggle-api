@@ -94,6 +94,7 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-web@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
+    <cve>CVE-2019-11272</cve>
   </suppress>
 
   <suppress>
@@ -102,6 +103,7 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-config@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
+    <cve>CVE-2019-11272</cve>
   </suppress>
 
   <suppress>
@@ -118,6 +120,7 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-core@.*$</packageUrl>
     <vulnerabilityName>BREACH attack possible in CSRF tokens</vulnerabilityName>
+    <cve>CVE-2019-11272</cve>
   </suppress>
 
   <suppress>
@@ -126,6 +129,7 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-crypto@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
+    <cve>CVE-2019-11272</cve>
   </suppress>
 
   <suppress>
@@ -134,6 +138,7 @@
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-test@.*$</packageUrl>
     <cve>CVE-2018-1258</cve>
+    <cve>CVE-2019-11272</cve>
   </suppress>
 
   <suppress>
