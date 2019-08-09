@@ -1,5 +1,5 @@
 dependencies:
   - name: java
     version: ~2.2.0
-    repository: '@hmcts'
+    repository: '@hmctspublic'
     
