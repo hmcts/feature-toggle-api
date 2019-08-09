@@ -1,7 +1,7 @@
 apiVersion: v1
 description: A Helm chart for the feature-toggle-api (https://github.com/hmcts/feature-toggle-api)
 name: rpe-feature-toggle-api
-version: 3.0.1
+version: 3.0.2
 icon: https://github.com/hmcts/rpe-feature-toggle-api/raw/master/charts/rpe-feature-toggle-api/images/icons8-java-50.png
 keywords:
   - feature-toggle-api
