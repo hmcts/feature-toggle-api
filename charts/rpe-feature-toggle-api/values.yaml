@@ -4,17 +4,17 @@ importer:
     enabled: false
     schedule: '*/5 * * * *'
     concurrencyPolicy: Forbid
-    image: hmcts.azurecr.io/hmcts/feature-toggle-importer:db1fs8  # pin to specific tag
+    image: hmctspublic.azurecr.io/rpe/feature-toggle-api/importer:db9by  # pin to specific tag
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
     imagePullPolicy: IfNotPresent
   oneoff:
     enabled: false
-    image: hmcts.azurecr.io/hmcts/feature-toggle-importer:db1fs8  # pin to specific tag
+    image: hmctspublic.azurecr.io/rpe/feature-toggle-api/importer:db9by  # pin to specific tag
     command: echo FEATURE_TOGGLE_API_URL=${FEATURE_TOGGLE_API_URL}
     imagePullPolicy: IfNotPresent
 
 java:
-  image: hmcts.azurecr.io/hmcts/rpe-feature-toggle-api:latest
+  image: hmctspublic.azurecr.io/rpe/feature-toggle-api:latest
   applicationPort: 8580
   registerAdditionalDns:
     enabled: false
