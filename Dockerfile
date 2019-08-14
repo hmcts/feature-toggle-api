@@ -1,13 +1,12 @@
-FROM hmcts/cnp-java-base:openjdk-8u181-jre-alpine3.8-1.0
+ARG APP_INSIGHTS_AGENT_VERSION=2.3.1
+FROM hmctspublic.azurecr.io/base/java:openjdk-8-distroless-1.0
 
 # Mandatory!
 ENV APP feature-toggle-api.jar
-ENV APPLICATION_TOTAL_MEMORY 1024M
-ENV APPLICATION_SIZE_ON_DISK_IN_MB 59
 
 COPY build/libs/$APP /opt/app/
-
-HEALTHCHECK --interval=10s --timeout=10s --retries=10 CMD http_proxy="" wget -q --spider http://localhost:8580/health || exit 1
+COPY lib/applicationinsights-agent-2.3.1.jar lib/AI-Agent.xml /opt/app/
 
 EXPOSE 8580
 
+CMD ["feature-toggle-api.jar"]
