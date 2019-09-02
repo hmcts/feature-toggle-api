@@ -164,6 +164,7 @@ dependencyManagement {
       entry 'tomcat-embed-el'
       entry 'tomcat-embed-websocket'
     }
+    dependency group: 'commons-beanutils', name: 'commons-beanutils', version: '1.9.4'
   }
 }
 
