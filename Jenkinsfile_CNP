@@ -33,7 +33,7 @@ withPipeline(type , product, component) {
      builder.gradle('integration')
    }
 
-  enableDbMigration()
+  enableDbMigration('rpe-ft-api')
   enableSlackNotifications(channel)
   loadVaultSecrets(secrets)
   enableDockerBuild()

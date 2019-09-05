@@ -36,7 +36,7 @@
 
   <suppress>
     <notes><![CDATA[
-   file name: postgresql-1.8.0.jar
+   file name: postgresql-1.12.0.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.testcontainers/postgresql@.*$</packageUrl>
     <cpe>cpe:/a:postgresql:postgresql</cpe>
@@ -172,5 +172,5 @@
     <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-json@.*$</packageUrl>
     <cpe>cpe:/a:apache:groovy</cpe>
   </suppress>
-  
+
 </suppressions>
