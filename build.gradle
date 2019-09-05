@@ -224,7 +224,8 @@ dependencies {
 
   integrationTestCompile sourceSets.main.runtimeClasspath
   integrationTestCompile sourceSets.test.runtimeClasspath
-  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.8.0'
+  integrationTestCompile group: 'org.testcontainers', name: 'postgresql', version: '1.12.0' //Remove explicit common-compress dependency when bumping this version.
+  integrationTestCompile group: 'org.apache.commons', name: 'commons-compress', version: '1.19'
   integrationTestCompile group: 'org.springframework.security', name: 'spring-security-test', version: '4.2.12.RELEASE'
 
   functionalTestCompile sourceSets.main.runtimeClasspath
