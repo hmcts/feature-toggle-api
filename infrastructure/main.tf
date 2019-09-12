@@ -38,6 +38,7 @@ module "feature-toggle-db" {
 
 module "feature-toggle-api" {
   source               = "git@github.com:hmcts/cnp-module-webapp?ref=master"
+  enable_ase           = "${var.enable_ase}"
   product              = "${var.product}-${var.component}"
   location             = "${var.location_app}"
   env                  = "${var.env}"
