@@ -19,7 +19,7 @@ version = '0.0.1'
 def versions = [
   ff4j            : '1.7.3',
   logback         : '1.2.3',
-  reformLogging   : '5.0.1',
+  reformLogging   : '5.1.0',
   springBoot      : springBoot.class.package.implementationVersion,
   springHystrix   : '1.4.6.RELEASE',
   springfoxSwagger: '2.9.2'
@@ -175,7 +175,7 @@ configurations.all {
         details.useVersion '2.9.9'
       }
       if (details.requested.name == 'jackson-databind') {
-         details.useVersion '2.9.10'
+         details.useVersion '2.9.10.1'
       }
     }
   }
@@ -193,8 +193,8 @@ dependencies {
 
   compile group: 'com.google.guava', name: 'guava', version: '28.0-jre'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
    exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
    exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
