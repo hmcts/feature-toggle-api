@@ -91,6 +91,86 @@
 
   <suppress>
     <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-codec-http2:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-handler-proxy:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-codec-http:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-handler:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-codec-socks:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-common:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-codec:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-transport:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-buffer:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
+    Suppressing as it seems a false positive as per https://github.com/jeremylong/DependencyCheck/issues/1573
+    ]]></notes>
+    <gav regex="true">^io\.netty:netty-resolver:.*</gav>
+    <cve>CVE-2019-16869</cve>
+  </suppress>
+
+  <suppress>
+    <notes><![CDATA[
    file name: spring-security-web-4.2.12.RELEASE.jar
    ]]></notes>
     <packageUrl regex="true">^pkg:maven/org\.springframework\.security/spring-security-web@.*$</packageUrl>
