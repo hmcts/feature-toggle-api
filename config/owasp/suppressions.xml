@@ -77,6 +77,10 @@
     <cve>CVE-2018-19360</cve>
     <cve>CVE-2018-19361</cve>
     <cve>CVE-2018-19362</cve>
+    <cve>CVE-2019-16869</cve>
+    <cve>CVE-2019-17531</cve>
+    <cve>CVE-2019-16943</cve>
+    <cve>CVE-2019-16942</cve>
   </suppress>
 
   <suppress>
