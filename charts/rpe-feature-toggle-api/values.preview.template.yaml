@@ -1,6 +1,3 @@
-postgresql:
-  enabled: true
-  
 importer:
   kvSecretRef: kvcreds
   
@@ -11,3 +8,5 @@ java:
     enabled: false
     primaryIngressHost: ${SERVICE_FQDN}
     prefix: www
+  postgresql:
+    enabled: true
