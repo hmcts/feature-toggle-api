@@ -33,11 +33,6 @@ variable "vault_section" {
 variable "ilbIp" {}
 
 variable "tenant_id" {}
-
-variable "client_id" {
-  description = "(Required) The object ID of a user, service principal or security group in the Azure Active Directory tenant for the vault. The object ID must be unique for the list of access policies. This is usually sourced from environment variables and not normally required to be specified."
-}
-
 variable "subscription" {}
 
 variable "jenkins_AAD_objectId" {
