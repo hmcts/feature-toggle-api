@@ -79,7 +79,7 @@ task smoke(type: Test, description: 'Runs smoke tests') {
 
 checkstyle {
   maxWarnings = 0
-  toolVersion = '8.24'
+  toolVersion = '8.29'
   sourceSets = [sourceSets.main, sourceSets.test, sourceSets.functionalTest, sourceSets.integrationTest]
   // need to set configDir to rootDir otherwise submodule will use submodule/config/checkstyle
   configDir = new File(rootDir, 'config/checkstyle')
