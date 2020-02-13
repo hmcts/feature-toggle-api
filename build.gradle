@@ -190,8 +190,8 @@ dependencies {
 
   compile group: 'com.google.guava', name: 'guava', version: '28.0-jre'
 
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging', version: versions.reformLogging
-  compile group: 'uk.gov.hmcts.reform', name: 'java-logging-appinsights', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging', version: versions.reformLogging
+  compile group: 'uk.gov.hmcts.reform', name: 'logging-appinsights', version: versions.reformLogging
   compile ("uk.gov.hmcts.reform:properties-volume-spring-boot-starter:0.0.4"){
    exclude group: 'org.springframework.cloud' , module : 'spring-cloud-context'
    exclude group: 'org.springframework.boot' , module: 'spring-boot-starter-web'
