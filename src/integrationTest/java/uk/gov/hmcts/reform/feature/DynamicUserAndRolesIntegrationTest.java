@@ -1,6 +1,8 @@
 package uk.gov.hmcts.reform.feature;
 
+import com.microsoft.applicationinsights.web.internal.WebRequestTrackingFilter;
 import org.json.JSONObject;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,17 +10,21 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockFilterConfig;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 /**
  * This class tests dynamic configuration of users and roles.
@@ -42,6 +48,18 @@ public class DynamicUserAndRolesIntegrationTest {
 
     @Autowired
     private transient MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext webAppContext;
+
+    @Before
+    public void setup() {
+        WebRequestTrackingFilter filter = new WebRequestTrackingFilter();
+        filter.init(new MockFilterConfig()); // using a mock that you construct with init params and all
+        this.mockMvc = webAppContextSetup(this.webAppContext)
+            .apply(springSecurity())
+            .addFilters(filter).build();
+    }
 
     @Test
     public void should_allow_new_user_to_access_webconsole_when_configured_as_admin() throws Exception {
