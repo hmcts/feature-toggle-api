@@ -49,6 +49,13 @@ spec:
             mountPath: /kvmnt
             readOnly: true
           {{- end }}
+          resources:
+            requests:
+              memory: '128Mi'
+              cpu: '100m'
+            limits:
+              memory: '256Mi'
+              cpu: '250m'
           env:
           {{- if .Values.importer.kvSecretRef }}
           - name: IMPORTER_CREDS_MOUNT

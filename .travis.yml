@@ -9,7 +9,8 @@ addons:
     packages:
       - libecpg-dev
     update: true
-
+jdk:
+  - openjdk8
 services:
   - docker
 
