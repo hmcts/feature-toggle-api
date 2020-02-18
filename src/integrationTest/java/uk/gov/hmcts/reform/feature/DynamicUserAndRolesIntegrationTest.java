@@ -20,6 +20,7 @@ import java.util.UUID;
 
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -56,6 +57,7 @@ public class DynamicUserAndRolesIntegrationTest {
         WebRequestTrackingFilter filter = new WebRequestTrackingFilter();
         filter.init(new MockFilterConfig()); // using a mock that you construct with init params and all
         this.mockMvc = webAppContextSetup(this.webAppContext)
+            .apply(springSecurity())
             .addFilters(filter).build();
     }
 
