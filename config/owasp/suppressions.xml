@@ -32,6 +32,14 @@
   </suppress>
 
 
+  <suppress>
+    <notes><![CDATA[
+   file name: hystrix-core-1.5.12.jar
+   ]]></notes>
+    <packageUrl regex="true">^pkg:maven/com\.netflix\.hystrix/hystrix-core@.*$</packageUrl>
+    <vulnerabilityName>CWE-79: Improper Neutralization of Input During Web Page Generation ('Cross-site Scripting')</vulnerabilityName>
+  </suppress>
+
   <!-- not used by server -->
 
   <suppress>
@@ -253,7 +261,7 @@
     <packageUrl regex="true">^pkg:maven/org\.codehaus\.groovy/groovy-json@.*$</packageUrl>
     <cpe>cpe:/a:apache:groovy</cpe>
   </suppress>
-  
+
   <suppress>
     <notes><![CDATA[
    relates to form based authentication, not relevant to us, fix will be picked up in next spring boot update
